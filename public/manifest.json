@@ -1,0 +1,17 @@
+{
+  "name": "Smart Attendance HRMS Pro",
+  "short_name": "SmartAttendance",
+  "description": "Smart Geofenced GPS and Live Camera Attendance Management Platform",
+  "start_url": "/employee/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

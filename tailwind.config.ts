@@ -6,11 +6,30 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        master: {
+          navy: '#11152F',
+          indigo: '#5428E8',
+          lavender: '#F6F5FF',
+          card: '#FFFFFF',
+          line: '#E6E8F2',
+        },
+        brand: {
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          200: '#c7d2fe',
+          300: '#a5b4fc',
+          400: '#818cf8',
+          500: '#6366f1',
+          600: '#5428E8',
+          700: '#4338ca',
+          800: '#3730a3',
+          900: '#312e81',
+          950: '#11152F',
+        },
       },
     },
   },

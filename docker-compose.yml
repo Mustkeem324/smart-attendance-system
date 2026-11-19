@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smart-attendance-app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://attendance:attendance_secret@postgres:5432/smart_attendance_db?schema=public
+      - JWT_SECRET=smart-attendance-super-secure-jwt-secret-key-32-chars-min-2026
+      - JWT_REFRESH_SECRET=smart-attendance-super-secure-refresh-jwt-secret-key-2026
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+      - NODE_ENV=production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - attendance-net
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: smart-attendance-db
+    restart: always
+    environment:
+      POSTGRES_USER: attendance
+      POSTGRES_PASSWORD: attendance_secret
+      POSTGRES_DB: smart_attendance_db
+    ports:
+      - "5435:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U attendance -d smart_attendance_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - attendance-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: smart-attendance-redis
+    restart: always
+    ports:
+      - "6385:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - attendance-net
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks:
+  attendance-net:
+    driver: bridge
