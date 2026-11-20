@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -15,7 +15,12 @@ import {
   ArrowUpRight,
   X,
   CheckCircle2,
+  Camera,
+  Upload,
+  Sparkles,
+  Image as ImageIcon,
 } from 'lucide-react';
+import EmployeePhotoUploadModal, { CORPORATE_PORTRAITS } from '@/components/employees/EmployeePhotoUploadModal';
 
 export default function EmployeesPage() {
   const { user } = useAuth();
@@ -30,6 +35,9 @@ export default function EmployeesPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
+
+  // Photo Update Modal State
+  const [photoModalEmployee, setPhotoModalEmployee] = useState<any | null>(null);
 
   // New Employee Form State
   const [formData, setFormData] = useState({
@@ -47,7 +55,10 @@ export default function EmployeesPage() {
     weeklyOff: 'SUNDAY',
     baseSalary: 70000,
     role: 'EMPLOYEE',
+    profilePhoto: '',
   });
+
+  const addFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -239,15 +250,38 @@ export default function EmployeesPage() {
                       {emp.employeeCode}
                     </td>
                     <td className="whitespace-nowrap px-5 py-3.5">
-                      <div className="flex items-center gap-2.5">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-50 text-xs font-bold text-brand-700 dark:bg-brand-950/60 dark:text-brand-300">
-                          {emp.firstName[0]}
-                          {emp.lastName[0]}
-                        </div>
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setPhotoModalEmployee(emp)}
+                          className="group relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl overflow-hidden border border-slate-200 bg-brand-50 shadow-sm transition hover:scale-105 hover:ring-2 hover:ring-brand-500/50 dark:border-slate-700 dark:bg-brand-950/60"
+                          title="Click to change or view corporate photo"
+                        >
+                          {emp.profilePhoto ? (
+                            <img
+                              src={emp.profilePhoto}
+                              alt={`${emp.firstName} ${emp.lastName}`}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-xs font-bold text-brand-700 dark:text-brand-300">
+                              {emp.firstName[0]}
+                              {emp.lastName[0]}
+                            </span>
+                          )}
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Camera className="h-4 w-4 text-white drop-shadow" />
+                          </div>
+                        </button>
                         <div>
-                          <span className="font-bold text-slate-900 dark:text-white">
-                            {emp.firstName} {emp.lastName}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-bold text-slate-900 dark:text-white">
+                              {emp.firstName} {emp.lastName}
+                            </span>
+                            {emp.profilePhoto && (
+                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" title="Corporate Portrait Active" />
+                            )}
+                          </div>
                           <p className="text-[11px] text-slate-400">{emp.email}</p>
                         </div>
                       </div>
@@ -270,13 +304,24 @@ export default function EmployeesPage() {
                       </span>
                     </td>
                     <td className="whitespace-nowrap px-5 py-3.5 text-right">
-                      <Link
-                        href={`/employees/${emp.id}`}
-                        className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800"
-                      >
-                        <span>View</span>
-                        <ArrowUpRight className="h-3 w-3" />
-                      </Link>
+                      <div className="inline-flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => setPhotoModalEmployee(emp)}
+                          className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800"
+                          title="Change employee portrait"
+                        >
+                          <Camera className="h-3 w-3 text-brand-600" />
+                          <span className="hidden sm:inline">Photo</span>
+                        </button>
+                        <Link
+                          href={`/employees/${emp.id}`}
+                          className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800"
+                        >
+                          <span>View</span>
+                          <ArrowUpRight className="h-3 w-3" />
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -303,6 +348,94 @@ export default function EmployeesPage() {
             </div>
 
             <form onSubmit={handleAddSubmit} className="mt-4 space-y-4">
+              {/* Employee Photo Section */}
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-3.5 dark:border-slate-800 dark:bg-slate-800/40">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                  Employee Profile Photograph
+                </label>
+                <div className="flex flex-col sm:flex-row items-center gap-3.5">
+                  <div className="relative h-16 w-16 shrink-0 rounded-2xl overflow-hidden border-2 border-brand-500 shadow bg-brand-50 dark:bg-brand-950 flex items-center justify-center">
+                    {formData.profilePhoto ? (
+                      <img
+                        src={formData.profilePhoto}
+                        alt="Employee portrait preview"
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-sm font-bold text-brand-600 dark:text-brand-300">
+                        {formData.firstName?.[0] || 'E'}{formData.lastName?.[0] || 'M'}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex-1 w-full space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => addFileInputRef.current?.click()}
+                        className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                      >
+                        <Upload className="h-3.5 w-3.5 text-brand-600" />
+                        <span>Upload Photo File</span>
+                      </button>
+                      <input
+                        ref={addFileInputRef}
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const fd = new FormData();
+                          fd.append('file', file);
+                          try {
+                            const res = await fetch('/api/upload', { method: 'POST', body: fd });
+                            const data = await res.json();
+                            if (res.ok && data.url) {
+                              setFormData((prev) => ({ ...prev, profilePhoto: data.url }));
+                            } else {
+                              alert(data.error || 'Failed to upload photo');
+                            }
+                          } catch (err: any) {
+                            alert(err.message);
+                          }
+                        }}
+                      />
+                      {formData.profilePhoto && (
+                        <button
+                          type="button"
+                          onClick={() => setFormData((prev) => ({ ...prev, profilePhoto: '' }))}
+                          className="text-xs font-semibold text-rose-600 hover:underline"
+                        >
+                          Clear Photo
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="space-y-1">
+                      <span className="text-[10px] text-slate-400 block font-medium">Or choose from executive portraits:</span>
+                      <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+                        {CORPORATE_PORTRAITS.slice(0, 7).map((p) => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setFormData((prev) => ({ ...prev, profilePhoto: p.url }))}
+                            className={`relative h-9 w-9 shrink-0 rounded-lg overflow-hidden border transition-all ${
+                              formData.profilePhoto === p.url
+                                ? 'border-brand-600 ring-2 ring-brand-500/50 scale-105'
+                                : 'border-slate-200 hover:border-slate-400 opacity-80 hover:opacity-100'
+                            }`}
+                            title={p.name}
+                          >
+                            <img src={p.url} alt={p.name} className="h-full w-full object-cover" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -439,6 +572,30 @@ export default function EmployeesPage() {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Photo Upload Modal for existing employee */}
+      {photoModalEmployee && (
+        <EmployeePhotoUploadModal
+          isOpen={Boolean(photoModalEmployee)}
+          onClose={() => setPhotoModalEmployee(null)}
+          currentPhoto={photoModalEmployee.profilePhoto}
+          employeeName={`${photoModalEmployee.firstName} ${photoModalEmployee.lastName}`}
+          onSave={async (photoUrl) => {
+            const res = await fetch(`/api/employees/${photoModalEmployee.id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ profilePhoto: photoUrl }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+              setFeedback(`Profile photo updated for ${photoModalEmployee.firstName} ${photoModalEmployee.lastName}!`);
+              fetchData();
+            } else {
+              alert(data.error || 'Failed to update photo');
+            }
+          }}
+        />
       )}
     </div>
   );

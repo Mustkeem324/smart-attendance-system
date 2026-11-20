@@ -1118,7 +1118,7 @@ export default function AdvancedFieldSalesMobileApp() {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <img
-                    src={dashboardData?.employee?.photoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'}
+                    src={dashboardData?.employee?.photoUrl || user?.employee?.profilePhoto || '/employees/alex-wong.jpg'}
                     alt="Employee"
                     className="h-12 w-12 rounded-xl object-cover border border-purple-500/40"
                   />

@@ -297,7 +297,7 @@ async function main() {
 
   const adminEmployee = await prisma.employee.upsert({
     where: { organizationId_employeeCode: { organizationId: org.id, employeeCode: 'ADM-001' } },
-    update: { officeLocationId: hqOffice.id },
+    update: { officeLocationId: hqOffice.id, profilePhoto: '/employees/arthur-pendelton.jpg' },
     create: {
       userId: adminUser.id,
       organizationId: org.id,
@@ -306,6 +306,7 @@ async function main() {
       lastName: 'Pendelton',
       email: 'admin@acme.com',
       phone: '+1-555-0101',
+      profilePhoto: '/employees/arthur-pendelton.jpg',
       designation: 'Managing Director & VP',
       departmentId: hrDept.id,
       branchId: hqBranch.id,
@@ -332,7 +333,7 @@ async function main() {
 
   const hrEmployee = await prisma.employee.upsert({
     where: { organizationId_employeeCode: { organizationId: org.id, employeeCode: 'HR-001' } },
-    update: { officeLocationId: hqOffice.id },
+    update: { officeLocationId: hqOffice.id, profilePhoto: '/employees/elena-rostova.jpg' },
     create: {
       userId: hrUser.id,
       organizationId: org.id,
@@ -341,6 +342,7 @@ async function main() {
       lastName: 'Rostova',
       email: 'hr@acme.com',
       phone: '+1-555-0102',
+      profilePhoto: '/employees/elena-rostova.jpg',
       designation: 'HR Lead & Talent Director',
       departmentId: hrDept.id,
       branchId: hqBranch.id,
@@ -368,7 +370,7 @@ async function main() {
 
   const mgrEmployee = await prisma.employee.upsert({
     where: { organizationId_employeeCode: { organizationId: org.id, employeeCode: 'MGR-001' } },
-    update: { officeLocationId: hqOffice.id },
+    update: { officeLocationId: hqOffice.id, profilePhoto: '/employees/marcus-vance.jpg' },
     create: {
       userId: mgrUser.id,
       organizationId: org.id,
@@ -377,6 +379,7 @@ async function main() {
       lastName: 'Vance',
       email: 'manager@acme.com',
       phone: '+1-555-0103',
+      profilePhoto: '/employees/marcus-vance.jpg',
       designation: 'Engineering Team Lead',
       departmentId: engDept.id,
       branchId: hqBranch.id,
@@ -404,7 +407,7 @@ async function main() {
 
   const emp1 = await prisma.employee.upsert({
     where: { organizationId_employeeCode: { organizationId: org.id, employeeCode: 'EMP-001' } },
-    update: { officeLocationId: hqOffice.id },
+    update: { officeLocationId: hqOffice.id, profilePhoto: '/employees/john-doe.jpg' },
     create: {
       userId: emp1User.id,
       organizationId: org.id,
@@ -413,6 +416,7 @@ async function main() {
       lastName: 'Doe',
       email: 'john.doe@acme.com',
       phone: '+1-555-0111',
+      profilePhoto: '/employees/john-doe.jpg',
       designation: 'Senior Full Stack Engineer',
       departmentId: engDept.id,
       branchId: hqBranch.id,
@@ -441,7 +445,7 @@ async function main() {
 
   const emp2 = await prisma.employee.upsert({
     where: { organizationId_employeeCode: { organizationId: org.id, employeeCode: 'EMP-002' } },
-    update: { officeLocationId: hqOffice.id },
+    update: { officeLocationId: hqOffice.id, profilePhoto: '/employees/sarah-smith.jpg' },
     create: {
       userId: emp2User.id,
       organizationId: org.id,
@@ -450,6 +454,7 @@ async function main() {
       lastName: 'Smith',
       email: 'sarah.smith@acme.com',
       phone: '+1-555-0112',
+      profilePhoto: '/employees/sarah-smith.jpg',
       designation: 'UI/UX Design Lead',
       departmentId: engDept.id,
       branchId: hqBranch.id,
@@ -478,7 +483,7 @@ async function main() {
 
   const emp3 = await prisma.employee.upsert({
     where: { organizationId_employeeCode: { organizationId: org.id, employeeCode: 'EMP-003' } },
-    update: { officeLocationId: cyberOffice.id },
+    update: { officeLocationId: cyberOffice.id, profilePhoto: '/employees/alex-wong.jpg' },
     create: {
       userId: emp3User.id,
       organizationId: org.id,
@@ -487,6 +492,7 @@ async function main() {
       lastName: 'Wong',
       email: 'alex.wong@acme.com',
       phone: '+1-555-0113',
+      profilePhoto: '/employees/alex-wong.jpg',
       designation: 'Enterprise Account Executive',
       departmentId: salesDept.id,
       branchId: cyberBranch.id,
@@ -498,6 +504,8 @@ async function main() {
       employmentStatus: EmploymentStatus.ACTIVE,
       weeklyOff: 'SUNDAY',
       baseSalary: 68000,
+    },
+  });
     },
   });
 

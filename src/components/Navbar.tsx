@@ -191,9 +191,16 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
                       className="flex items-center justify-between rounded-xl px-2 py-2 transition hover:bg-master-lavender dark:hover:bg-white/10"
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#5428E8]/10 text-xs font-bold text-[#5428E8]">
-                          {emp.firstName[0]}
-                          {emp.lastName[0]}
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#5428E8]/10 text-xs font-bold text-[#5428E8] overflow-hidden shrink-0">
+                          {emp.profilePhoto ? (
+                            <img
+                              src={emp.profilePhoto}
+                              alt={emp.firstName}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <>{emp.firstName[0]}{emp.lastName[0]}</>
+                          )}
                         </div>
                         <div>
                           <p className="text-xs font-bold text-slate-900 dark:text-white">
@@ -317,8 +324,16 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
         {/* User Profile & Role Badge */}
         {user && (
           <div className="flex items-center gap-2.5 border-l border-master-line pl-3 dark:border-white/10">
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl border border-master-indigo/20 bg-master-indigo/10 text-xs font-black text-master-indigo dark:text-brand-300">
-              {user.employee ? `${user.employee.firstName[0]}${user.employee.lastName[0]}` : 'SA'}
+            <div className="flex h-9 w-9 items-center justify-center rounded-2xl border border-master-indigo/20 bg-master-indigo/10 text-xs font-black text-master-indigo dark:text-brand-300 overflow-hidden shrink-0">
+              {user.employee?.profilePhoto ? (
+                <img
+                  src={user.employee.profilePhoto}
+                  alt={user.employee.firstName}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                user.employee ? `${user.employee.firstName[0]}${user.employee.lastName[0]}` : 'SA'
+              )}
             </div>
             <div className="hidden text-left lg:block">
               <div className="flex items-center gap-1.5">

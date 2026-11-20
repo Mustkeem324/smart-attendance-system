@@ -112,6 +112,7 @@ export async function POST(req: NextRequest) {
       baseSalary = 0,
       role = 'EMPLOYEE',
       password = 'Password@123',
+      profilePhoto,
     } = body;
 
     if (!employeeCode || !firstName || !lastName || !email || !departmentId || !branchId || !shiftId) {
@@ -165,6 +166,7 @@ export async function POST(req: NextRequest) {
         employmentStatus: EmploymentStatus.ACTIVE,
         weeklyOff,
         baseSalary: Number(baseSalary) || 0,
+        profilePhoto: profilePhoto || null,
       },
       include: {
         department: true,

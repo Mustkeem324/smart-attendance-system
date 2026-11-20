@@ -269,8 +269,16 @@ export function DistributionHeader({
             onClick={() => setShowUserMenu(!showUserMenu)}
             className="flex items-center gap-2 p-1.5 rounded-xl bg-[#151A38] hover:bg-[#1C234E] border border-[#23294E] transition-colors"
           >
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-500 text-white font-bold text-xs flex items-center justify-center">
-              {currentUser?.name?.slice(0, 1) || 'A'}
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 to-indigo-500 text-white font-bold text-xs flex items-center justify-center overflow-hidden shrink-0 border border-white/10">
+              {currentUser?.employee?.profilePhoto || currentUser?.profilePhoto ? (
+                <img
+                  src={currentUser.employee?.profilePhoto || currentUser.profilePhoto}
+                  alt={currentUser.name || 'User'}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                currentUser?.name?.slice(0, 1) || 'A'
+              )}
             </div>
             <div className="hidden xl:flex flex-col text-left leading-tight pr-1">
               <span className="text-xs font-semibold text-white truncate max-w-[110px]">

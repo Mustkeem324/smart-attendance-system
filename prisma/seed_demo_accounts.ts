@@ -161,6 +161,7 @@ async function main() {
       userId: dealerUser.id,
       designation: 'Apex Mobile Hub - Authorized Dealer Partner',
       officeLocationId: hqOffice?.id,
+      profilePhoto: '/employees/vikas-malhotra.jpg',
     },
     create: {
       userId: dealerUser.id,
@@ -170,6 +171,7 @@ async function main() {
       lastName: 'Malhotra',
       email: 'dealer@apexmobile.com',
       phone: '+91-9811002233',
+      profilePhoto: '/employees/vikas-malhotra.jpg',
       designation: 'Apex Mobile Hub - Authorized Dealer Partner',
       departmentId: salesDept!.id,
       branchId: hqBranch!.id,

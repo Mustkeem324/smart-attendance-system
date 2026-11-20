@@ -48,6 +48,7 @@ export async function GET(req: NextRequest) {
           department: emp.department?.name,
           branch: emp.branch?.name,
           role: emp.user?.role || 'EMPLOYEE',
+          profilePhoto: emp.profilePhoto,
           distributionStats: {
             assignedRetailers,
             ordersBooked,

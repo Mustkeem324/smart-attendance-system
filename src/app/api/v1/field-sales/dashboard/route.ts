@@ -156,7 +156,7 @@ export async function GET(req: NextRequest) {
         territory: 'Bangalore Central & South Urban',
         designation: employeeData?.designation || 'Senior Field Sales Specialist',
         department: 'Field Sales & Distribution',
-        photoUrl: employeeData?.photoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+        photoUrl: employeeData?.profilePhoto || employeeData?.photoUrl || '/employees/alex-wong.jpg',
         attendanceStatus: 'CHECKED_IN',
       },
       kpis: {

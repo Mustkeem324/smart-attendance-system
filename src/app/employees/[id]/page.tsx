@@ -15,22 +15,51 @@ import {
   ArrowLeft,
   DollarSign,
   CheckCircle2,
+  Camera,
+  Check,
 } from 'lucide-react';
+import EmployeePhotoUploadModal from '@/components/employees/EmployeePhotoUploadModal';
 
 export default function EmployeeDetailPage() {
   const params = useParams();
   const id = params?.id as string;
   const [employee, setEmployee] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchEmployee = () => {
     if (id) {
       fetch(`/api/employees/${id}`)
         .then((r) => r.json())
         .then((d) => setEmployee(d.employee))
         .finally(() => setLoading(false));
     }
+  };
+
+  useEffect(() => {
+    fetchEmployee();
   }, [id]);
+
+  const handleUpdatePhoto = async (photoUrl: string) => {
+    try {
+      const res = await fetch(`/api/employees/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profilePhoto: photoUrl }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setEmployee(data.employee);
+        setToastMessage('Profile photo updated successfully!');
+        setTimeout(() => setToastMessage(null), 4000);
+      } else {
+        alert(data.error || 'Failed to update photo');
+      }
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
 
   if (loading) {
     return (
@@ -67,15 +96,54 @@ export default function EmployeeDetailPage() {
         </div>
       </div>
 
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div className="flex items-center gap-2 rounded-2xl bg-emerald-500 text-white px-4 py-2.5 text-xs font-semibold shadow-lg">
+          <Check className="h-4 w-4" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* Profile Overview Card */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
           <div className="flex flex-col items-center text-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-brand-100 text-2xl font-bold text-brand-700 dark:bg-brand-950/60 dark:text-brand-300">
-              {employee.firstName[0]}
-              {employee.lastName[0]}
+            {/* Interactive Profile Photo */}
+            <div className="relative group">
+              <div className="flex h-28 w-28 items-center justify-center rounded-3xl overflow-hidden border-2 border-brand-500 shadow-md bg-brand-50 text-2xl font-bold text-brand-700 dark:bg-brand-950/60 dark:text-brand-300">
+                {employee.profilePhoto ? (
+                  <img
+                    src={employee.profilePhoto}
+                    alt={`${employee.firstName} ${employee.lastName}`}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span>
+                    {employee.firstName[0]}
+                    {employee.lastName[0]}
+                  </span>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPhotoModalOpen(true)}
+                className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-xl bg-brand-600 text-white shadow-lg hover:bg-brand-700 transition"
+                title="Change Profile Photo"
+              >
+                <Camera className="h-4 w-4" />
+              </button>
             </div>
-            <h2 className="mt-4 text-base font-bold text-slate-900 dark:text-white">
+
+            <button
+              type="button"
+              onClick={() => setIsPhotoModalOpen(true)}
+              className="mt-3 inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 transition"
+            >
+              <Camera className="h-3.5 w-3.5 text-brand-600" />
+              <span>{employee.profilePhoto ? 'Change Photo' : 'Upload Photo'}</span>
+            </button>
+
+            <h2 className="mt-3 text-base font-bold text-slate-900 dark:text-white">
               {employee.firstName} {employee.lastName}
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400">{employee.designation}</p>
@@ -164,6 +232,15 @@ export default function EmployeeDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Photo Upload Modal */}
+      <EmployeePhotoUploadModal
+        isOpen={isPhotoModalOpen}
+        onClose={() => setIsPhotoModalOpen(false)}
+        currentPhoto={employee.profilePhoto}
+        employeeName={`${employee.firstName} ${employee.lastName}`}
+        onSave={handleUpdatePhoto}
+      />
     </div>
   );
 }

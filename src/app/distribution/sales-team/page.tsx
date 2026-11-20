@@ -50,9 +50,18 @@ export default function SalesTeamPage() {
             >
               <div>
                 <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="font-bold text-white text-sm">{emp.name}</h3>
-                    <p className="text-[11px] text-purple-400 font-medium">{emp.designation || 'Field Representative'}</p>
+                  <div className="flex items-center gap-3">
+                    <div className="h-11 w-11 rounded-xl overflow-hidden border border-purple-500/30 bg-[#10132A] flex items-center justify-center shrink-0 shadow-sm">
+                      {emp.profilePhoto ? (
+                        <img src={emp.profilePhoto} alt={emp.name} className="h-full w-full object-cover" />
+                      ) : (
+                        <span className="text-xs font-bold text-purple-300">{emp.name.slice(0, 2).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-white text-sm">{emp.name}</h3>
+                      <p className="text-[11px] text-purple-400 font-medium">{emp.designation || 'Field Representative'}</p>
+                    </div>
                   </div>
                   <span className="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 font-mono text-[10px] font-bold border border-purple-500/20">
                     {emp.employeeCode}

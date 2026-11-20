@@ -58,42 +58,58 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const hasAccess = requireRole(session.user.role, [
+    const { id } = params;
+    const body = await req.json();
+
+    const isSelf = session.employee?.id === id;
+    const hasElevatedAccess = requireRole(session.user.role, [
       Role.SUPER_ADMIN,
       Role.COMPANY_ADMIN,
       Role.HR_MANAGER,
     ]);
 
-    if (!hasAccess) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    if (!hasElevatedAccess && !isSelf) {
+      return NextResponse.json({ error: 'Forbidden: Insufficient privileges' }, { status: 403 });
     }
-
-    const { id } = params;
-    const body = await req.json();
 
     const existing = await prisma.employee.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
 
+    const updateData: any = {};
+
+    if (body.profilePhoto !== undefined) {
+      updateData.profilePhoto = body.profilePhoto;
+    }
+    if (body.phone !== undefined) {
+      updateData.phone = body.phone;
+    }
+    if (body.address !== undefined) {
+      updateData.address = body.address;
+    }
+    if (body.emergencyContact !== undefined) {
+      updateData.emergencyContact = body.emergencyContact;
+    }
+
+    // Elevated-only fields
+    if (hasElevatedAccess) {
+      if (body.firstName) updateData.firstName = body.firstName;
+      if (body.lastName) updateData.lastName = body.lastName;
+      if (body.designation) updateData.designation = body.designation;
+      if (body.departmentId) updateData.departmentId = body.departmentId;
+      if (body.branchId) updateData.branchId = body.branchId;
+      if (body.shiftId) updateData.shiftId = body.shiftId;
+      if (body.managerId !== undefined) updateData.managerId = body.managerId;
+      if (body.employmentStatus) updateData.employmentStatus = body.employmentStatus;
+      if (body.employmentType) updateData.employmentType = body.employmentType;
+      if (body.weeklyOff) updateData.weeklyOff = body.weeklyOff;
+      if (body.baseSalary !== undefined) updateData.baseSalary = Number(body.baseSalary);
+    }
+
     const updated = await prisma.employee.update({
       where: { id },
-      data: {
-        firstName: body.firstName || undefined,
-        lastName: body.lastName || undefined,
-        phone: body.phone || undefined,
-        address: body.address || undefined,
-        emergencyContact: body.emergencyContact || undefined,
-        designation: body.designation || undefined,
-        departmentId: body.departmentId || undefined,
-        branchId: body.branchId || undefined,
-        shiftId: body.shiftId || undefined,
-        managerId: body.managerId !== undefined ? body.managerId : undefined,
-        employmentStatus: body.employmentStatus || undefined,
-        employmentType: body.employmentType || undefined,
-        weeklyOff: body.weeklyOff || undefined,
-        baseSalary: body.baseSalary !== undefined ? Number(body.baseSalary) : undefined,
-      },
+      data: updateData,
       include: {
         department: true,
         branch: true,
