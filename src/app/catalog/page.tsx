@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import PublicNavbar from '@/components/public/PublicNavbar';
 import { useAuth } from '@/context/AuthContext';
 import {
   Search,
@@ -394,123 +395,7 @@ export default function ProductCatalogPage() {
       {/* =========================================================================
           1. TOP NAVIGATION BAR (Exact brand match with B2B Homepage)
           ========================================================================= */}
-      <header className="sticky top-0 z-40 bg-[#080B1A]/95 backdrop-blur-xl border-b border-white/10 text-white shadow-xl shadow-black/30">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3.5">
-          {/* Brand Identity */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-[#5428E8] to-[#8055F7] p-0.5 shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition">
-              <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-[#0E122A]">
-                <Smartphone className="h-5 w-5 text-indigo-400 group-hover:text-white transition" />
-              </div>
-            </div>
-            <div>
-              <span className="text-base font-black tracking-tight text-white block leading-tight">
-                APEX ELECTRONICS
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 block">
-                B2B Distribution
-              </span>
-            </div>
-          </Link>
-
-          {/* Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold tracking-wide text-slate-300">
-            <Link href="/" className="hover:text-white transition">Home</Link>
-            <Link href="/catalog" className="text-indigo-400 font-bold transition flex items-center gap-1">
-              <span>Catalog</span>
-              <span className="rounded-full bg-indigo-500/20 px-2 py-0.5 text-[10px] text-indigo-300 font-mono">
-                {totalProducts}
-              </span>
-            </Link>
-            <Link href="/#calculator" className="hover:text-white transition">ROI Calculator</Link>
-            <Link href="/#brands" className="hover:text-white transition">Brands</Link>
-            <Link href="/#network" className="hover:text-white transition">Logistics</Link>
-            <Link href="/#partnership" className="hover:text-white transition">Partner Application</Link>
-            <Link href="/#contact" className="hover:text-white transition">Contact</Link>
-          </nav>
-
-          {/* Right Header Actions */}
-          <div className="hidden sm:flex items-center gap-2.5">
-            <button
-              onClick={() => openQuoteModalFor()}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-500/40 bg-indigo-500/10 px-3.5 py-2 text-xs font-bold text-indigo-300 hover:bg-indigo-500/20 transition"
-            >
-              <ShoppingBag className="h-3.5 w-3.5" />
-              <span>Request Quote</span>
-            </button>
-
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2 text-xs font-bold text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/25 transition"
-            >
-              <Lock className="h-3.5 w-3.5 text-indigo-400" />
-              <span>{isDealerAuthorized ? 'Dealer Active' : 'Dealer Login'}</span>
-            </Link>
-
-            <Link
-              href="/#partnership"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] px-4 py-2 text-xs font-bold text-white shadow-lg shadow-indigo-600/30 hover:opacity-95 transition"
-            >
-              <span>Become Retailer</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          {/* Mobile Menu Toggle */}
-          <div className="flex items-center gap-2 lg:hidden">
-            <button
-              onClick={() => setMobileFilterOpen(true)}
-              className="rounded-xl border border-indigo-500/40 bg-indigo-500/15 p-2 text-indigo-300 text-xs font-bold flex items-center gap-1"
-            >
-              <Filter className="h-4 w-4" />
-              <span>Filters</span>
-              {activeFilterCount > 0 && (
-                <span className="rounded-full bg-[#5428E8] text-white text-[10px] h-4 w-4 flex items-center justify-center">
-                  {activeFilterCount}
-                </span>
-              )}
-            </button>
-
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-300 hover:text-white"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#0E122A] border-b border-white/10 px-6 py-6 space-y-4 animate-in slide-in-from-top-4 duration-200">
-            <nav className="flex flex-col space-y-3 text-sm font-semibold text-slate-300">
-              <Link onClick={() => setMobileMenuOpen(false)} href="/" className="hover:text-white">Home</Link>
-              <Link onClick={() => setMobileMenuOpen(false)} href="/catalog" className="text-indigo-400 font-bold">Catalog</Link>
-              <Link onClick={() => setMobileMenuOpen(false)} href="/#calculator" className="hover:text-white">ROI Calculator</Link>
-              <Link onClick={() => setMobileMenuOpen(false)} href="/#brands" className="hover:text-white">Brands</Link>
-              <Link onClick={() => setMobileMenuOpen(false)} href="/#network" className="hover:text-white">Distribution Logistics</Link>
-              <Link onClick={() => setMobileMenuOpen(false)} href="/#partnership" className="hover:text-white">Retailer Partnership</Link>
-            </nav>
-            <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openQuoteModalFor();
-                }}
-                className="w-full text-center rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-2.5 text-xs font-bold text-white shadow-md"
-              >
-                Request Bulk Quotation
-              </button>
-              <Link
-                href="/login"
-                className="w-full text-center rounded-xl border border-white/15 bg-white/5 py-2.5 text-xs font-bold text-white hover:bg-white/10"
-              >
-                Partner &amp; Staff Login
-              </Link>
-            </div>
-          </div>
-        )}
-      </header>
+      <PublicNavbar totalProductsCount={totalProducts} />
 
       {/* =========================================================================
           2. EDITORIAL FEATURED PROMOTION BANNER

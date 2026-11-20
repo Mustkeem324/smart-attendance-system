@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import PublicNavbar from '@/components/public/PublicNavbar';
 import {
   Smartphone,
   Tablet,
@@ -694,151 +695,16 @@ export default function B2BDistributionHomePage() {
   return (
     <div className="min-h-screen bg-[#080B1A] text-slate-100 font-sans selection:bg-[#5428E8] selection:text-white pb-16 sm:pb-0">
       {/* =========================================================================
-          TOP NAVIGATION BAR (Transparent / Frosted Glass on Scroll)
+          TOP NAVIGATION BAR (Responsive, Glassmorphic, Brand-Aligned)
           ========================================================================= */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          scrolled
-            ? 'bg-[#080B1A]/90 backdrop-blur-xl border-b border-white/10 shadow-xl shadow-black/40 py-3.5'
-            : 'bg-transparent py-5'
-        }`}
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Left: Brand Identity */}
-          <Link href="#hero" className="flex items-center gap-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-[#5428E8] to-[#8055F7] p-0.5 shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition">
-              <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-[#0E122A]">
-                <Smartphone className="h-5 w-5 text-indigo-400 group-hover:text-white transition" />
-              </div>
-            </div>
-            <div>
-              <span className="text-base font-black tracking-tight text-white block leading-tight">
-                APEX ELECTRONICS
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 block">
-                B2B Distribution
-              </span>
-            </div>
-          </Link>
-
-          {/* Center: Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold tracking-wide text-slate-300">
-            <a href="#hero" className="hover:text-white transition">Home</a>
-            <Link href="/catalog" className="text-indigo-400 font-bold hover:text-white transition flex items-center gap-1">
-              <span>Catalog</span>
-              <span className="rounded-full bg-indigo-500/20 px-1.5 py-0.2 text-[10px] text-indigo-300 font-mono">23</span>
-            </Link>
-            <a href="#calculator" className="hover:text-indigo-400 transition flex items-center gap-1 text-indigo-300">
-              <Calculator className="h-3.5 w-3.5" />
-              <span>ROI Calculator</span>
-            </a>
-            <a href="#brands" className="hover:text-white transition">Brands</a>
-            <a href="#network" className="hover:text-white transition">Logistics</a>
-            <a href="#partnership" className="hover:text-white transition">Partner Application</a>
-            <a href="#contact" className="hover:text-white transition">Contact</a>
-          </nav>
-
-          {/* Right: Actions */}
-          <div className="hidden sm:flex items-center gap-2.5">
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition"
-              title="Search Catalog"
-            >
-              <Search className="h-4 w-4" />
-            </button>
-
-            {/* Enterprise Portal Button */}
-            <Link
-              href="/distribution"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-purple-500/40 bg-purple-500/15 px-3.5 py-2 text-xs font-bold text-purple-200 hover:bg-purple-500/25 transition shadow-lg shadow-purple-900/20"
-            >
-              <Building2 className="h-3.5 w-3.5 text-purple-400" />
-              <span>Enterprise Portal</span>
-            </Link>
-
-            <Link
-              href="/catalog"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-2 text-xs font-bold text-indigo-200 hover:bg-indigo-500/20 transition"
-            >
-              <Smartphone className="h-3.5 w-3.5 text-indigo-400" />
-              <span>Catalog</span>
-            </Link>
-
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2 text-xs font-bold text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/25 transition"
-            >
-              <Lock className="h-3.5 w-3.5 text-indigo-400" />
-              <span>Portal Login</span>
-            </Link>
-
-            <a
-              href="#partnership"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] px-3.5 py-2 text-xs font-bold text-white shadow-lg shadow-indigo-600/30 hover:opacity-95 transition"
-            >
-              <span>Become Retailer</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </a>
-          </div>
-
-          {/* Mobile Hamburger Toggle */}
-          <div className="flex items-center gap-2 lg:hidden">
-            <Link
-              href="/catalog"
-              className="rounded-lg border border-indigo-500/40 bg-indigo-500/15 px-2.5 py-1.5 text-[11px] font-bold text-indigo-300"
-            >
-              Catalog
-            </Link>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-300 hover:text-white"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden bg-[#0E122A] border-b border-white/10 px-6 py-6 space-y-4 animate-in slide-in-from-top-4 duration-200">
-            <nav className="flex flex-col space-y-3 text-sm font-semibold text-slate-300">
-              <a onClick={() => setMobileMenuOpen(false)} href="#hero" className="hover:text-white py-1">Home</a>
-              <Link onClick={() => setMobileMenuOpen(false)} href="/catalog" className="text-indigo-400 font-bold hover:text-white py-1 flex items-center justify-between">
-                <span>Products Catalog (All 23)</span>
-                <span className="text-xs font-mono bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full">Catalog</span>
-              </Link>
-              <Link onClick={() => setMobileMenuOpen(false)} href="/distribution" className="text-purple-300 font-bold hover:text-white py-1 flex items-center justify-between">
-                <span>Enterprise Distribution Portal</span>
-                <span className="text-xs font-mono bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">23 Modules</span>
-              </Link>
-              <a onClick={() => setMobileMenuOpen(false)} href="#calculator" className="text-indigo-400 hover:text-white py-1 flex items-center gap-2">
-                <Calculator className="h-4 w-4" />
-                <span>B2B Margin Calculator</span>
-              </a>
-              <a onClick={() => setMobileMenuOpen(false)} href="#brands" className="hover:text-white py-1">Manufacturer Brands</a>
-              <a onClick={() => setMobileMenuOpen(false)} href="#network" className="hover:text-white py-1">Distribution Logistics</a>
-              <a onClick={() => setMobileMenuOpen(false)} href="#partnership" className="hover:text-white py-1">Retailer Partnership</a>
-              <a onClick={() => setMobileMenuOpen(false)} href="#contact" className="hover:text-white py-1">Contact Office</a>
-            </nav>
-            <div className="pt-4 border-t border-white/10 flex flex-col gap-2.5">
-              <Link
-                href="/login"
-                className="w-full text-center rounded-xl border border-white/15 bg-white/5 py-3 text-xs font-bold text-white hover:bg-white/10"
-              >
-                Partner &amp; Staff Login
-              </Link>
-            </div>
-          </div>
-        )}
-      </header>
+      <PublicNavbar onOpenSearch={() => setSearchOpen(true)} />
 
       {/* =========================================================================
           HERO SECTION (High-Polish B2B Technology Identity)
           ========================================================================= */}
       <section
         id="hero"
-        className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden bg-gradient-to-b from-[#080B1A] via-[#0E122A] to-[#080B1A]"
+        className="relative pt-12 pb-20 md:pt-16 md:pb-28 overflow-hidden bg-gradient-to-b from-[#080B1A] via-[#0E122A] to-[#080B1A]"
       >
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-[#5428E8]/15 rounded-full blur-[140px] pointer-events-none" />
 
