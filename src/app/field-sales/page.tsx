@@ -35,6 +35,7 @@ import {
   Eye,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import AndroidBottomNav from '@/components/mobile/AndroidBottomNav';
 
 export default function AdvancedFieldSalesAdminDashboard() {
   const { user } = useAuth();
@@ -515,6 +516,9 @@ export default function AdvancedFieldSalesAdminDashboard() {
           </div>
         </div>
       )}
+
+      {/* Mobile Android Bottom Nav */}
+      <AndroidBottomNav />
     </div>
   );
 }

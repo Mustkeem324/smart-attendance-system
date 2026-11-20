@@ -48,6 +48,7 @@ import {
   CheckCircle2,
   Menu,
 } from 'lucide-react';
+import AndroidBottomNav from '@/components/mobile/AndroidBottomNav';
 
 interface ProductItem {
   _id: string;
@@ -1835,6 +1836,9 @@ export default function ProductCatalogPage() {
           </div>
         </div>
       )}
+
+      {/* Mobile Android Bottom Nav */}
+      <AndroidBottomNav />
     </div>
   );
 }

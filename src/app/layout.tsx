@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import AppShell from '@/components/AppShell';
+import PWARegister from '@/components/mobile/PWARegister';
 
 export const metadata: Metadata = {
   title: 'Apex Mobile & Electronics Distribution Ltd. | B2B Smartphone & Hardware Supply',
@@ -15,7 +16,18 @@ export const metadata: Metadata = {
     'retailer dealer network',
     'genuine IMEI tracking',
     'GST tax invoices',
+    'android enterprise',
+    'field sales app',
   ],
+  icons: {
+    icon: '/icons/icon-192.png',
+    apple: '/icons/icon-192.png',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'APEX Electronics',
+  },
   openGraph: {
     title: 'Apex Mobile & Electronics Distribution Ltd.',
     description:
@@ -30,6 +42,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
+  themeColor: '#0E122A',
 };
 
 export default function RootLayout({
@@ -40,6 +53,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full scroll-smooth" suppressHydrationWarning>
       <head>
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var stored=localStorage.getItem('theme');var dark=stored?stored==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.classList.toggle('dark',dark);}catch(e){}})();`,
@@ -48,6 +63,7 @@ export default function RootLayout({
       </head>
       <body className="h-full bg-[var(--background)] font-sans text-[var(--foreground)] antialiased">
         <AuthProvider>
+          <PWARegister />
           <AppShell>{children}</AppShell>
         </AuthProvider>
       </body>

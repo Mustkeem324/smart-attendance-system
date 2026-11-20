@@ -46,6 +46,9 @@ import {
   HelpCircle,
   ChevronLeft,
 } from 'lucide-react';
+import AndroidSyncStatusBar from '@/components/mobile/AndroidSyncStatusBar';
+import AndroidBottomNav from '@/components/mobile/AndroidBottomNav';
+import { saveOfflineVisit, generateUUID } from '@/lib/offline-sync-engine';
 
 interface Shop {
   _id: string;
@@ -820,7 +823,53 @@ export default function AdvancedFieldSalesMobileApp() {
       // Reload dashboard stats
       loadInitialData();
     } catch (err: any) {
-      showToast('error', err.message || 'Submission failed');
+      console.warn('Network submission failed, saving visit offline:', err);
+      // Offline fallback: save visit to client-side offline queue
+      if (selectedShop && capturedGps) {
+        saveOfflineVisit({
+          id: activeVisitId || generateUUID(),
+          idempotencyKey: payload?.idempotencyKey || generateUUID(),
+          createdAt: new Date().toISOString(),
+          retailerId: selectedShop._id,
+          retailerName: selectedShop.name,
+          retailerCity: (selectedShop as any).city,
+          latitude: capturedGps.latitude,
+          longitude: capturedGps.longitude,
+          accuracyMeters: capturedGps.accuracy,
+          googleMapsUrl: capturedGps.googleMapsUrl,
+          shopFrontPhoto: frontPhoto ? { dataUrl: frontPhoto.dataUrl, captureMethod: frontPhoto.captureMethod } : undefined,
+          shopInteractionPhoto: interactionPhoto ? { dataUrl: interactionPhoto.dataUrl, captureMethod: interactionPhoto.captureMethod, consentGiven: interactionPhoto.consentGiven, declinedReason: interactionPhoto.declinedReason } : undefined,
+          salesLines: selectedLines.map((line) => ({
+            productId: line.productId,
+            productName: line.productName,
+            sku: line.sku,
+            quantity: line.quantity,
+            standardPrice: line.standardPrice,
+            unitPrice: line.actualPrice,
+            lineTotal: line.lineTotal,
+            isManualPrice: line.priceType === 'MANUAL',
+            priceOverrideReason: line.manualPriceReason,
+          })),
+          totalSalesAmount: totalActualSales,
+          visitRemarks: visitRemarks || 'Saved offline on Android device',
+          status: 'SAVED_OFFLINE',
+          attempts: 0,
+        });
+
+        setSubmissionSuccessModal({
+          visitId: activeVisitId || `OFFLINE-${Date.now().toString().slice(-4)}`,
+          shopName: selectedShop.name,
+          totalSales: totalActualSales,
+          totalUnits,
+          googleMapsUrl: capturedGps.googleMapsUrl,
+          isOfflineSaved: true,
+          pendingPriceOverrides: 0,
+        });
+
+        showToast('info', 'Offline mode: Visit saved locally. Will sync automatically when online.');
+      } else {
+        showToast('error', err.message || 'Submission failed');
+      }
     } finally {
       setSubmittingVisit(false);
     }
@@ -970,7 +1019,10 @@ export default function AdvancedFieldSalesMobileApp() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080B1A] text-slate-100 pb-24 sm:pb-12">
+    <div className="min-h-screen bg-[#080B1A] text-slate-100 pb-28 sm:pb-12">
+      {/* Android Native Status & Sync Bar */}
+      <AndroidSyncStatusBar />
+
       {/* Toast Notification */}
       {toast && (
         <div
@@ -2937,6 +2989,9 @@ export default function AdvancedFieldSalesMobileApp() {
           </div>
         </div>
       )}
+
+      {/* Android Native Bottom Navigation Bar */}
+      <AndroidBottomNav />
     </div>
   );
 }

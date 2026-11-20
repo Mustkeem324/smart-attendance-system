@@ -19,6 +19,7 @@ import {
   ChevronDown,
   ExternalLink,
 } from 'lucide-react';
+import PlatformModeSwitcher from '@/components/mobile/PlatformModeSwitcher';
 
 export function DistributionHeader({
   onOpenSearch,
@@ -81,7 +82,7 @@ export function DistributionHeader({
   };
 
   return (
-    <header className="h-16 bg-[#10132A] border-b border-[#23294E] sticky top-0 z-20 flex items-center justify-between px-4 lg:px-6">
+    <header className="h-16 bg-[#10132A] border-b border-[#23294E] sticky top-0 z-20 flex items-center justify-between px-3 sm:px-4 lg:px-6 w-full max-w-full overflow-hidden">
       {/* Left: Mobile Toggle & Workspace Switcher */}
       <div className="flex items-center gap-3 shrink-0">
         <button
@@ -92,7 +93,7 @@ export function DistributionHeader({
           <Menu className="w-5 h-5" />
         </button>
 
-        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#151A38] border border-white/5 text-xs text-slate-300">
+        <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#151A38] border border-white/5 text-xs text-slate-300">
           <Building2 className="w-4 h-4 text-purple-400 shrink-0" />
           <span className="font-semibold text-white truncate max-w-[150px] md:max-w-none">Apex HQ Bangalore Hub</span>
           <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 font-medium shrink-0">
@@ -102,7 +103,7 @@ export function DistributionHeader({
       </div>
 
       {/* Middle: Global Search bar (Cmd+K) */}
-      <div className="flex-1 max-w-md mx-2 sm:mx-4 hidden md:block min-w-0">
+      <div className="flex-1 max-w-xs xl:max-w-md mx-2 hidden lg:block min-w-0">
         <button
           onClick={onOpenSearch}
           className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-[#151A38] hover:bg-[#1A2147] border border-[#23294E] hover:border-purple-500/40 text-slate-400 text-xs transition-all cursor-pointer shadow-inner"
@@ -119,6 +120,8 @@ export function DistributionHeader({
 
       {/* Right Actions */}
       <div className="flex items-center gap-2 shrink-0">
+        <PlatformModeSwitcher />
+
         {/* Date Filter */}
         <div className="relative hidden lg:block">
           <button

@@ -23,6 +23,7 @@ import {
   MapPin,
   HelpCircle,
 } from 'lucide-react';
+import PlatformModeSwitcher from '@/components/mobile/PlatformModeSwitcher';
 
 export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => void }) {
   const router = useRouter();
@@ -322,6 +323,8 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
         </div>
 
         {/* User Profile & Role Badge */}
+        <PlatformModeSwitcher />
+
         {user && (
           <div className="flex items-center gap-2.5 border-l border-master-line pl-3 dark:border-white/10">
             <div className="flex h-9 w-9 items-center justify-center rounded-2xl border border-master-indigo/20 bg-master-indigo/10 text-xs font-black text-master-indigo dark:text-brand-300 overflow-hidden shrink-0">
