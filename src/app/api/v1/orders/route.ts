@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { SalesOrder, Retailer, Product, Inventory, StockMovement } from '@/models/electronics-sales';

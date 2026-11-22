@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthSession, requireRole } from '@/lib/auth';
 import { getEmployeePerformanceAnalytics, getMonthlyAnalytics } from '@/lib/analytics';

@@ -1,0 +1,10 @@
+# Vercel Deployment Ignore
+android/
+test/
+tests/
+docs/
+*.log
+.git
+.github
+*.md
+!README.md
