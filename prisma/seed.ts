@@ -506,8 +506,6 @@ async function main() {
       baseSalary: 68000,
     },
   });
-    },
-  });
 
   // 8. Initialize Leave Balances
   const allEmployees = [adminEmployee, hrEmployee, mgrEmployee, emp1, emp2, emp3];
