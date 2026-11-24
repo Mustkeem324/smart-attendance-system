@@ -38,7 +38,7 @@ export async function generateEmployeeImportTemplate(): Promise<Buffer> {
     employeeCode: 'EMP-101',
     firstName: 'David',
     lastName: 'Miller',
-    email: 'david.miller@acme.com',
+    email: 'farhan.sales@salmanenterprises.in',
     phone: '+1-555-0921',
     designation: 'Frontend Specialist',
     departmentCode: 'ENG',

@@ -153,7 +153,7 @@ export default function UsersPage() {
                 <input
                   type="email"
                   required
-                  placeholder="name@acme.com"
+                  placeholder="employee@salmanenterprises.in"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl bg-[#10132A] border border-[#23294E] text-white"

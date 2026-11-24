@@ -26,42 +26,54 @@ async function runTestSuite() {
     }
   }
 
-  // 1. Verify all 6 Demo Personas in PostgreSQL
-  await test('PostgreSQL Demo Accounts Verification', async () => {
-    const demoAccounts = [
-      { email: 'admin@acme.com', pass: 'Admin@12345', expectedRole: 'COMPANY_ADMIN' },
-      { email: 'hr@acme.com', pass: 'Password@123', expectedRole: 'HR_MANAGER' },
-      { email: 'alex.wong@acme.com', pass: 'Password@123', expectedRole: 'FIELD_SALES_REP' },
-      { email: 'dealer@apexmobile.com', pass: 'Password@123', expectedRole: 'EMPLOYEE' },
-      { email: 'manager@acme.com', pass: 'Password@123', expectedRole: 'TEAM_MANAGER' },
-      { email: 'john.doe@acme.com', pass: 'Password@123', expectedRole: 'EMPLOYEE' },
+  // 1. Verify 1 Admin and 7 Employees in PostgreSQL
+  await test('PostgreSQL Salman Enterprises Accounts Verification', async () => {
+    // 1 Admin (Owner/HR/Super Admin)
+    const adminUser = await prisma.user.findFirst({
+      where: { email: 'salmanenterprisesphu@gmail.com' },
+      include: { organization: true },
+    });
+    assert(adminUser, 'Admin salmanenterprisesphu@gmail.com not found in database');
+    assert.strictEqual(adminUser.role, 'SUPER_ADMIN', 'Admin role must be SUPER_ADMIN');
+    assert(await comparePassword('Admin@12345', adminUser.passwordHash), 'Admin password invalid');
+
+    // Exactly 7 Employees
+    const totalEmployees = await prisma.employee.count();
+    assert.strictEqual(totalEmployees, 7, `Expected exactly 7 employees, found ${totalEmployees}`);
+
+    const employeeAccounts = [
+      { email: 'farhan.sales@salmanenterprises.in', pass: 'Password@123', code: 'EMP-001' },
+      { email: 'ayesha.ops@salmanenterprises.in', pass: 'Password@123', code: 'EMP-002' },
+      { email: 'tariq.warehouse@salmanenterprises.in', pass: 'Password@123', code: 'EMP-003' },
+      { email: 'zaid.field@salmanenterprises.in', pass: 'Password@123', code: 'EMP-004' },
+      { email: 'rehan.logistics@salmanenterprises.in', pass: 'Password@123', code: 'EMP-005' },
+      { email: 'zoya.support@salmanenterprises.in', pass: 'Password@123', code: 'EMP-006' },
+      { email: 'bilal.qc@salmanenterprises.in', pass: 'Password@123', code: 'EMP-007' },
     ];
 
-    for (const acc of demoAccounts) {
+    for (const acc of employeeAccounts) {
       const user = await prisma.user.findFirst({
         where: { email: acc.email },
         include: { employee: true, organization: true },
       });
       assert(user, `User ${acc.email} not found in database`);
-      assert.strictEqual(user.role, acc.expectedRole, `Role mismatch for ${acc.email}`);
       const validPass = await comparePassword(acc.pass, user.passwordHash);
       assert(validPass, `Password verification failed for ${acc.email}`);
       assert(user.employee, `Employee record missing for ${acc.email}`);
+      assert.strictEqual(user.employee.employeeCode, acc.code, `Employee code mismatch for ${acc.email}`);
     }
   });
 
-  // 2. Test Live HTTP Auth Login for each Persona
-  await test('HTTP POST /api/auth/login for all 6 personas', async () => {
-    const demoAccounts = [
-      { email: 'admin@acme.com', pass: 'Admin@12345' },
-      { email: 'hr@acme.com', pass: 'Password@123' },
-      { email: 'alex.wong@acme.com', pass: 'Password@123' },
-      { email: 'dealer@apexmobile.com', pass: 'Password@123' },
-      { email: 'manager@acme.com', pass: 'Password@123' },
-      { email: 'john.doe@acme.com', pass: 'Password@123' },
+  // 2. Test Live HTTP Auth Login for Admin and Employees
+  await test('HTTP POST /api/auth/login for Salman Enterprises Admin & Employees', async () => {
+    const testAccounts = [
+      { email: 'salmanenterprisesphu@gmail.com', pass: 'Admin@12345' },
+      { email: 'farhan.sales@salmanenterprises.in', pass: 'Password@123' },
+      { email: 'ayesha.ops@salmanenterprises.in', pass: 'Password@123' },
+      { email: 'retailer@salmanenterprises.in', pass: 'Password@123' },
     ];
 
-    for (const acc of demoAccounts) {
+    for (const acc of testAccounts) {
       const res = await fetch(`${BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

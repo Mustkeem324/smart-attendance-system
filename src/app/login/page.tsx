@@ -32,11 +32,11 @@ export default function LoginPage() {
   const routeByRoleOrEmail = (userEmail: string, role?: string) => {
     const e = userEmail.toLowerCase();
     const r = (role || '').toUpperCase();
-    if (r === 'FIELD_SALES_REP' || e.includes('sales') || e.includes('rep') || e.includes('wong')) {
+    if (r === 'FIELD_SALES_REP' || e.includes('field') || e.includes('zaid')) {
       router.push('/field-sales/mobile');
-    } else if (r === 'RETAILER' || e.includes('dealer') || e.includes('retailer')) {
+    } else if (r === 'RETAILER' || e.includes('retailer')) {
       router.push('/catalog');
-    } else if (r === 'EMPLOYEE' || e.includes('john') || e.includes('employee')) {
+    } else if (r === 'EMPLOYEE' || r === 'INVENTORY_MANAGER' || r === 'DELIVERY_AGENT') {
       router.push('/employee/dashboard');
     } else {
       router.push('/distribution');
@@ -151,16 +151,16 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl bg-[#1B1D35] p-6 sm:p-7 border border-[#252A54] shadow-xl">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Corporate or Registered Email
+                Corporate Email or Mobile Phone
               </label>
               <div className="relative">
                 <Mail className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                 <input
-                  type="email"
+                  type="text"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@company.com"
+                  placeholder="salmanenterprisesphu@gmail.com or 9876543210"
                   className="w-full rounded-xl border border-[#2A2E5A] bg-[#101225] py-3 pl-10 pr-4 text-xs font-medium text-white placeholder-slate-500 outline-none transition focus:border-[#7138F5]"
                 />
               </div>

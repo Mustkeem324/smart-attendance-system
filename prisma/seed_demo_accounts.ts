@@ -6,196 +6,314 @@ import { Retailer } from '../src/models/electronics-sales';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Seeding & Validating Demo Accounts...');
+  console.log('🌱 Seeding Salman Enterprises: 1 ADMIN (Owner/HR/Super Admin) & EXACTLY 7 EMPLOYEES...');
 
-  const org = await prisma.organization.findFirst({ where: { code: 'ACME' } });
+  // 1. Get Organization
+  let org = await prisma.organization.findFirst({
+    where: {
+      OR: [
+        { slug: 'salman-enterprises' },
+        { code: 'SALMAN' },
+        { code: 'ACME' },
+      ],
+    },
+  });
+
   if (!org) {
-    throw new Error('Default organization ACME not found!');
+    org = await prisma.organization.create({
+      data: {
+        name: 'Salman Enterprises Distribution Ltd.',
+        code: 'SALMAN',
+        slug: 'salman-enterprises',
+        email: 'salmanenterprisesphu@gmail.com',
+      },
+    });
   }
 
-  const hqBranch = await prisma.branch.findFirst({ where: { code: 'HQ-DL' } });
-  const cyberBranch = await prisma.branch.findFirst({ where: { code: 'CYBER-GGN' } });
-  const salesDept = await prisma.department.findFirst({ where: { code: 'SALES' } });
-  const engDept = await prisma.department.findFirst({ where: { code: 'ENG' } });
-  const hrDept = await prisma.department.findFirst({ where: { code: 'HR' } });
-  const generalShift = await prisma.shift.findFirst({ where: { code: 'GEN' } });
-  const cyberOffice = await prisma.officeLocation.findFirst({ where: { code: 'CYBER-OFFICE-01' } });
-  const hqOffice = await prisma.officeLocation.findFirst({ where: { code: 'HQ-OFFICE-01' } });
+  // 2. Ensure Branches
+  const delBranch = await prisma.branch.upsert({
+    where: { organizationId_code: { organizationId: org.id, code: 'DEL-HUB' } },
+    update: { name: 'Salman Enterprises Central Hub - Delhi / NCR' },
+    create: {
+      organizationId: org.id,
+      code: 'DEL-HUB',
+      name: 'Salman Enterprises Central Hub - Delhi / NCR',
+      address: 'Plot 42, Okhla Industrial Area Phase III, New Delhi',
+      city: 'Delhi',
+      country: 'India',
+      latitude: 28.5355,
+      longitude: 77.2732,
+      radiusMeters: 100,
+    },
+  });
 
-  const defaultPassword = await bcrypt.hash('Password@123', 10);
+  const noidaBranch = await prisma.branch.upsert({
+    where: { organizationId_code: { organizationId: org.id, code: 'NOIDA-DC' } },
+    update: { name: 'Salman Enterprises Distribution Center - Noida / UP' },
+    create: {
+      organizationId: org.id,
+      code: 'NOIDA-DC',
+      name: 'Salman Enterprises Distribution Center - Noida / UP',
+      address: 'B-12, Sector 63, Electronic City, Noida',
+      city: 'Noida',
+      country: 'India',
+      latitude: 28.6280,
+      longitude: 77.3649,
+      radiusMeters: 100,
+    },
+  });
+
+  // 3. Ensure Shifts
+  const genShift = await prisma.shift.upsert({
+    where: { organizationId_code: { organizationId: org.id, code: 'GEN' } },
+    update: { name: 'General Distribution Shift' },
+    create: {
+      organizationId: org.id,
+      code: 'GEN',
+      name: 'General Distribution Shift',
+      startTime: '09:30',
+      endTime: '18:30',
+    },
+  });
+
+  const mrnShift = await prisma.shift.upsert({
+    where: { organizationId_code: { organizationId: org.id, code: 'MRN' } },
+    update: { name: 'Early Dispatch Shift' },
+    create: {
+      organizationId: org.id,
+      code: 'MRN',
+      name: 'Early Dispatch Shift',
+      startTime: '08:00',
+      endTime: '17:00',
+    },
+  });
+
+  const fldShift = await prisma.shift.upsert({
+    where: { organizationId_code: { organizationId: org.id, code: 'FLD' } },
+    update: { name: 'Field Sales Flexible Shift' },
+    create: {
+      organizationId: org.id,
+      code: 'FLD',
+      name: 'Field Sales Flexible Shift',
+      startTime: '10:00',
+      endTime: '19:00',
+    },
+  });
+
+  // 4. Ensure Departments
+  const deptMap: Record<string, any> = {};
+  const depts = [
+    { code: 'SALES', name: 'B2B Sales & Distribution' },
+    { code: 'OPS', name: 'Operations & Finance' },
+    { code: 'LOG', name: 'Logistics & Warehousing' },
+    { code: 'QC', name: 'Quality & Technical Support' },
+    { code: 'HR', name: 'Executive & HR Administration' },
+  ];
+
+  for (const d of depts) {
+    deptMap[d.code] = await prisma.department.upsert({
+      where: { organizationId_code: { organizationId: org.id, code: d.code } },
+      update: { name: d.name },
+      create: {
+        organizationId: org.id,
+        code: d.code,
+        name: d.name,
+      },
+    });
+  }
+
   const adminPassword = await bcrypt.hash('Admin@12345', 10);
+  const employeePassword = await bcrypt.hash('Password@123', 10);
 
-  // 1. Company Admin (admin@acme.com)
-  const adminUser = await prisma.user.upsert({
-    where: { organizationId_email: { organizationId: org.id, email: 'admin@acme.com' } },
+  // 5. 1 ADMIN (Owner / HR / Super Admin)
+  const adminEmail = 'salmanenterprisesphu@gmail.com';
+  await prisma.user.upsert({
+    where: { organizationId_email: { organizationId: org.id, email: adminEmail } },
     update: {
       passwordHash: adminPassword,
-      role: Role.COMPANY_ADMIN,
+      phone: '9876543210',
+      role: Role.SUPER_ADMIN,
       isActive: true,
     },
     create: {
       organizationId: org.id,
-      email: 'admin@acme.com',
+      email: adminEmail,
+      phone: '9876543210',
       passwordHash: adminPassword,
-      role: Role.COMPANY_ADMIN,
+      role: Role.SUPER_ADMIN,
       isActive: true,
     },
   });
+  console.log(`👑 1 Admin confirmed: ${adminEmail}`);
 
-  // 2. HR Manager (hr@acme.com)
-  const hrUser = await prisma.user.upsert({
-    where: { organizationId_email: { organizationId: org.id, email: 'hr@acme.com' } },
-    update: {
-      passwordHash: defaultPassword,
-      role: Role.HR_MANAGER,
-      isActive: true,
-    },
-    create: {
-      organizationId: org.id,
-      email: 'hr@acme.com',
-      passwordHash: defaultPassword,
-      role: Role.HR_MANAGER,
-      isActive: true,
-    },
-  });
-
-  // 3. Team Lead / Manager (manager@acme.com)
-  const mgrUser = await prisma.user.upsert({
-    where: { organizationId_email: { organizationId: org.id, email: 'manager@acme.com' } },
-    update: {
-      passwordHash: defaultPassword,
-      role: Role.TEAM_MANAGER,
-      isActive: true,
-    },
-    create: {
-      organizationId: org.id,
-      email: 'manager@acme.com',
-      passwordHash: defaultPassword,
-      role: Role.TEAM_MANAGER,
-      isActive: true,
-    },
-  });
-
-  // 4. Employee (john.doe@acme.com)
-  const empUser = await prisma.user.upsert({
-    where: { organizationId_email: { organizationId: org.id, email: 'john.doe@acme.com' } },
-    update: {
-      passwordHash: defaultPassword,
-      role: Role.EMPLOYEE,
-      isActive: true,
-    },
-    create: {
-      organizationId: org.id,
-      email: 'john.doe@acme.com',
-      passwordHash: defaultPassword,
-      role: Role.EMPLOYEE,
-      isActive: true,
-    },
-  });
-
-  // 5. Field Sales Rep (alex.wong@acme.com)
-  const salesUser = await prisma.user.upsert({
-    where: { organizationId_email: { organizationId: org.id, email: 'alex.wong@acme.com' } },
-    update: {
-      passwordHash: defaultPassword,
+  // 6. EXACTLY 7 EMPLOYEES
+  const employeesData = [
+    {
+      code: 'EMP-001',
+      firstName: 'Farhan',
+      lastName: 'Akhtar',
+      email: 'farhan.sales@salmanenterprises.in',
+      phone: '9811011221',
+      designation: 'Senior B2B Sales Executive (North Zone)',
+      deptCode: 'SALES',
+      branch: delBranch,
+      shift: fldShift,
       role: Role.FIELD_SALES_REP,
-      isActive: true,
+      baseSalary: 55000,
+      joiningDate: new Date('2024-01-15'),
     },
-    create: {
-      organizationId: org.id,
-      email: 'alex.wong@acme.com',
-      passwordHash: defaultPassword,
+    {
+      code: 'EMP-002',
+      firstName: 'Ayesha',
+      lastName: 'Siddiqui',
+      email: 'ayesha.ops@salmanenterprises.in',
+      phone: '9811011222',
+      designation: 'Operations & Accounts Executive',
+      deptCode: 'OPS',
+      branch: delBranch,
+      shift: genShift,
+      role: Role.EMPLOYEE,
+      baseSalary: 48000,
+      joiningDate: new Date('2024-02-01'),
+    },
+    {
+      code: 'EMP-003',
+      firstName: 'Tariq',
+      lastName: 'Mehmood',
+      email: 'tariq.warehouse@salmanenterprises.in',
+      phone: '9811011223',
+      designation: 'Warehouse & Inventory Supervisor',
+      deptCode: 'LOG',
+      branch: noidaBranch,
+      shift: mrnShift,
+      role: Role.INVENTORY_MANAGER,
+      baseSalary: 45000,
+      joiningDate: new Date('2024-02-15'),
+    },
+    {
+      code: 'EMP-004',
+      firstName: 'Mohammad',
+      lastName: 'Zaid',
+      email: 'zaid.field@salmanenterprises.in',
+      phone: '9811011224',
+      designation: 'Field Sales Representative (South Zone)',
+      deptCode: 'SALES',
+      branch: noidaBranch,
+      shift: fldShift,
       role: Role.FIELD_SALES_REP,
-      isActive: true,
+      baseSalary: 42000,
+      joiningDate: new Date('2024-03-01'),
     },
-  });
-
-  // Ensure Alex Wong's employee profile
-  await prisma.employee.upsert({
-    where: { organizationId_employeeCode: { organizationId: org.id, employeeCode: 'EMP-003' } },
-    update: {
-      userId: salesUser.id,
-      designation: 'Field Sales & Distribution Specialist',
-      officeLocationId: cyberOffice?.id,
+    {
+      code: 'EMP-005',
+      firstName: 'Rehan',
+      lastName: 'Shaikh',
+      email: 'rehan.logistics@salmanenterprises.in',
+      phone: '9811011225',
+      designation: 'Logistics & Dispatch Coordinator',
+      deptCode: 'LOG',
+      branch: noidaBranch,
+      shift: genShift,
+      role: Role.DELIVERY_AGENT,
+      baseSalary: 38000,
+      joiningDate: new Date('2024-03-10'),
     },
-    create: {
-      userId: salesUser.id,
-      organizationId: org.id,
-      employeeCode: 'EMP-003',
-      firstName: 'Alex',
-      lastName: 'Wong',
-      email: 'alex.wong@acme.com',
-      phone: '+91-9880011223',
-      designation: 'Field Sales & Distribution Specialist',
-      departmentId: salesDept!.id,
-      branchId: cyberBranch!.id,
-      officeLocationId: cyberOffice?.id,
-      shiftId: generalShift!.id,
-      joiningDate: new Date('2024-04-10'),
-      employmentType: EmploymentType.FULL_TIME,
-      employmentStatus: EmploymentStatus.ACTIVE,
-      baseSalary: 68000,
-    },
-  });
-
-  // 6. Retailer Dealer Partner (dealer@apexmobile.com)
-  const dealerUser = await prisma.user.upsert({
-    where: { organizationId_email: { organizationId: org.id, email: 'dealer@apexmobile.com' } },
-    update: {
-      passwordHash: defaultPassword,
+    {
+      code: 'EMP-006',
+      firstName: 'Zoya',
+      lastName: 'Khan',
+      email: 'zoya.support@salmanenterprises.in',
+      phone: '9811011226',
+      designation: 'Retailer Support & Order Desk Executive',
+      deptCode: 'SALES',
+      branch: delBranch,
+      shift: genShift,
       role: Role.EMPLOYEE,
-      isActive: true,
+      baseSalary: 40000,
+      joiningDate: new Date('2024-03-20'),
     },
-    create: {
-      organizationId: org.id,
-      email: 'dealer@apexmobile.com',
-      passwordHash: defaultPassword,
+    {
+      code: 'EMP-007',
+      firstName: 'Bilal',
+      lastName: 'Qureshi',
+      email: 'bilal.qc@salmanenterprises.in',
+      phone: '9811011227',
+      designation: 'Hardware Testing & QC Specialist',
+      deptCode: 'QC',
+      branch: delBranch,
+      shift: genShift,
       role: Role.EMPLOYEE,
-      isActive: true,
+      baseSalary: 42000,
+      joiningDate: new Date('2024-04-01'),
     },
-  });
+  ];
 
-  await prisma.employee.upsert({
-    where: { organizationId_employeeCode: { organizationId: org.id, employeeCode: 'DLR-EMP-01' } },
-    update: {
-      userId: dealerUser.id,
-      designation: 'Apex Mobile Hub - Authorized Dealer Partner',
-      officeLocationId: hqOffice?.id,
-      profilePhoto: '/employees/vikas-malhotra.jpg',
-    },
-    create: {
-      userId: dealerUser.id,
-      organizationId: org.id,
-      employeeCode: 'DLR-EMP-01',
-      firstName: 'Vikas',
-      lastName: 'Malhotra',
-      email: 'dealer@apexmobile.com',
-      phone: '+91-9811002233',
-      profilePhoto: '/employees/vikas-malhotra.jpg',
-      designation: 'Apex Mobile Hub - Authorized Dealer Partner',
-      departmentId: salesDept!.id,
-      branchId: hqBranch!.id,
-      officeLocationId: hqOffice?.id,
-      shiftId: generalShift!.id,
-      joiningDate: new Date('2024-01-01'),
-      employmentType: EmploymentType.FULL_TIME,
-      employmentStatus: EmploymentStatus.ACTIVE,
-      baseSalary: 0,
-    },
-  });
+  for (const empData of employeesData) {
+    const empUser = await prisma.user.upsert({
+      where: { organizationId_email: { organizationId: org.id, email: empData.email } },
+      update: {
+        passwordHash: employeePassword,
+        phone: empData.phone,
+        role: empData.role,
+        isActive: true,
+      },
+      create: {
+        organizationId: org.id,
+        email: empData.email,
+        phone: empData.phone,
+        passwordHash: employeePassword,
+        role: empData.role,
+        isActive: true,
+      },
+    });
 
-  // Connect MongoDB and verify Apex Mobile Hub exists
-  await connectToDatabase();
-  const apexRetailer = await Retailer.findOne({ dealerCode: 'DLR-00001' });
-  if (apexRetailer) {
-    apexRetailer.ownerName = 'Vikas Malhotra';
-    apexRetailer.phone = '9811002233';
-    apexRetailer.name = 'Apex Mobile Hub';
-    await apexRetailer.save();
-    console.log('✅ MongoDB Apex Mobile Hub synced with dealer account');
+    await prisma.employee.upsert({
+      where: { organizationId_employeeCode: { organizationId: org.id, employeeCode: empData.code } },
+      update: {
+        userId: empUser.id,
+        firstName: empData.firstName,
+        lastName: empData.lastName,
+        email: empData.email,
+        phone: empData.phone,
+        designation: empData.designation,
+        departmentId: deptMap[empData.deptCode].id,
+        branchId: empData.branch.id,
+        shiftId: empData.shift.id,
+        joiningDate: empData.joiningDate,
+        employmentType: EmploymentType.FULL_TIME,
+        employmentStatus: EmploymentStatus.ACTIVE,
+        baseSalary: empData.baseSalary,
+      },
+      create: {
+        userId: empUser.id,
+        organizationId: org.id,
+        employeeCode: empData.code,
+        firstName: empData.firstName,
+        lastName: empData.lastName,
+        email: empData.email,
+        phone: empData.phone,
+        designation: empData.designation,
+        departmentId: deptMap[empData.deptCode].id,
+        branchId: empData.branch.id,
+        shiftId: empData.shift.id,
+        joiningDate: empData.joiningDate,
+        employmentType: EmploymentType.FULL_TIME,
+        employmentStatus: EmploymentStatus.ACTIVE,
+        baseSalary: empData.baseSalary,
+      },
+    });
   }
 
-  console.log('🎉 All 6 Demo Personas successfully seeded and verified!');
+  // 7. Sync MongoDB
+  try {
+    await connectToDatabase();
+    console.log('✅ MongoDB connected');
+  } catch (err) {
+    console.warn('MongoDB connection note:', err);
+  }
+
+  const empCount = await prisma.employee.count({ where: { organizationId: org.id } });
+  console.log(`🎉 Done: Verified 1 Admin and exactly ${empCount} Employees.`);
 }
 
 main()

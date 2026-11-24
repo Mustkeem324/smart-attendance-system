@@ -285,7 +285,7 @@ export function DistributionHeader({
             </div>
             <div className="hidden xl:flex flex-col text-left leading-tight pr-1">
               <span className="text-xs font-semibold text-white truncate max-w-[110px]">
-                {currentUser?.name || 'Administrator'}
+                {currentUser?.name || 'Salman (Owner & HR)'}
               </span>
               <span className="text-[10px] text-purple-400 font-medium">
                 {currentUser?.role || 'SUPER_ADMIN'}
@@ -297,8 +297,8 @@ export function DistributionHeader({
           {showUserMenu && (
             <div className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#151A38] border border-[#23294E] shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95">
               <div className="p-3 border-b border-[#23294E] mb-1">
-                <p className="text-xs font-semibold text-white">{currentUser?.name || 'Admin User'}</p>
-                <p className="text-[11px] text-slate-400 truncate">{currentUser?.email || 'admin@acme.com'}</p>
+                <p className="text-xs font-semibold text-white">{currentUser?.name || 'Salman (Owner, HR & Super Admin)'}</p>
+                <p className="text-[11px] text-slate-400 truncate">{currentUser?.email || 'salmanenterprisesphu@gmail.com'}</p>
                 <div className="mt-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/20 text-[10px] font-medium text-purple-300">
                   <Shield className="w-3 h-3 text-purple-400" />
                   <span>{currentUser?.role || 'SUPER_ADMIN'}</span>
