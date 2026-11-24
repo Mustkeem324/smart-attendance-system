@@ -311,14 +311,21 @@ export async function getWeeklyAnalytics(
   let totalAbsent = 0;
   let totalLate = 0;
 
-  for (let i = 0; i < 7; i++) {
-    const curDate = new Date(monday);
-    curDate.setUTCDate(monday.getUTCDate() + i);
-    const dStr = curDate.toISOString().split('T')[0];
-    const dayName = DAY_NAMES[curDate.getUTCDay()];
+  const dayIndices = [0, 1, 2, 3, 4, 5, 6];
 
-    const dayData = await getDailyAnalytics(organizationId, dStr, filters);
+  // Fetch all 7 days of the current week concurrently
+  const currentWeekResults = await Promise.all(
+    dayIndices.map(async (i) => {
+      const curDate = new Date(monday);
+      curDate.setUTCDate(monday.getUTCDate() + i);
+      const dStr = curDate.toISOString().split('T')[0];
+      const dayName = DAY_NAMES[curDate.getUTCDay()];
+      const dayData = await getDailyAnalytics(organizationId, dStr, filters);
+      return { dStr, dayName, dayData };
+    })
+  );
 
+  for (const { dStr, dayName, dayData } of currentWeekResults) {
     totalScheduled += dayData.scheduledEmployees;
     totalPresent += dayData.presentEmployees;
     totalAbsent += dayData.absentEmployees;
@@ -340,17 +347,22 @@ export async function getWeeklyAnalytics(
     });
   }
 
-  // Previous week calculation for week-on-week comparison
+  // Previous week calculation for week-on-week comparison (concurrent)
   const prevMonday = new Date(monday);
   prevMonday.setUTCDate(monday.getUTCDate() - 7);
   let prevTotalPresent = 0;
   let prevTotalScheduled = 0;
 
-  for (let i = 0; i < 7; i++) {
-    const pDate = new Date(prevMonday);
-    pDate.setUTCDate(prevMonday.getUTCDate() + i);
-    const pdStr = pDate.toISOString().split('T')[0];
-    const pData = await getDailyAnalytics(organizationId, pdStr, filters);
+  const prevWeekResults = await Promise.all(
+    dayIndices.map(async (i) => {
+      const pDate = new Date(prevMonday);
+      pDate.setUTCDate(prevMonday.getUTCDate() + i);
+      const pdStr = pDate.toISOString().split('T')[0];
+      return await getDailyAnalytics(organizationId, pdStr, filters);
+    })
+  );
+
+  for (const pData of prevWeekResults) {
     prevTotalPresent += pData.presentEmployees;
     prevTotalScheduled += pData.scheduledEmployees;
   }

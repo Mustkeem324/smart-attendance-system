@@ -21,20 +21,61 @@ export async function GET(req: NextRequest) {
     const branchId = searchParams.get('branchId') || undefined;
     const departmentId = searchParams.get('departmentId') || undefined;
 
-    // Fetch overview metrics & real-time BI insights
+    // Fetch overview metrics
     const overview = await getDashboardOverviewMetrics(session.user.organizationId, dateStr, {
       branchId,
       departmentId,
     });
 
-    const bi = await getBusinessIntelligenceInsights(session.user.organizationId);
+    // Real-time BI insights computed directly from verified metrics
+    const attRate = overview.kpis.attendancePercentage;
+    const insights: Array<{
+      type: 'POSITIVE' | 'WARNING' | 'ALERT' | 'INFO';
+      title: string;
+      description: string;
+      metric?: string;
+    }> = [];
+
+    if (attRate >= 80) {
+      insights.push({
+        type: 'POSITIVE',
+        title: 'High Workforce Presence',
+        description: `Today's attendance stands at a robust ${attRate}%, meeting organizational operational benchmarks.`,
+        metric: `${attRate}%`,
+      });
+    } else {
+      insights.push({
+        type: 'ALERT',
+        title: 'Attendance Dip Detected',
+        description: `Overall presence is currently at ${attRate}%. Review absent records and pending leave authorizations.`,
+        metric: `${attRate}%`,
+      });
+    }
+
+    if (overview.kpis.lateArrivals > 0) {
+      insights.push({
+        type: 'WARNING',
+        title: 'Punctuality Advisory',
+        description: `${overview.kpis.lateArrivals} employee(s) punched in past shift grace periods today.`,
+        metric: `${overview.kpis.lateArrivals} Late`,
+      });
+    }
+
+    if (overview.kpis.currentlyCheckedIn > 0) {
+      insights.push({
+        type: 'POSITIVE',
+        title: 'Active Geofence Operations',
+        description: `${overview.kpis.currentlyCheckedIn} staff members currently verified inside designated office perimeters.`,
+        metric: `${overview.kpis.currentlyCheckedIn} On Duty`,
+      });
+    }
 
     return NextResponse.json({
       success: true,
       date: overview.date,
       kpis: overview.kpis,
       detailedEmployees: overview.detailedEmployees,
-      insights: bi.insights,
+      insights,
     });
   } catch (err: any) {
     console.error('Error in /api/admin/dashboard/overview:', err);

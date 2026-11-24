@@ -7,6 +7,7 @@ import {
   Users,
   UserCheck,
   UserX,
+  UserPlus,
   Clock,
   AlertTriangle,
   Building2,
@@ -279,6 +280,78 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       )}
+
+      {/* Quick Actions Grid */}
+      <div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-xs dark:border-white/10 dark:bg-[#0F122B]">
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-xs font-bold tracking-wider text-slate-400 uppercase dark:text-slate-500">
+            Enterprise Quick Actions
+          </h2>
+          <span className="text-[11px] font-semibold text-[#7138F5]">6 Operational Modules</span>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <Link
+            href="/employees"
+            className="group flex flex-col items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50/60 p-3.5 text-center transition hover:border-[#7138F5] hover:bg-purple-50/50 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:hover:border-purple-500"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100 text-[#7138F5] dark:bg-purple-950/60 dark:text-purple-300 group-hover:scale-110 transition">
+              <UserPlus className="h-5 w-5" />
+            </div>
+            <span className="mt-2 text-xs font-bold text-slate-900 dark:text-white">Add Employee</span>
+            <span className="text-[10px] text-slate-400">Onboard staff</span>
+          </Link>
+          <Link
+            href="/branches"
+            className="group flex flex-col items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50/60 p-3.5 text-center transition hover:border-[#7138F5] hover:bg-purple-50/50 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:hover:border-purple-500"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-300 group-hover:scale-110 transition">
+              <MapPin className="h-5 w-5" />
+            </div>
+            <span className="mt-2 text-xs font-bold text-slate-900 dark:text-white">Manage Geofence</span>
+            <span className="text-[10px] text-slate-400">Radius & perimeter</span>
+          </Link>
+          <Link
+            href="/shifts"
+            className="group flex flex-col items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50/60 p-3.5 text-center transition hover:border-[#7138F5] hover:bg-purple-50/50 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:hover:border-purple-500"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-300 group-hover:scale-110 transition">
+              <Clock className="h-5 w-5" />
+            </div>
+            <span className="mt-2 text-xs font-bold text-slate-900 dark:text-white">Create Shift</span>
+            <span className="text-[10px] text-slate-400">Timing & grace</span>
+          </Link>
+          <Link
+            href="/leaves"
+            className="group flex flex-col items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50/60 p-3.5 text-center transition hover:border-[#7138F5] hover:bg-purple-50/50 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:hover:border-purple-500"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-950/60 dark:text-amber-300 group-hover:scale-110 transition">
+              <Calendar className="h-5 w-5" />
+            </div>
+            <span className="mt-2 text-xs font-bold text-slate-900 dark:text-white">Manage Leave</span>
+            <span className="text-[10px] text-slate-400">Approval desk</span>
+          </Link>
+          <Link
+            href="/reports"
+            className="group flex flex-col items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50/60 p-3.5 text-center transition hover:border-[#7138F5] hover:bg-purple-50/50 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:hover:border-purple-500"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-100 text-rose-600 dark:bg-rose-950/60 dark:text-rose-300 group-hover:scale-110 transition">
+              <FileSpreadsheet className="h-5 w-5" />
+            </div>
+            <span className="mt-2 text-xs font-bold text-slate-900 dark:text-white">Generate Report</span>
+            <span className="text-[10px] text-slate-400">CSV & PDF export</span>
+          </Link>
+          <Link
+            href="/branches"
+            className="group flex flex-col items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50/60 p-3.5 text-center transition hover:border-[#7138F5] hover:bg-purple-50/50 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:hover:border-purple-500"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-950/60 dark:text-blue-300 group-hover:scale-110 transition">
+              <Building2 className="h-5 w-5" />
+            </div>
+            <span className="mt-2 text-xs font-bold text-slate-900 dark:text-white">Manage Branches</span>
+            <span className="text-[10px] text-slate-400">Office locations</span>
+          </Link>
+        </div>
+      </div>
 
       {/* 12 DYNAMIC KPI CARDS (All Clickable for Drill-down Employee List) */}
       <div>

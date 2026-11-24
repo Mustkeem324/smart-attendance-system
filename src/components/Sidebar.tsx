@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -13,11 +13,8 @@ import {
   FileText,
   BarChart3,
   CalendarDays,
-  Palmtree,
   Clock,
   CreditCard,
-  Bell,
-  ShieldAlert,
   Settings,
   CheckCircle2,
   AlertCircle,
@@ -25,21 +22,18 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Sparkles,
-  Truck,
   Store,
-  Package,
-  ShieldCheck,
-  FileSpreadsheet,
-  Receipt,
-  Boxes,
-  Target,
-  Sliders,
   Smartphone,
-  QrCode,
+  ShieldCheck,
   ShoppingBag,
-  FileCheck,
-  UploadCloud,
+  Truck,
+  Boxes,
+  Sliders,
+  LogOut,
+  Shield,
+  Layers,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -56,57 +50,47 @@ export default function Sidebar({
   onToggleCollapse,
 }: SidebarProps) {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const [salesExpanded, setSalesExpanded] = useState(false);
 
   const isElevated = user?.role && ['SUPER_ADMIN', 'COMPANY_ADMIN', 'HR_MANAGER', 'TEAM_MANAGER'].includes(user.role);
   const isSalesElevated = user?.role && ['SUPER_ADMIN', 'COMPANY_ADMIN', 'HR_MANAGER', 'TEAM_MANAGER', 'SALES_MANAGER', 'FIELD_SALES_REP', 'INVENTORY_MANAGER'].includes(user.role);
 
-  // 14 Core HR Administration Navigation Items
+  // Self Service Portal
+  const selfServiceNavigation = [
+    { name: 'My Attendance & Punch', href: '/employee/dashboard', icon: CheckCircle2 },
+    { name: 'Attendance History', href: '/attendance/my-history', icon: History },
+    { name: 'Attendance Exceptions', href: '/attendance/exceptions', icon: AlertCircle },
+    { name: 'Leaves & Holidays', href: '/leaves', icon: CalendarDays },
+    { name: 'Shifts & Swaps', href: '/shifts', icon: Clock },
+    { name: 'Field Sales & Visits', href: '/field-sales/mobile', icon: Store, badge: 'MOBILE' },
+  ];
+
+  // HR Administration
   const adminNavigation = [
     { name: 'Overview', href: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Live Attendance', href: '/admin/attendance/live', icon: Radio, badge: 'LIVE' },
     { name: 'Employee Management', href: '/employees', icon: Users },
     { name: 'Departments', href: '/departments', icon: Building2 },
-    { name: 'Branches', href: '/branches', icon: MapPin },
+    { name: 'Branches & Locations', href: '/branches', icon: MapPin },
     { name: 'Attendance Reports', href: '/reports', icon: FileText },
     { name: 'Attendance Analytics', href: '/admin/analytics', icon: BarChart3, badge: 'PRO' },
     { name: 'Leave Management', href: '/leaves', icon: CalendarDays },
-    { name: 'Holiday Calendar', href: '/holidays', icon: Palmtree },
     { name: 'Shift Management', href: '/shifts', icon: Clock },
-    { name: 'Payroll', href: '/payroll', icon: CreditCard },
-    { name: 'Notifications', href: '/admin/notifications', icon: Bell },
-    { name: 'Audit Logs', href: '/audit-logs', icon: ShieldAlert },
+    { name: 'Payroll (Phase 2)', href: '/payroll', icon: CreditCard },
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
-  // Mobile Phones, Accessories & Electronics Sales Navigation Items
-  const fieldSalesNavigation = [
-    { name: 'Electronics Sales Dashboard', href: '/field-sales', icon: LayoutDashboard },
-    { name: 'Retailer & Dealer Directory', href: '/field-sales/shops', icon: Store },
-    { name: 'Shop Visit Monitor', href: '/field-sales/visits', icon: Radio, badge: 'LIVE' },
-    { name: 'Mobile & Electronics Catalog', href: '/field-sales/products', icon: Smartphone },
-    { name: 'IMEI & Serial Inventory', href: '/field-sales/imei', icon: QrCode, badge: 'IMEI' },
-    { name: 'Sales Orders & Bookings', href: '/field-sales/orders', icon: ShoppingBag },
-    { name: 'Product Deliveries', href: '/field-sales/deliveries', icon: Truck },
-    { name: 'Delivery Verification', href: '/field-sales/verification', icon: ShieldCheck, badge: 'AUDIT' },
-    { name: 'Tax Invoices & Billing', href: '/field-sales/invoices', icon: FileCheck },
-    { name: 'Payment Collections', href: '/field-sales/payments', icon: Receipt },
-    { name: 'Dealer Credit & Ledger', href: '/field-sales/ledger', icon: CreditCard },
+  // Mobile & Electronics Distribution (Expandable)
+  const distributionNavigation = [
+    { name: 'Distribution Hub', href: '/field-sales', icon: LayoutDashboard },
+    { name: 'Retailer Network', href: '/field-sales/shops', icon: Store },
+    { name: 'Shop Visits & GPS', href: '/field-sales/visits', icon: Radio, badge: 'LIVE' },
+    { name: 'Catalog & IMEI Stock', href: '/field-sales/products', icon: Smartphone },
+    { name: 'B2B Sales Orders', href: '/field-sales/orders', icon: ShoppingBag },
+    { name: 'Dispatch & Deliveries', href: '/field-sales/deliveries', icon: Truck },
     { name: 'Warehouse Inventory', href: '/field-sales/inventory', icon: Boxes },
-    { name: 'Sales Representatives', href: '/field-sales/representatives', icon: Users },
-    { name: 'Sales Targets & Quotas', href: '/field-sales/targets', icon: Target },
-    { name: 'Sales & Inventory Reports', href: '/field-sales/reports', icon: FileSpreadsheet },
-    { name: 'Real Data Import Center', href: '/field-sales/import', icon: UploadCloud, badge: 'IMPORT' },
     { name: 'Distribution Settings', href: '/field-sales/settings', icon: Sliders },
-  ];
-
-  const employeeNavigation = [
-    { name: 'My Attendance & Punch', href: '/employee/dashboard', icon: CheckCircle2 },
-    { name: 'My Attendance History', href: '/attendance/my-history', icon: History },
-    { name: 'Attendance Exceptions', href: '/attendance/exceptions', icon: AlertCircle },
-    { name: 'My Leaves & Holidays', href: '/leaves', icon: CalendarDays },
-    { name: 'My Shifts & Swaps', href: '/shifts', icon: Clock },
-    { name: 'Field Sales & Visits', href: '/field-sales/mobile', icon: Store, badge: 'MOBILE' },
   ];
 
   return (
@@ -115,37 +99,35 @@ export default function Sidebar({
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-slate-950/60  lg:hidden"
+          className="fixed inset-0 z-40 bg-slate-950/70 backdrop-blur-sm lg:hidden transition-opacity"
         />
       )}
 
-      {/* Sidebar Container with Master UI Deep Navy */}
+      {/* Sidebar Container with Premium Dark Navy */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex flex-col border-r border-white/10 bg-master-navy text-slate-200 shadow-2xl transition-all duration-300 lg:static ${
+        className={`fixed inset-y-0 left-0 z-40 flex flex-col border-r border-white/10 bg-[#0C0E22] text-slate-200 shadow-2xl transition-all duration-300 ease-in-out lg:static ${
           isCollapsed ? 'w-20' : 'w-64'
         } ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
-        {/* Header / Brand */}
+        {/* Brand Header */}
         <div className="flex h-16 items-center justify-between border-b border-white/10 px-4">
-          {!isCollapsed && (
-            <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-master-indigo text-white shadow-lg shadow-master-indigo/40">
-                <Sparkles className="h-5 w-5" />
+          {!isCollapsed ? (
+            <div className="flex items-center gap-3 overflow-hidden">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#7138F5] text-white shadow-lg shadow-[#7138F5]/40 ring-1 ring-white/20">
+                <Sparkles className="h-4 w-4" />
               </div>
               <div className="truncate">
                 <span className="block text-sm font-extrabold tracking-wide text-white">
-                  SmartHRMS
+                  Salman Enterprises
                 </span>
-                <span className="block text-[10px] font-medium text-indigo-300">
-                  Enterprise Cloud Suite
+                <span className="block text-[10px] font-medium text-purple-300">
+                  SmartHRMS &bull; Cloud Suite
                 </span>
               </div>
             </div>
-          )}
-
-          {isCollapsed && (
-            <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-master-indigo text-white shadow-lg shadow-master-indigo/40">
-              <Sparkles className="h-5 w-5" />
+          ) : (
+            <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-[#7138F5] text-white shadow-lg shadow-[#7138F5]/40 ring-1 ring-white/20">
+              <Sparkles className="h-4 w-4" />
             </div>
           )}
 
@@ -153,8 +135,9 @@ export default function Sidebar({
           {onToggleCollapse && (
             <button
               onClick={onToggleCollapse}
-              className="hidden rounded-xl p-1.5 text-slate-400 hover:bg-white/10 hover:text-white lg:block transition"
+              className="hidden rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-white transition lg:block"
               title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              aria-label="Toggle sidebar collapse"
             >
               {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
             </button>
@@ -163,15 +146,16 @@ export default function Sidebar({
           {/* Mobile Close Button */}
           <button
             onClick={onClose}
-            className="rounded-xl p-1.5 text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-white transition lg:hidden"
+            aria-label="Close sidebar"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Scrollable Navigation List */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4">
-          {/* Employee Self-Service Section */}
+        {/* Scrollable Navigation Items */}
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+          {/* Section 1: Self Service Portal */}
           <div>
             {!isCollapsed && (
               <h3 className="mb-2 px-3 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
@@ -179,7 +163,7 @@ export default function Sidebar({
               </h3>
             )}
             <div className="space-y-1">
-              {employeeNavigation.map((item) => {
+              {selfServiceNavigation.map((item) => {
                 const isActive = pathname === item.href;
                 const Icon = item.icon;
                 return (
@@ -188,31 +172,40 @@ export default function Sidebar({
                     href={item.href}
                     onClick={onClose}
                     title={isCollapsed ? item.name : undefined}
-                    className={`flex items-center gap-3 rounded-xl px-3 py-2 text-xs font-semibold transition-all ${
+                    className={`group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-150 ${
                       isActive
-                        ? 'bg-master-indigo text-white shadow-md shadow-master-indigo/30 font-bold'
-                        : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                        ? 'bg-[#7138F5] text-white shadow-md shadow-[#7138F5]/30 font-bold'
+                        : 'text-slate-300 hover:bg-white/8 hover:text-white'
                     } ${isCollapsed ? 'justify-center px-2' : ''}`}
                   >
-                    <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-                    {!isCollapsed && <span className="truncate">{item.name}</span>}
+                    <div className="flex items-center gap-3 truncate">
+                      <Icon className={`h-4 w-4 shrink-0 transition-colors ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-purple-300'}`} />
+                      {!isCollapsed && <span className="truncate">{item.name}</span>}
+                    </div>
+                    {!isCollapsed && item.badge && (
+                      <span className="rounded-full bg-purple-500/20 px-2 py-0.5 text-[9px] font-black text-purple-300 border border-purple-500/30">
+                        {item.badge}
+                      </span>
+                    )}
                   </Link>
                 );
               })}
             </div>
           </div>
 
-          {/* 14 Core Admin Modules */}
+          {/* Section 2: HR Administration */}
           {isElevated && (
             <div>
               {!isCollapsed && (
                 <h3 className="mb-2 px-3 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
-                  HR Administration (14)
+                  HR Administration
                 </h3>
               )}
               <div className="space-y-1">
                 {adminNavigation.map((item) => {
-                  const isActive = pathname === item.href || (item.href !== '/admin/dashboard' && pathname.startsWith(item.href));
+                  const isActive =
+                    pathname === item.href ||
+                    (item.href !== '/admin/dashboard' && item.href !== '/leaves' && item.href !== '/shifts' && pathname.startsWith(item.href));
                   const Icon = item.icon;
                   return (
                     <Link
@@ -220,19 +213,19 @@ export default function Sidebar({
                       href={item.href}
                       onClick={onClose}
                       title={isCollapsed ? item.name : undefined}
-                      className={`flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all ${
+                      className={`group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-150 ${
                         isActive
-                          ? 'bg-master-indigo text-white shadow-md shadow-master-indigo/30 font-bold'
-                          : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                          ? 'bg-[#7138F5] text-white shadow-md shadow-[#7138F5]/30 font-bold'
+                          : 'text-slate-300 hover:bg-white/8 hover:text-white'
                       } ${isCollapsed ? 'justify-center px-2' : ''}`}
                     >
                       <div className="flex items-center gap-3 truncate">
-                        <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                        <Icon className={`h-4 w-4 shrink-0 transition-colors ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-purple-300'}`} />
                         {!isCollapsed && <span className="truncate">{item.name}</span>}
                       </div>
                       {!isCollapsed && item.badge && (
                         <span
-                          className={`rounded-full px-2 py-0.5 text-[9px] font-extrabold ${
+                          className={`rounded-full px-2 py-0.5 text-[9px] font-black ${
                             item.badge === 'LIVE'
                               ? 'animate-pulse bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
                               : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
@@ -248,70 +241,110 @@ export default function Sidebar({
             </div>
           )}
 
-          {/* MOBILE & ELECTRONICS DISTRIBUTION Section */}
+          {/* Section 3: Field Sales & Distribution */}
           {isSalesElevated && (
             <div>
               {!isCollapsed && (
-                <h3 className="mb-2 px-3 text-[10px] font-bold tracking-wider text-indigo-300 uppercase flex items-center justify-between">
-                  <span>Mobile &amp; Electronics Sales</span>
-                  <span className="rounded bg-indigo-500/20 px-1.5 py-0.2 text-[9px] font-extrabold text-indigo-300 border border-indigo-500/30">PRO</span>
-                </h3>
+                <button
+                  type="button"
+                  onClick={() => setSalesExpanded(!salesExpanded)}
+                  className="flex w-full items-center justify-between px-3 py-1 text-[10px] font-bold tracking-wider text-purple-300 uppercase hover:text-white transition"
+                >
+                  <span className="flex items-center gap-1.5">
+                    <Layers className="h-3.5 w-3.5 text-purple-400" />
+                    <span>Distribution & Sales</span>
+                  </span>
+                  <ChevronDown
+                    className={`h-3 w-3 text-purple-400 transition-transform duration-200 ${
+                      salesExpanded ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
               )}
-              <div className="space-y-1">
-                {fieldSalesNavigation.map((item) => {
-                  const isActive = pathname === item.href || (item.href !== '/field-sales' && pathname.startsWith(item.href));
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={onClose}
-                      title={isCollapsed ? item.name : undefined}
-                      className={`flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all ${
-                        isActive
-                          ? 'bg-master-indigo text-white shadow-md shadow-master-indigo/30 font-bold'
-                          : 'text-slate-300 hover:bg-white/10 hover:text-white'
-                      } ${isCollapsed ? 'justify-center px-2' : ''}`}
-                    >
-                      <div className="flex items-center gap-3 truncate">
-                        <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-                        {!isCollapsed && <span className="truncate">{item.name}</span>}
-                      </div>
-                      {!isCollapsed && item.badge && (
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-[9px] font-extrabold ${
-                            item.badge === 'LIVE'
-                              ? 'animate-pulse bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                              : item.badge === 'AUDIT'
-                              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                              : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                          }`}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
-                    </Link>
-                  );
-                })}
-              </div>
+              {(!isCollapsed ? salesExpanded : true) && (
+                <div className="mt-1 space-y-1">
+                  {distributionNavigation.map((item) => {
+                    const isActive = pathname === item.href || (item.href !== '/field-sales' && pathname.startsWith(item.href));
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={onClose}
+                        title={isCollapsed ? item.name : undefined}
+                        className={`group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-150 ${
+                          isActive
+                            ? 'bg-[#7138F5] text-white shadow-md shadow-[#7138F5]/30 font-bold'
+                            : 'text-slate-300 hover:bg-white/8 hover:text-white'
+                        } ${isCollapsed ? 'justify-center px-2' : ''}`}
+                      >
+                        <div className="flex items-center gap-3 truncate">
+                          <Icon className={`h-4 w-4 shrink-0 transition-colors ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-purple-300'}`} />
+                          {!isCollapsed && <span className="truncate">{item.name}</span>}
+                        </div>
+                        {!isCollapsed && item.badge && (
+                          <span className="rounded-full bg-emerald-500/20 px-1.5 py-0.2 text-[9px] font-black text-emerald-300 border border-emerald-500/30">
+                            {item.badge}
+                          </span>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        {/* Footer Geofence Status */}
-        {!isCollapsed && (
-          <div className="border-t border-white/10 p-3.5 bg-black/20">
-            <div className="rounded-xl bg-white/5 p-3 text-xs border border-white/10">
-              <div className="flex items-center justify-between text-slate-200">
-                <span className="text-[11px] font-bold tracking-wide text-indigo-300">GEOFENCE ACTIVE</span>
-                <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        {/* Footer: User Profile & Geofence Status */}
+        <div className="border-t border-white/10 p-3 bg-black/25">
+          {/* Active Geofence Indicator */}
+          {!isCollapsed && (
+            <div className="mb-2.5 rounded-xl bg-white/5 px-3 py-2 text-xs border border-white/10">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold tracking-wider text-purple-300 uppercase">
+                  GEOFENCE RADAR
+                </span>
+                <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-400">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Active (100m)
+                </span>
               </div>
-              <p className="mt-1 text-[10px] text-slate-400">
-                50m / 100m Live Haversine Verified
-              </p>
             </div>
-          </div>
-        )}
+          )}
+
+          {/* User Profile Card */}
+          {user && (
+            <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+              <div className="flex items-center gap-2.5 overflow-hidden">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-purple-600 text-xs font-black text-white shadow">
+                  SE
+                </div>
+                {!isCollapsed && (
+                  <div className="truncate">
+                    <p className="text-xs font-bold text-white truncate">
+                      Salman Enterprises
+                    </p>
+                    <p className="text-[10px] text-purple-300 truncate">
+                      {user.role?.replace('_', ' ') || 'SUPER ADMIN'}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {!isCollapsed && (
+                <button
+                  onClick={() => logout()}
+                  className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-500/20 hover:text-rose-300 transition"
+                  title="Sign Out"
+                  aria-label="Sign out"
+                >
+                  <LogOut className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </aside>
     </>
   );

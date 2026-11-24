@@ -22,6 +22,8 @@ import {
   Command,
   MapPin,
   HelpCircle,
+  Smartphone,
+  ChevronDown,
 } from 'lucide-react';
 import PlatformModeSwitcher from '@/components/mobile/PlatformModeSwitcher';
 
@@ -34,9 +36,11 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains('dark'));
   }, []);
+
   const [notifications, setNotifications] = useState<any[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAiModal, setShowAiModal] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   // Global Search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -48,7 +52,8 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
   const notifRef = useRef<HTMLDivElement>(null);
 
   // Office Location Selector
-  const [selectedBranch, setSelectedBranch] = useState('All Branches (HQ + Satellites)');
+  const [selectedBranch, setSelectedBranch] = useState('ALL');
+  const [branches, setBranches] = useState<any[]>([]);
 
   useEffect(() => {
     if (user) {
@@ -56,6 +61,13 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
         .then((r) => r.json())
         .then((d) => {
           if (d.notifications) setNotifications(d.notifications);
+        })
+        .catch(() => {});
+
+      fetch('/api/branches')
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.branches) setBranches(d.branches);
         })
         .catch(() => {});
     }
@@ -84,7 +96,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
     const timer = setTimeout(async () => {
       setIsSearching(true);
       try {
-        const res = await fetch(`/api/employees?search=${encodeURIComponent(searchQuery)}&limit=5`);
+        const res = await fetch(`/api/employees?search=${encodeURIComponent(searchQuery)}&limit=6`);
         if (res.ok) {
           const json = await res.json();
           setSearchResults(json.employees || []);
@@ -119,9 +131,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
     document.documentElement.classList.toggle('dark', next);
     try {
       localStorage.setItem('theme', next ? 'dark' : 'light');
-    } catch {
-      // Storage can be blocked in private browsing; the class toggle still applies
-    }
+    } catch {}
   };
 
   const markAllRead = async () => {
@@ -138,23 +148,23 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-master-line bg-white/95 px-4 overflow-visible dark:border-white/10 dark:bg-master-navy/95 lg:px-8">
-      {/* Left: Mobile Toggle & Global Search Bar */}
+    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 backdrop-blur-md overflow-visible dark:border-white/10 dark:bg-[#0C0E22]/95 lg:px-8">
+      {/* Left: Mobile Toggle & Global Search Bar & Branch Selector */}
       <div className="flex items-center gap-3">
         {onToggleSidebar && (
           <button
             onClick={onToggleSidebar}
-            className="rounded-xl p-2 text-slate-500 hover:bg-master-lavender dark:text-slate-300 dark:hover:bg-white/10 lg:hidden"
+            className="rounded-xl p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/10 lg:hidden"
             aria-label="Toggle menu"
           >
             <Menu className="h-5 w-5" />
           </button>
         )}
 
-        {/* Global Search Input with Cmd+K hint */}
-        <div ref={searchRef} className="relative hidden w-72 sm:block md:w-96">
+        {/* Global Search Input with Cmd+K shortcut */}
+        <div ref={searchRef} className="relative hidden w-64 sm:block md:w-80 lg:w-96">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+            <Search className="pointer-events-none absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
             <input
               ref={searchInputRef}
               type="text"
@@ -165,9 +175,9 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
               }}
               onFocus={() => setShowSearchDropdown(true)}
               placeholder="Search employee, ID, shift, department..."
-              className="w-full rounded-2xl border border-master-line bg-master-lavender/60 py-2 pl-9 pr-14 text-xs text-[#172033] transition-all focus:border-master-indigo focus:bg-white focus:outline-none focus:ring-2 focus:ring-master-indigo/20 dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:focus:bg-slate-800"
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50/80 py-2 pl-9 pr-14 text-xs text-slate-800 transition-all focus:border-[#7138F5] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#7138F5]/20 dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:focus:bg-slate-900"
             />
-            <div className="absolute right-2.5 top-2 flex items-center gap-0.5 rounded-lg border border-slate-200 bg-white px-1.5 py-0.5 text-[10px] font-bold text-slate-400">
+            <div className="absolute right-2.5 top-2 flex items-center gap-0.5 rounded-md border border-slate-200 bg-white px-1.5 py-0.5 text-[10px] font-bold text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
               <Command className="h-2.5 w-2.5" /> K
             </div>
           </div>
@@ -175,11 +185,11 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
           {/* Search Dropdown Results */}
           {showSearchDropdown && searchQuery.trim().length >= 2 && (
             <div className="absolute left-0 mt-2 z-50 w-full rounded-2xl border border-slate-200 bg-white p-3 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2 dark:border-slate-800">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                   Search Results ({searchResults.length})
                 </span>
-                {isSearching && <span className="text-[10px] text-[#5428E8]">Searching...</span>}
+                {isSearching && <span className="text-[10px] font-bold text-[#7138F5]">Searching...</span>}
               </div>
 
               {searchResults.length === 0 && !isSearching ? (
@@ -187,16 +197,16 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
                   No matching employees or records found.
                 </div>
               ) : (
-                <div className="divide-y divide-slate-100 max-h-64 overflow-y-auto">
+                <div className="divide-y divide-slate-100 max-h-64 overflow-y-auto dark:divide-slate-800">
                   {searchResults.map((emp) => (
                     <Link
                       key={emp.id}
                       href={`/employees/${emp.id}`}
                       onClick={() => setShowSearchDropdown(false)}
-                      className="flex items-center justify-between rounded-xl px-2 py-2 transition hover:bg-master-lavender dark:hover:bg-white/10"
+                      className="flex items-center justify-between rounded-xl px-2 py-2 transition hover:bg-slate-50 dark:hover:bg-white/10"
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#5428E8]/10 text-xs font-bold text-[#5428E8] overflow-hidden shrink-0">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#7138F5]/10 text-xs font-bold text-[#7138F5] overflow-hidden shrink-0">
                           {emp.profilePhoto ? (
                             <img
                               src={emp.profilePhoto}
@@ -212,7 +222,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
                             {emp.firstName} {emp.lastName}
                           </p>
                           <p className="text-[10px] text-slate-400">
-                            {emp.employeeCode} • {emp.department?.name || 'General'}
+                            {emp.employeeCode} • {emp.department?.name || 'Operations'}
                           </p>
                         </div>
                       </div>
@@ -225,23 +235,43 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
           )}
         </div>
 
-        {/* Office Location Selector */}
-        <div className="hidden items-center gap-1.5 rounded-2xl border border-master-line bg-master-lavender/70 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 lg:flex">
-          <MapPin className="h-3.5 w-3.5 text-[#5428E8]" />
-          <span>{selectedBranch}</span>
+        {/* Branch Selector Dropdown */}
+        <div className="hidden items-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50/80 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 md:flex">
+          <MapPin className="h-3.5 w-3.5 text-[#7138F5]" />
+          <select
+            value={selectedBranch}
+            onChange={(e) => setSelectedBranch(e.target.value)}
+            className="bg-transparent font-medium focus:outline-none dark:bg-transparent dark:text-white"
+          >
+            <option value="ALL" className="dark:bg-slate-900 text-slate-800 dark:text-white">All Branches (HQ + Satellites)</option>
+            {branches.map((b) => (
+              <option key={b.id} value={b.id} className="dark:bg-slate-900 text-slate-800 dark:text-white">
+                {b.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
-      {/* Right Navigation Actions */}
+      {/* Right: Quick Tools, Theme, AI, Notifications, User Profile */}
       <div className="flex items-center gap-2 sm:gap-3">
+        {/* Mobile App Shortcut */}
+        <Link
+          href="/field-sales/mobile"
+          className="hidden sm:flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 shadow-xs transition hover:border-[#7138F5] hover:text-[#7138F5] dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:text-white"
+          title="Mobile Attendance App"
+        >
+          <Smartphone className="h-3.5 w-3.5 text-[#7138F5]" />
+          <span className="hidden md:inline">Mobile App</span>
+        </Link>
+
         {/* Theme Toggle */}
         <button
           type="button"
           onClick={toggleTheme}
           aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-          aria-pressed={isDark}
           title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-          className="rounded-xl p-2 text-slate-500 transition hover:bg-master-lavender hover:text-master-indigo dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+          className="rounded-xl p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
         >
           {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </button>
@@ -249,49 +279,49 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
         {/* AI Assistant Button */}
         <button
           onClick={() => setShowAiModal(true)}
-          className="flex items-center gap-1.5 rounded-2xl bg-gradient-to-r from-master-indigo to-brand-400 px-3.5 py-1.5 text-xs font-bold text-white shadow-md shadow-master-indigo/25 transition hover:opacity-95"
+          className="flex items-center gap-1.5 rounded-2xl bg-[#7138F5] px-3 py-1.5 text-xs font-bold text-white shadow-md shadow-[#7138F5]/25 transition hover:bg-[#6025e8]"
         >
           <Sparkles className="h-3.5 w-3.5" />
           <span className="hidden sm:inline">AI Copilot</span>
         </button>
 
-        {/* Help Center */}
-        <Link
-          href="/settings"
-          className="rounded-xl p-2 text-slate-500 transition hover:bg-master-lavender hover:text-master-indigo dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
-          title="Help & Documentation"
+        {/* Help & Support */}
+        <button
+          onClick={() => setShowHelpModal(true)}
+          className="rounded-xl p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+          title="Help & Support"
         >
           <HelpCircle className="h-4 w-4" />
-        </Link>
+        </button>
 
-        {/* Notifications Dropdown */}
+        {/* Notifications Dropdown with unclipped z-50 */}
         <div ref={notifRef} className="relative">
           <button
             type="button"
             onClick={() => setShowNotifications(!showNotifications)}
             aria-label="Notifications"
             aria-expanded={showNotifications}
-            className="relative rounded-xl p-2 text-slate-500 transition hover:bg-master-lavender hover:text-master-indigo dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+            className="relative rounded-xl p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
           >
             <Bell className="h-4 w-4" />
             {unreadCount > 0 && (
-              <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white">
+              <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow">
                 {unreadCount}
               </span>
             )}
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 z-50 w-80 rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="text-xs font-bold text-slate-900 dark:text-white">Admin Notification Center</span>
+            <div className="absolute right-0 mt-2 z-50 w-80 sm:w-96 rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl dark:border-slate-700 dark:bg-[#0F122B]">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2 dark:border-slate-800">
+                <span className="text-xs font-bold text-slate-900 dark:text-white">Admin Notifications</span>
                 {unreadCount > 0 && (
-                  <button onClick={markAllRead} className="text-[11px] font-bold text-[#5428E8] hover:underline">
+                  <button onClick={markAllRead} className="text-[11px] font-bold text-[#7138F5] hover:underline">
                     Mark all read
                   </button>
                 )}
               </div>
-              <div className="max-h-64 divide-y divide-slate-100 overflow-y-auto">
+              <div className="max-h-64 divide-y divide-slate-100 overflow-y-auto dark:divide-slate-800">
                 {notifications.length === 0 ? (
                   <div className="py-6 text-center text-xs text-slate-400">No active notifications</div>
                 ) : (
@@ -313,11 +343,11 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
                   ))
                 )}
               </div>
-              <div className="border-t border-slate-100 pt-2 text-center">
+              <div className="border-t border-slate-100 pt-2 text-center dark:border-slate-800">
                 <Link
                   href="/admin/notifications"
                   onClick={() => setShowNotifications(false)}
-                  className="text-[11px] font-bold text-[#5428E8] hover:underline"
+                  className="text-[11px] font-bold text-[#7138F5] hover:underline"
                 >
                   View All Notifications →
                 </Link>
@@ -326,38 +356,32 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
           )}
         </div>
 
-        {/* User Profile & Role Badge */}
+        {/* Platform View Switcher */}
         <PlatformModeSwitcher />
 
+        {/* User Profile & Role Badge */}
         {user && (
-          <div className="flex items-center gap-2.5 border-l border-master-line pl-3 dark:border-white/10">
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl border border-master-indigo/20 bg-master-indigo/10 text-xs font-black text-master-indigo dark:text-brand-300 overflow-hidden shrink-0">
-              {user.employee?.profilePhoto ? (
-                <img
-                  src={user.employee.profilePhoto}
-                  alt={user.employee.firstName}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                user.employee ? `${user.employee.firstName[0]}${user.employee.lastName[0]}` : 'SA'
-              )}
+          <div className="flex items-center gap-2.5 border-l border-slate-200 pl-3 dark:border-white/10">
+            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#7138F5]/10 text-xs font-black text-[#7138F5] overflow-hidden shrink-0 border border-[#7138F5]/20">
+              SE
             </div>
             <div className="hidden text-left lg:block">
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-[#172033] dark:text-white">
-                  {user.employee ? `${user.employee.firstName} ${user.employee.lastName}` : user.email.split('@')[0]}
+                <span className="text-xs font-bold text-slate-900 dark:text-white">
+                  Salman Enterprises
                 </span>
-                <span className="rounded-md bg-master-indigo/10 px-1.5 py-0.2 text-[9px] font-extrabold text-master-indigo dark:text-brand-300">
-                  {user.role.replace('_', ' ')}
+                <span className="rounded-md bg-[#7138F5]/10 px-1.5 py-0.2 text-[9px] font-extrabold text-[#7138F5] dark:text-purple-300">
+                  {user.role?.replace('_', ' ') || 'SUPER ADMIN'}
                 </span>
               </div>
-              <p className="text-[11px] text-[#8792AA] dark:text-slate-400">{user.employee?.designation || user.email}</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-400">{user.email}</p>
             </div>
 
             <button
               onClick={() => logout()}
-              className="ml-1 rounded-xl p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+              className="ml-1 rounded-xl p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-500/10 dark:hover:text-rose-400 transition"
               title="Sign Out"
+              aria-label="Sign out"
             >
               <LogOut className="h-4 w-4" />
             </button>
@@ -378,7 +402,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
             <button
               type="button"
               onClick={() => setShowAiModal(false)}
-              className="rounded-xl bg-master-indigo px-4 py-2 text-xs font-bold text-white hover:bg-brand-700"
+              className="rounded-xl bg-[#7138F5] px-4 py-2 text-xs font-bold text-white hover:bg-[#6025e8]"
             >
               Done
             </button>
@@ -386,18 +410,51 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
         }
       >
         <div className="space-y-3">
-          <div className="space-y-2 rounded-2xl bg-master-lavender p-4 text-xs dark:bg-white/5">
-            <p className="font-bold text-master-indigo dark:text-brand-300">✨ Daily Workforce Observations</p>
+          <div className="space-y-2 rounded-2xl bg-purple-50/60 p-4 text-xs dark:bg-white/5">
+            <p className="font-bold text-[#7138F5] dark:text-purple-300">✨ Daily Workforce Observations</p>
             <ul className="list-inside list-disc space-y-1 text-slate-700 dark:text-slate-300">
-              <li>Engineering &amp; Development maintains 92% on-time arrival within 50m geofence.</li>
-              <li>Overtime engine identified 3 eligible requests pending manager approval.</li>
-              <li>Monthly payroll run for November 2026 is ready for review and disbursement.</li>
-              <li>0 statutory deduction conflicts detected across active employees.</li>
+              <li>Delhi Central Hub has 2 staff checked in within the 100m geofence perimeter.</li>
+              <li>Noida DC has 1 staff completed shift and 1 staff currently on site (88m from center).</li>
+              <li>1 staff (Bilal Qureshi) reported outside geofence roadblock exception (135m).</li>
+              <li>Casual Leave approved for Rehan Shaikh today.</li>
             </ul>
           </div>
 
           <div className="rounded-2xl border border-slate-100 p-3 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
-            Type natural language queries like: <em>&quot;Who worked overtime this Friday?&quot;</em> or <em>&quot;Export 01-31 grid for Sales team&quot;</em>
+            Type natural language commands: <em>&quot;Approve Bilal&apos;s geofence exception&quot;</em> or <em>&quot;Export attendance summary for North zone&quot;</em>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Help & Support Modal */}
+      <Modal
+        isOpen={showHelpModal}
+        onClose={() => setShowHelpModal(false)}
+        title="SmartHRMS Support & Documentation"
+        description="Salman Enterprises Enterprise Cloud Suite Helpdesk"
+        maxWidthClass="max-w-md"
+        panelClassName="p-6"
+        footer={
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={() => setShowHelpModal(false)}
+              className="rounded-xl bg-[#7138F5] px-4 py-2 text-xs font-bold text-white hover:bg-[#6025e8]"
+            >
+              Close
+            </button>
+          </div>
+        }
+      >
+        <div className="space-y-3 text-xs text-slate-600 dark:text-slate-300">
+          <p>
+            Welcome to the <strong>SmartHRMS Enterprise Suite</strong> for Salman Enterprises B2B Distribution.
+          </p>
+          <div className="rounded-xl bg-slate-50 p-3 dark:bg-white/5 space-y-1">
+            <p className="font-bold text-slate-800 dark:text-white">Direct Enterprise Support:</p>
+            <p>Email: <span className="text-[#7138F5] font-semibold">salmanenterprisesphu@gmail.com</span></p>
+            <p>Phone: <span className="font-semibold">+91 9876543210</span></p>
+            <p>Operating Hours: Monday – Saturday (9:00 AM – 7:00 PM IST)</p>
           </div>
         </div>
       </Modal>
