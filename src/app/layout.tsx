@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'APEX Electronics',
+    title: 'Salman Enterprises',
   },
   openGraph: {
     title: 'Salman Enterprises Distribution Ltd.',
@@ -51,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className="h-full scroll-smooth overflow-x-hidden" suppressHydrationWarning>
       <head>
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -61,7 +61,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="h-full bg-[var(--background)] font-sans text-[var(--foreground)] antialiased">
+      <body className="h-full bg-[var(--background)] font-sans text-[var(--foreground)] antialiased overflow-x-hidden">
         <AuthProvider>
           <PWARegister />
           <AppShell>{children}</AppShell>

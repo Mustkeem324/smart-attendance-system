@@ -115,7 +115,7 @@ export default function Sidebar({
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-slate-950/60  lg:hidden"
         />
       )}
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import { SalmanIcon } from '@/components/brand/SalmanLogo';
 import {
   Store,
   MapPin,
@@ -1019,14 +1020,14 @@ export default function AdvancedFieldSalesMobileApp() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080B1A] text-slate-100 pb-28 sm:pb-12">
+    <div className="min-h-screen bg-[#101225] text-slate-100 pb-28 sm:pb-12">
       {/* Android Native Status & Sync Bar */}
       <AndroidSyncStatusBar />
 
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-2xl text-xs font-semibold backdrop-blur-md animate-in slide-in-from-top-4 duration-200 border ${
+          className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-2xl text-xs font-semibold  animate-in slide-in-from-top-4 duration-200 border ${
             toast.type === 'success'
               ? 'bg-emerald-950/90 border-emerald-500/50 text-emerald-200 shadow-emerald-950/60'
               : toast.type === 'error'
@@ -1049,12 +1050,10 @@ export default function AdvancedFieldSalesMobileApp() {
       )}
 
       {/* Top Mobile App Header */}
-      <header className="sticky top-0 z-30 bg-[#0E122A]/95 border-b border-white/10 backdrop-blur-md px-4 py-3">
+      <header className="sticky top-0 z-30 bg-[#1B1D35] border-b border-[#252A54]  px-4 py-3">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#5428E8] to-[#8055F7] shadow-lg shadow-[#5428E8]/40">
-              <Smartphone className="h-5 w-5 text-white" />
-            </div>
+            <SalmanIcon className="h-9 w-9 shrink-0" />
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-extrabold text-sm text-white tracking-tight">SALMAN ENTERPRISES FIELD SALES</span>
@@ -1090,7 +1089,7 @@ export default function AdvancedFieldSalesMobileApp() {
 
             <Link
               href="/distribution"
-              className="p-1.5 rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:text-white hover:bg-white/10"
+              className="p-1.5 rounded-xl border border-[#252A54] bg-white/5 text-slate-300 hover:text-white hover:bg-white/10"
               title="Enterprise Console"
             >
               <Building2 className="h-4 w-4 text-purple-400" />
@@ -1166,7 +1165,7 @@ export default function AdvancedFieldSalesMobileApp() {
         {activeTab === 'dashboard' && (
           <div className="space-y-5">
             {/* Employee Profile Strip */}
-            <div className="rounded-2xl border border-white/10 bg-[#0E122A] p-4 flex items-center justify-between shadow-xl">
+            <div className="rounded-2xl border border-[#252A54] bg-[#1B1D35] p-4 flex items-center justify-between shadow-xl">
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <img
@@ -1202,7 +1201,7 @@ export default function AdvancedFieldSalesMobileApp() {
 
             {/* KPI Cards Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              <div className="p-3.5 rounded-2xl border border-white/10 bg-[#0E122A]">
+              <div className="p-3.5 rounded-2xl border border-[#252A54] bg-[#1B1D35]">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] font-bold uppercase text-slate-400">Today Visits</span>
                   <Store className="h-3.5 w-3.5 text-purple-400" />
@@ -1213,7 +1212,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl border border-white/10 bg-[#0E122A]">
+              <div className="p-3.5 rounded-2xl border border-[#252A54] bg-[#1B1D35]">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] font-bold uppercase text-slate-400">Units Sold</span>
                   <Smartphone className="h-3.5 w-3.5 text-indigo-400" />
@@ -1224,7 +1223,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl border border-white/10 bg-[#0E122A]">
+              <div className="p-3.5 rounded-2xl border border-[#252A54] bg-[#1B1D35]">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] font-bold uppercase text-slate-400">Today Sales</span>
                   <DollarSign className="h-3.5 w-3.5 text-emerald-400" />
@@ -1234,7 +1233,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl border border-white/10 bg-[#0E122A]">
+              <div className="p-3.5 rounded-2xl border border-[#252A54] bg-[#1B1D35]">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] font-bold uppercase text-slate-400">Monthly Target</span>
                   <TrendingUp className="h-3.5 w-3.5 text-cyan-400" />
@@ -1256,7 +1255,7 @@ export default function AdvancedFieldSalesMobileApp() {
                   setWizardStep(1);
                   setShopFilterTab('all');
                 }}
-                className="flex items-center gap-2 p-3 rounded-xl border border-white/10 bg-[#0E122A] hover:bg-white/5 transition text-left"
+                className="flex items-center gap-2 p-3 rounded-xl border border-[#252A54] bg-[#1B1D35] hover:bg-white/5 transition text-left"
               >
                 <div className="p-2 rounded-lg bg-purple-500/20 text-purple-300">
                   <Store className="h-4 w-4" />
@@ -1273,7 +1272,7 @@ export default function AdvancedFieldSalesMobileApp() {
                   setWizardStep(1);
                   setIsRegisterShopModalOpen(true);
                 }}
-                className="flex items-center gap-2 p-3 rounded-xl border border-white/10 bg-[#0E122A] hover:bg-white/5 transition text-left"
+                className="flex items-center gap-2 p-3 rounded-xl border border-[#252A54] bg-[#1B1D35] hover:bg-white/5 transition text-left"
               >
                 <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-300">
                   <Plus className="h-4 w-4" />
@@ -1286,7 +1285,7 @@ export default function AdvancedFieldSalesMobileApp() {
 
               <button
                 onClick={() => setActiveTab('history')}
-                className="flex items-center gap-2 p-3 rounded-xl border border-white/10 bg-[#0E122A] hover:bg-white/5 transition text-left"
+                className="flex items-center gap-2 p-3 rounded-xl border border-[#252A54] bg-[#1B1D35] hover:bg-white/5 transition text-left"
               >
                 <div className="p-2 rounded-lg bg-blue-500/20 text-blue-300">
                   <Clock className="h-4 w-4" />
@@ -1299,7 +1298,7 @@ export default function AdvancedFieldSalesMobileApp() {
 
               <button
                 onClick={() => setActiveTab('offline_sync')}
-                className="flex items-center gap-2 p-3 rounded-xl border border-white/10 bg-[#0E122A] hover:bg-white/5 transition text-left"
+                className="flex items-center gap-2 p-3 rounded-xl border border-[#252A54] bg-[#1B1D35] hover:bg-white/5 transition text-left"
               >
                 <div className="p-2 rounded-lg bg-amber-500/20 text-amber-300">
                   <RefreshCw className="h-4 w-4" />
@@ -1312,7 +1311,7 @@ export default function AdvancedFieldSalesMobileApp() {
             </div>
 
             {/* Today's Assigned Visit Plan */}
-            <div className="rounded-2xl border border-white/10 bg-[#0E122A] p-4 space-y-3">
+            <div className="rounded-2xl border border-[#252A54] bg-[#1B1D35] p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-xs font-extrabold text-white uppercase tracking-wider">
@@ -1372,7 +1371,7 @@ export default function AdvancedFieldSalesMobileApp() {
 
             {/* Recent Visited Activity */}
             {recentVisits.length > 0 && (
-              <div className="rounded-2xl border border-white/10 bg-[#0E122A] p-4 space-y-3">
+              <div className="rounded-2xl border border-[#252A54] bg-[#1B1D35] p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-extrabold text-white uppercase tracking-wider">
                     Recent Verified Visits
@@ -1429,7 +1428,7 @@ export default function AdvancedFieldSalesMobileApp() {
         {activeTab === 'visit_wizard' && (
           <div className="space-y-4">
             {/* Step Progress Bar */}
-            <div className="rounded-2xl border border-white/10 bg-[#0E122A] p-3 shadow-xl">
+            <div className="rounded-2xl border border-[#252A54] bg-[#1B1D35] p-3 shadow-xl">
               <div className="flex items-center justify-between mb-2 text-[11px] font-bold">
                 <span className="text-purple-300">
                   Step {wizardStep} of 5:{' '}
@@ -1501,7 +1500,7 @@ export default function AdvancedFieldSalesMobileApp() {
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
                       shopFilterTab === 'all'
                         ? 'bg-purple-500/20 border border-purple-500/40 text-purple-300'
-                        : 'border border-white/10 text-slate-400 hover:text-white'
+                        : 'border border-[#252A54] text-slate-400 hover:text-white'
                     }`}
                   >
                     All Shops ({shops.length})
@@ -1514,7 +1513,7 @@ export default function AdvancedFieldSalesMobileApp() {
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                       shopFilterTab === 'nearby'
                         ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300'
-                        : 'border border-white/10 text-slate-400 hover:text-white'
+                        : 'border border-[#252A54] text-slate-400 hover:text-white'
                     }`}
                   >
                     <MapPin className="h-3.5 w-3.5" />
@@ -1540,7 +1539,7 @@ export default function AdvancedFieldSalesMobileApp() {
                     filteredShops.map((shop) => (
                       <div
                         key={shop._id}
-                        className="p-4 rounded-2xl border border-white/10 bg-[#0E122A] hover:border-purple-500/50 hover:bg-white/[0.04] transition space-y-2.5"
+                        className="p-4 rounded-2xl border border-[#252A54] bg-[#1B1D35] hover:border-purple-500/50 hover:bg-white/[0.04] transition space-y-2.5"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div>
@@ -1604,7 +1603,7 @@ export default function AdvancedFieldSalesMobileApp() {
 
                 {/* Selected Shop Context Card */}
                 {selectedShop && (
-                  <div className="p-3.5 rounded-2xl border border-white/10 bg-[#0E122A] flex items-center justify-between">
+                  <div className="p-3.5 rounded-2xl border border-[#252A54] bg-[#1B1D35] flex items-center justify-between">
                     <div>
                       <p className="text-[10px] font-mono text-purple-400 uppercase font-bold">Selected Destination</p>
                       <h4 className="text-xs font-extrabold text-white">{selectedShop.name}</h4>
@@ -1617,7 +1616,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 )}
 
                 {/* Prominent Capture Button */}
-                <div className="p-6 rounded-2xl border border-white/10 bg-[#0E122A] text-center space-y-3">
+                <div className="p-6 rounded-2xl border border-[#252A54] bg-[#1B1D35] text-center space-y-3">
                   <div className="h-16 w-16 mx-auto rounded-3xl bg-gradient-to-br from-[#5428E8] to-[#8055F7] flex items-center justify-center text-white shadow-2xl shadow-[#5428E8]/50">
                     <Navigation className={`h-8 w-8 ${gpsLoading ? 'animate-spin' : ''}`} />
                   </div>
@@ -1641,8 +1640,8 @@ export default function AdvancedFieldSalesMobileApp() {
 
                 {/* Captured GPS Details */}
                 {capturedGps && (
-                  <div className="p-4 rounded-2xl border border-white/10 bg-[#0E122A] space-y-3">
-                    <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                  <div className="p-4 rounded-2xl border border-[#252A54] bg-[#1B1D35] space-y-3">
+                    <div className="flex items-center justify-between pb-2 border-b border-[#252A54]">
                       <span className="text-xs font-bold text-white flex items-center gap-1.5">
                         <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                         <span>GPS Coordinates Locked</span>
@@ -1691,7 +1690,7 @@ export default function AdvancedFieldSalesMobileApp() {
                       <button
                         type="button"
                         onClick={copyGoogleMapsLink}
-                        className="w-full sm:flex-1 py-2.5 px-3 rounded-xl border border-white/10 bg-white/5 text-xs font-bold text-slate-200 hover:bg-white/10 flex items-center justify-center gap-1.5"
+                        className="w-full sm:flex-1 py-2.5 px-3 rounded-xl border border-[#252A54] bg-white/5 text-xs font-bold text-slate-200 hover:bg-white/10 flex items-center justify-center gap-1.5"
                       >
                         {copiedLink ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
                         <span>{copiedLink ? 'Link Copied!' : 'Copy Location Link'}</span>
@@ -1706,7 +1705,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 <div className="flex items-center justify-between pt-2">
                   <button
                     onClick={() => setWizardStep(1)}
-                    className="px-4 py-2.5 rounded-xl border border-white/10 text-xs font-bold text-slate-300 hover:bg-white/5"
+                    className="px-4 py-2.5 rounded-xl border border-[#252A54] text-xs font-bold text-slate-300 hover:bg-white/5"
                   >
                     &larr; Back
                   </button>
@@ -1780,7 +1779,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 )}
 
                 {/* PHOTO 1: SHOP FRONT */}
-                <div className="p-4 rounded-2xl border border-white/10 bg-[#0E122A] space-y-3">
+                <div className="p-4 rounded-2xl border border-[#252A54] bg-[#1B1D35] space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-[10px] font-mono font-bold text-purple-400 uppercase">Evidence 1 of 2</span>
@@ -1796,9 +1795,9 @@ export default function AdvancedFieldSalesMobileApp() {
                   </div>
 
                   {frontPhoto ? (
-                    <div className="relative rounded-xl overflow-hidden aspect-video bg-black/50 border border-white/10">
+                    <div className="relative rounded-xl overflow-hidden aspect-video bg-black/50 border border-[#252A54]">
                       <img src={frontPhoto.dataUrl} alt="Shop Front" className="w-full h-full object-cover" />
-                      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] text-white">
+                      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between bg-black/60  px-3 py-1.5 rounded-lg text-[10px] text-white">
                         <span>Captured at {frontPhoto.timestamp}</span>
                         <button
                           onClick={() => startLiveCamera('front')}
@@ -1817,7 +1816,7 @@ export default function AdvancedFieldSalesMobileApp() {
                         <Camera className="h-4 w-4" />
                         <span>Open Camera</span>
                       </button>
-                      <label className="py-3 px-4 rounded-xl border border-white/10 bg-white/5 text-xs font-bold text-slate-300 hover:bg-white/10 cursor-pointer flex items-center gap-2">
+                      <label className="py-3 px-4 rounded-xl border border-[#252A54] bg-white/5 text-xs font-bold text-slate-300 hover:bg-white/10 cursor-pointer flex items-center gap-2">
                         <Upload className="h-4 w-4" />
                         <span>Upload</span>
                         <input
@@ -1832,7 +1831,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 </div>
 
                 {/* PHOTO 2: SHOPKEEPER / INTERACTION */}
-                <div className="p-4 rounded-2xl border border-white/10 bg-[#0E122A] space-y-3">
+                <div className="p-4 rounded-2xl border border-[#252A54] bg-[#1B1D35] space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-[10px] font-mono font-bold text-purple-400 uppercase">Evidence 2 of 2</span>
@@ -1859,9 +1858,9 @@ export default function AdvancedFieldSalesMobileApp() {
                       </button>
                     </div>
                   ) : interactionPhoto ? (
-                    <div className="relative rounded-xl overflow-hidden aspect-video bg-black/50 border border-white/10">
+                    <div className="relative rounded-xl overflow-hidden aspect-video bg-black/50 border border-[#252A54]">
                       <img src={interactionPhoto.dataUrl} alt="Interaction" className="w-full h-full object-cover" />
-                      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg text-[10px] text-white">
+                      <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between bg-black/60  px-3 py-1.5 rounded-lg text-[10px] text-white">
                         <span>Captured at {interactionPhoto.timestamp}</span>
                         <button
                           onClick={() => startLiveCamera('interaction')}
@@ -1881,7 +1880,7 @@ export default function AdvancedFieldSalesMobileApp() {
                           <Camera className="h-4 w-4" />
                           <span>Open Camera</span>
                         </button>
-                        <label className="py-3 px-4 rounded-xl border border-white/10 bg-white/5 text-xs font-bold text-slate-300 hover:bg-white/10 cursor-pointer flex items-center gap-2">
+                        <label className="py-3 px-4 rounded-xl border border-[#252A54] bg-white/5 text-xs font-bold text-slate-300 hover:bg-white/10 cursor-pointer flex items-center gap-2">
                           <Upload className="h-4 w-4" />
                           <span>Upload</span>
                           <input
@@ -1919,7 +1918,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 <div className="flex items-center justify-between pt-2">
                   <button
                     onClick={() => setWizardStep(2)}
-                    className="px-4 py-2.5 rounded-xl border border-white/10 text-xs font-bold text-slate-300"
+                    className="px-4 py-2.5 rounded-xl border border-[#252A54] text-xs font-bold text-slate-300"
                   >
                     &larr; Back
                   </button>
@@ -1959,7 +1958,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 </div>
 
                 {/* Date & Time Sold + Optional Distributor Strip */}
-                <div className="p-3.5 rounded-2xl border border-white/10 bg-[#0E122A] space-y-3">
+                <div className="p-3.5 rounded-2xl border border-[#252A54] bg-[#1B1D35] space-y-3">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     <div>
                       <label className="block text-[10px] font-bold uppercase text-purple-300 mb-1">
@@ -2032,7 +2031,7 @@ export default function AdvancedFieldSalesMobileApp() {
                         className={`px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap transition ${
                           productCategoryFilter === cat
                             ? 'bg-[#5428E8] text-white'
-                            : 'border border-white/10 text-slate-400 hover:text-white'
+                            : 'border border-[#252A54] text-slate-400 hover:text-white'
                         }`}
                       >
                         {cat}
@@ -2057,7 +2056,7 @@ export default function AdvancedFieldSalesMobileApp() {
                       {selectedLines.map((line, idx) => (
                         <div
                           key={idx}
-                          className="p-3 rounded-xl border border-white/10 bg-[#0E122A] space-y-2"
+                          className="p-3 rounded-xl border border-[#252A54] bg-[#1B1D35] space-y-2"
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div>
@@ -2097,7 +2096,7 @@ export default function AdvancedFieldSalesMobileApp() {
                               className={`text-[10px] font-bold px-2 py-1 rounded-lg border transition ${
                                 line.priceType === 'MANUAL'
                                   ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
-                                  : 'border-white/10 text-slate-400 hover:text-white'
+                                  : 'border-[#252A54] text-slate-400 hover:text-white'
                               }`}
                             >
                               {line.priceType === 'MANUAL' ? '✎ Manual Price Active' : 'Use Standard Price'}
@@ -2169,7 +2168,7 @@ export default function AdvancedFieldSalesMobileApp() {
                     {filteredProducts.slice(0, 12).map((prod) => (
                       <div
                         key={prod._id}
-                        className="p-3 rounded-xl border border-white/10 bg-[#0E122A] flex items-center justify-between gap-3 hover:border-purple-500/40 transition"
+                        className="p-3 rounded-xl border border-[#252A54] bg-[#1B1D35] flex items-center justify-between gap-3 hover:border-purple-500/40 transition"
                       >
                         <div className="min-w-0">
                           <span className="text-[9px] font-bold text-purple-400 uppercase">{prod.brand}</span>
@@ -2195,7 +2194,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 <div className="flex items-center justify-between pt-2">
                   <button
                     onClick={() => setWizardStep(3)}
-                    className="px-4 py-2.5 rounded-xl border border-white/10 text-xs font-bold text-slate-300"
+                    className="px-4 py-2.5 rounded-xl border border-[#252A54] text-xs font-bold text-slate-300"
                   >
                     &larr; Back
                   </button>
@@ -2235,8 +2234,8 @@ export default function AdvancedFieldSalesMobileApp() {
                 </div>
 
                 {/* Visit Information Card */}
-                <div className="p-4 rounded-2xl border border-white/10 bg-[#0E122A] space-y-3">
-                  <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                <div className="p-4 rounded-2xl border border-[#252A54] bg-[#1B1D35] space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-[#252A54]">
                     <span className="text-xs font-extrabold text-white">Visit Dossier</span>
                     <span className="font-mono text-[10px] text-purple-300 font-bold">
                       {selectedShop?.dealerCode}
@@ -2273,7 +2272,7 @@ export default function AdvancedFieldSalesMobileApp() {
 
                   {/* Photographs Thumbnails */}
                   <div className="grid grid-cols-2 gap-2 pt-1">
-                    <div className="rounded-xl overflow-hidden border border-white/10 bg-black/40 aspect-video relative">
+                    <div className="rounded-xl overflow-hidden border border-[#252A54] bg-black/40 aspect-video relative">
                       {frontPhoto?.dataUrl && (
                         <img src={frontPhoto.dataUrl} alt="Shop Front" className="w-full h-full object-cover" />
                       )}
@@ -2282,7 +2281,7 @@ export default function AdvancedFieldSalesMobileApp() {
                       </span>
                     </div>
 
-                    <div className="rounded-xl overflow-hidden border border-white/10 bg-black/40 aspect-video relative">
+                    <div className="rounded-xl overflow-hidden border border-[#252A54] bg-black/40 aspect-video relative">
                       {interactionPhoto?.dataUrl ? (
                         <img src={interactionPhoto.dataUrl} alt="Interaction" className="w-full h-full object-cover" />
                       ) : (
@@ -2298,7 +2297,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 </div>
 
                 {/* Product Sales Itemized Table */}
-                <div className="p-4 rounded-2xl border border-white/10 bg-[#0E122A] space-y-3">
+                <div className="p-4 rounded-2xl border border-[#252A54] bg-[#1B1D35] space-y-3">
                   <div className="flex items-center justify-between">
                     <h4 className="text-xs font-extrabold text-white">Itemized Sales Breakdown</h4>
                     <span className="text-[10px] text-slate-400 font-mono">{selectedLines.length} Lines</span>
@@ -2307,7 +2306,7 @@ export default function AdvancedFieldSalesMobileApp() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs">
                       <thead>
-                        <tr className="border-b border-white/10 text-[10px] font-bold text-slate-400 uppercase">
+                        <tr className="border-b border-[#252A54] text-[10px] font-bold text-slate-400 uppercase">
                           <th className="pb-2">Product</th>
                           <th className="pb-2 text-center">Qty</th>
                           <th className="pb-2 text-right">Standard</th>
@@ -2351,11 +2350,11 @@ export default function AdvancedFieldSalesMobileApp() {
 
                 {/* Summary KPI Cards */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                  <div className="p-3 rounded-xl border border-white/10 bg-[#0E122A]">
+                  <div className="p-3 rounded-xl border border-[#252A54] bg-[#1B1D35]">
                     <span className="text-[10px] text-slate-400 block">Total Units</span>
                     <span className="font-mono text-base font-black text-white">{totalUnits} units</span>
                   </div>
-                  <div className="p-3 rounded-xl border border-white/10 bg-[#0E122A]">
+                  <div className="p-3 rounded-xl border border-[#252A54] bg-[#1B1D35]">
                     <span className="text-[10px] text-slate-400 block">Standard Value</span>
                     <span className="font-mono text-base font-black text-slate-300">
                       ₹{totalStandardValue.toLocaleString('en-IN')}
@@ -2367,7 +2366,7 @@ export default function AdvancedFieldSalesMobileApp() {
                       ₹{totalActualSales.toLocaleString('en-IN')}
                     </span>
                   </div>
-                  <div className="p-3 rounded-xl border border-white/10 bg-[#0E122A]">
+                  <div className="p-3 rounded-xl border border-[#252A54] bg-[#1B1D35]">
                     <span className="text-[10px] text-slate-400 block">Net GST (18%)</span>
                     <span className="font-mono text-base font-black text-purple-300">
                       ₹{totalTax.toLocaleString('en-IN')}
@@ -2408,7 +2407,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 <div className="flex items-center justify-between pt-2">
                   <button
                     onClick={() => setWizardStep(4)}
-                    className="px-4 py-2.5 rounded-xl border border-white/10 text-xs font-bold text-slate-300"
+                    className="px-4 py-2.5 rounded-xl border border-[#252A54] text-xs font-bold text-slate-300"
                   >
                     &larr; Back
                   </button>
@@ -2462,7 +2461,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 recentVisits.map((v: any) => (
                   <div
                     key={v._id}
-                    className="p-4 rounded-2xl border border-white/10 bg-[#0E122A] hover:border-purple-500/40 transition space-y-2.5"
+                    className="p-4 rounded-2xl border border-[#252A54] bg-[#1B1D35] hover:border-purple-500/40 transition space-y-2.5"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div>
@@ -2591,7 +2590,7 @@ export default function AdvancedFieldSalesMobileApp() {
               </h4>
 
               {offlineQueue.length === 0 ? (
-                <div className="p-8 text-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02]">
+                <div className="p-8 text-center rounded-2xl border border-dashed border-[#252A54] bg-white/[0.02]">
                   <CheckCircle2 className="h-10 w-10 text-emerald-500/40 mx-auto mb-2" />
                   <p className="text-sm font-bold text-white">All device records are synchronized</p>
                   <p className="text-xs text-slate-400 mt-0.5">Zero pending offline queues.</p>
@@ -2600,7 +2599,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 offlineQueue.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-xl border border-white/10 bg-[#0E122A] flex items-center justify-between"
+                    className="p-3.5 rounded-xl border border-[#252A54] bg-[#1B1D35] flex items-center justify-between"
                   >
                     <div>
                       <div className="flex items-center gap-2">
@@ -2628,9 +2627,9 @@ export default function AdvancedFieldSalesMobileApp() {
           MODAL: REGISTER NEW SHOP (IF NOT IN MASTER LIST)
           ========================================================================= */}
       {isRegisterShopModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md overflow-y-auto">
-          <div className="w-full max-w-lg rounded-3xl bg-[#0E122A] border border-white/15 p-6 shadow-2xl space-y-4 my-auto max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4  overflow-y-auto">
+          <div className="w-full max-w-lg rounded-3xl bg-[#1B1D35] border border-white/15 p-6 shadow-2xl space-y-4 my-auto max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-[#252A54]">
               <div className="flex items-center gap-2">
                 <Store className="h-5 w-5 text-emerald-400" />
                 <div>
@@ -2790,7 +2789,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 </div>
               </div>
 
-              <div className="pt-2 flex items-center justify-end gap-2 border-t border-white/10">
+              <div className="pt-2 flex items-center justify-end gap-2 border-t border-[#252A54]">
                 <button
                   type="button"
                   onClick={() => setIsRegisterShopModalOpen(false)}
@@ -2815,8 +2814,8 @@ export default function AdvancedFieldSalesMobileApp() {
           MODAL: SUBMISSION SUCCESS CELEBRATION
           ========================================================================= */}
       {submissionSuccessModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
-          <div className="w-full max-w-md rounded-3xl bg-[#0E122A] border border-white/15 p-6 shadow-2xl text-center space-y-4 animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 ">
+          <div className="w-full max-w-md rounded-3xl bg-[#1B1D35] border border-white/15 p-6 shadow-2xl text-center space-y-4 animate-in zoom-in-95 duration-200">
             <div className="h-16 w-16 mx-auto rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white shadow-2xl shadow-emerald-500/40">
               <CheckCircle2 className="h-8 w-8" />
             </div>
@@ -2832,7 +2831,7 @@ export default function AdvancedFieldSalesMobileApp() {
               </p>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 grid grid-cols-2 gap-2 text-xs text-left">
+            <div className="p-3.5 rounded-2xl bg-white/5 border border-[#252A54] grid grid-cols-2 gap-2 text-xs text-left">
               <div>
                 <span className="text-[10px] text-slate-400 block">Total Sold</span>
                 <span className="font-bold text-white">{submissionSuccessModal.totalUnits} Units</span>
@@ -2868,7 +2867,7 @@ export default function AdvancedFieldSalesMobileApp() {
               </button>
               <button
                 onClick={resetVisitWizard}
-                className="w-full py-2.5 rounded-xl border border-white/10 text-xs font-bold text-slate-300 hover:bg-white/5"
+                className="w-full py-2.5 rounded-xl border border-[#252A54] text-xs font-bold text-slate-300 hover:bg-white/5"
               >
                 Return to Dashboard
               </button>
@@ -2881,9 +2880,9 @@ export default function AdvancedFieldSalesMobileApp() {
           MODAL: INSPECT VISIT DOSSIER (FROM HISTORY)
           ========================================================================= */}
       {inspectVisit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md overflow-y-auto">
-          <div className="w-full max-w-xl rounded-3xl bg-[#0E122A] border border-white/15 p-6 shadow-2xl space-y-4 my-auto max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4  overflow-y-auto">
+          <div className="w-full max-w-xl rounded-3xl bg-[#1B1D35] border border-white/15 p-6 shadow-2xl space-y-4 my-auto max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-[#252A54]">
               <div>
                 <span className="font-mono text-[10px] font-bold text-purple-400">{inspectVisit.visitId}</span>
                 <h3 className="text-base font-extrabold text-white">{inspectVisit.retailerId?.name}</h3>
@@ -2922,7 +2921,7 @@ export default function AdvancedFieldSalesMobileApp() {
             <div className="space-y-1.5">
               <span className="text-[11px] font-bold text-slate-300">Photographic Evidence</span>
               <div className="grid grid-cols-2 gap-2">
-                <div className="rounded-xl overflow-hidden border border-white/10 bg-black/40 aspect-video relative">
+                <div className="rounded-xl overflow-hidden border border-[#252A54] bg-black/40 aspect-video relative">
                   {inspectVisit.shopFrontPhoto?.photoUrl ? (
                     <img
                       src={inspectVisit.shopFrontPhoto.photoUrl}
@@ -2939,7 +2938,7 @@ export default function AdvancedFieldSalesMobileApp() {
                   </span>
                 </div>
 
-                <div className="rounded-xl overflow-hidden border border-white/10 bg-black/40 aspect-video relative">
+                <div className="rounded-xl overflow-hidden border border-[#252A54] bg-black/40 aspect-video relative">
                   {inspectVisit.shopInteractionPhoto?.photoUrl ? (
                     <img
                       src={inspectVisit.shopInteractionPhoto.photoUrl}
@@ -2981,7 +2980,7 @@ export default function AdvancedFieldSalesMobileApp() {
             <div className="pt-2 flex justify-end">
               <button
                 onClick={() => setInspectVisit(null)}
-                className="px-5 py-2 rounded-xl border border-white/10 text-xs font-bold text-slate-300"
+                className="px-5 py-2 rounded-xl border border-[#252A54] text-xs font-bold text-slate-300"
               >
                 Close
               </button>

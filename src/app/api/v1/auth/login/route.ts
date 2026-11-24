@@ -8,14 +8,24 @@ import { logDistributionAction, apiSuccess, apiError } from '@/lib/distribution-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, password } = body;
+    const identifier = (body.email || body.phone || body.username || '').trim();
+    const { password } = body;
 
-    if (!email || !password) {
-      return apiError('Email and password are required', 400);
+    if (!identifier || !password) {
+      return apiError('Email or mobile number, and password are required', 400);
     }
 
+    const cleanIdentifier = identifier.toLowerCase();
+    const cleanPhone = identifier.replace(/[\s-]/g, '');
+
     const user = await prisma.user.findFirst({
-      where: { email: email.toLowerCase().trim() },
+      where: {
+        OR: [
+          { email: cleanIdentifier },
+          { phone: cleanPhone },
+          { phone: identifier },
+        ],
+      },
       include: {
         organization: true,
         employee: {
@@ -80,13 +90,13 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Set auth cookie
+    // Set auth cookie (Active for 30 Days)
     response.cookies.set('auth_token', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      maxAge: 30 * 24 * 60 * 60, // 30 days active session
     });
 
     return response;

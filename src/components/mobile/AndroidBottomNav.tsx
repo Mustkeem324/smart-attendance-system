@@ -65,7 +65,7 @@ export default function AndroidBottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-[#23294E] bg-[#0E122A]/95 backdrop-blur-xl px-1 shadow-[0_-8px_30px_rgba(0,0,0,0.5)] md:hidden pb-[env(safe-area-inset-bottom)]"
+      className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-[#23294E] bg-[#0E122A]/95  px-1 shadow-[0_-8px_30px_rgba(0,0,0,0.5)] md:hidden pb-[env(safe-area-inset-bottom)]"
       aria-label="Android Bottom Navigation"
     >
       {navItems.map((item) => {

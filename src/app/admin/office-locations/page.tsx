@@ -190,7 +190,7 @@ export default function OfficeLocationsPage() {
                 </div>
 
                 {/* Marker Card Overlay */}
-                <div className="absolute -bottom-10 rounded-xl bg-slate-900/90 px-4 py-2 text-center text-xs text-white backdrop-blur shadow-xl border border-slate-800">
+                <div className="absolute -bottom-10 rounded-xl bg-slate-900/90 px-4 py-2 text-center text-xs text-white  shadow-xl border border-slate-800">
                   <span className="font-bold text-emerald-400">{selectedOfficeForMap.name}</span>
                   <p className="text-[10px] text-slate-300">
                     Lat: {selectedOfficeForMap.latitude.toFixed(4)}, Lon: {selectedOfficeForMap.longitude.toFixed(4)}
@@ -205,7 +205,7 @@ export default function OfficeLocationsPage() {
             )}
 
             {/* Map Controls */}
-            <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-slate-900/80 px-2.5 py-1 text-[10px] text-white backdrop-blur">
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-slate-900/80 px-2.5 py-1 text-[10px] text-white ">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
               <span>Geofence Simulator Active</span>
             </div>
@@ -335,7 +335,7 @@ export default function OfficeLocationsPage() {
 
       {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 ">
           <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
               <h2 className="text-sm font-bold text-slate-900 dark:text-white">

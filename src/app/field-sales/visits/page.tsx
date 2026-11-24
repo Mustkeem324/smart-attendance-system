@@ -300,7 +300,7 @@ export default function ShopVisitMonitorPage() {
 
       {/* Photo Preview Modal */}
       {selectedPhoto && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 ">
           <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl border border-indigo-100">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
               <h4 className="font-bold text-slate-800 text-sm">Store Visit Photographic Proof</h4>

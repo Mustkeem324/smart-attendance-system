@@ -270,7 +270,7 @@ export default function DeliveriesPage() {
 
       {/* Dispatch Shipment Modal */}
       {showDispatchModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80  animate-in fade-in">
           <div className="w-full max-w-lg rounded-2xl bg-[#151A38] border border-[#2B3363] shadow-2xl p-6 ring-1 ring-purple-500/20">
             <div className="flex items-center justify-between pb-3 border-b border-[#23294E]">
               <h2 className="text-base font-bold text-white flex items-center gap-2">
@@ -355,7 +355,7 @@ export default function DeliveriesPage() {
 
       {/* Confirm Delivery Modal */}
       {showConfirmModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80  animate-in fade-in">
           <div className="w-full max-w-sm rounded-2xl bg-[#151A38] border border-[#2B3363] shadow-2xl p-6 ring-1 ring-purple-500/20">
             <h3 className="text-base font-bold text-white mb-2">Confirm Proof of Delivery (POD)</h3>
             <p className="text-xs text-slate-400 mb-4">

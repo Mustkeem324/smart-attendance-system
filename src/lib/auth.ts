@@ -24,8 +24,9 @@ export async function comparePassword(password: string, hash: string): Promise<b
 }
 
 export function generateTokens(payload: TokenPayload) {
-  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
-  const refreshToken = jwt.sign({ userId: payload.userId }, JWT_REFRESH_SECRET, { expiresIn: '30d' });
+  // 30-Day Active Real Session
+  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '30d' });
+  const refreshToken = jwt.sign({ userId: payload.userId }, JWT_REFRESH_SECRET, { expiresIn: '90d' });
   return { accessToken, refreshToken };
 }
 

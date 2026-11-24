@@ -17,6 +17,8 @@ enum Role {
   FIELD_SALES_REP
   DELIVERY_AGENT
   INVENTORY_MANAGER
+  RETAILER
+  DISTRIBUTOR
 }
 
 enum EmploymentType {

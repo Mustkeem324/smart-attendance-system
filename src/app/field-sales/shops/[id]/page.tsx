@@ -382,7 +382,7 @@ export default function ShopDetailPage() {
                     className="h-44 w-full object-cover transition duration-300 group-hover:scale-105"
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 text-white">
-                    <span className="rounded bg-black/40 px-1.5 py-0.5 text-[9px] font-bold uppercase backdrop-blur-xs">
+                    <span className="rounded bg-black/40 px-1.5 py-0.5 text-[9px] font-bold uppercase ">
                       {photo.category}
                     </span>
                     <p className="mt-1 text-[10px] text-slate-200 truncate">{photo.source}</p>

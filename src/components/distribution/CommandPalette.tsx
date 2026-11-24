@@ -82,7 +82,7 @@ export function CommandPalette({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/75  animate-in fade-in duration-150">
       <div
         className="w-full max-w-xl rounded-2xl bg-[#151A38] border border-[#2B3363] shadow-2xl overflow-hidden ring-1 ring-purple-500/20"
         onClick={(e) => e.stopPropagation()}

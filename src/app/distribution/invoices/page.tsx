@@ -176,7 +176,7 @@ export default function InvoicesPage() {
 
       {/* Formal Tax Invoice Preview Modal */}
       {selectedInvoice && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80  animate-in fade-in">
           <div className="w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-2xl bg-white text-slate-900 shadow-2xl p-8 ring-1 ring-black/20">
             {/* Modal Controls */}
             <div className="flex items-center justify-between pb-4 border-b border-slate-200 mb-6 print:hidden">

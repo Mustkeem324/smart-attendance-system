@@ -391,7 +391,7 @@ export default function ProductCatalogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FD] text-slate-900 font-sans selection:bg-[#5428E8] selection:text-white pb-20">
+    <div className="min-h-screen bg-[#F8F9FD] text-slate-900 font-sans selection:bg-[#7138F5] selection:text-white pb-20">
       {/* =========================================================================
           1. TOP NAVIGATION BAR (Exact brand match with B2B Homepage)
           ========================================================================= */}
@@ -401,7 +401,7 @@ export default function ProductCatalogPage() {
           2. EDITORIAL FEATURED PROMOTION BANNER
           ========================================================================= */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#080B1A] via-[#101438] to-[#0A0D1F] text-white py-12 md:py-16 border-b border-indigo-950">
-        <div className="absolute top-0 right-0 -mr-24 -mt-24 w-96 h-96 bg-[#5428E8]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 -mr-24 -mt-24 w-96 h-96 bg-[#7138F5]/20 rounded-full blur-3xl pointer-events-none" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8 space-y-4">
@@ -437,7 +437,7 @@ export default function ProductCatalogPage() {
                     const el = document.getElementById('catalog-grid-top');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="rounded-2xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-xl shadow-indigo-600/30 hover:opacity-95 transition flex items-center gap-2"
+                  className="rounded-2xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] px-6 py-3 text-xs sm:text-sm font-bold text-white shadow-xl shadow-indigo-600/30 hover:opacity-95 transition flex items-center gap-2"
                 >
                   <span>Explore Collection ({totalProducts})</span>
                   <ArrowRight className="h-4 w-4" />
@@ -453,24 +453,24 @@ export default function ProductCatalogPage() {
             </div>
 
             {/* Quick Stats Pill Panel */}
-            <div className="lg:col-span-4 rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl space-y-4">
+            <div className="lg:col-span-4 rounded-3xl border border-[#252A54] bg-white/5 p-6  space-y-4">
               <span className="text-[10px] font-black uppercase tracking-widest text-indigo-300 block">
                 DISTRIBUTION NETWORK STATUS
               </span>
               <div className="grid grid-cols-2 gap-3 text-xs">
-                <div className="rounded-2xl bg-black/20 p-3 border border-white/5">
+                <div className="rounded-2xl bg-black/20 p-3 border border-[#1E2248]">
                   <span className="text-[10px] text-slate-400 block">Active SKUs</span>
                   <span className="font-mono text-lg font-black text-white">{totalProducts} Devices</span>
                 </div>
-                <div className="rounded-2xl bg-black/20 p-3 border border-white/5">
+                <div className="rounded-2xl bg-black/20 p-3 border border-[#1E2248]">
                   <span className="text-[10px] text-slate-400 block">OEM Brands</span>
                   <span className="font-mono text-lg font-black text-indigo-300">{brands.length} Verified</span>
                 </div>
-                <div className="rounded-2xl bg-black/20 p-3 border border-white/5">
+                <div className="rounded-2xl bg-black/20 p-3 border border-[#1E2248]">
                   <span className="text-[10px] text-slate-400 block">Dispatch SLA</span>
                   <span className="font-mono text-lg font-black text-emerald-400">Same-Day</span>
                 </div>
-                <div className="rounded-2xl bg-black/20 p-3 border border-white/5">
+                <div className="rounded-2xl bg-black/20 p-3 border border-[#1E2248]">
                   <span className="text-[10px] text-slate-400 block">Dealer Pricing</span>
                   <span className="font-mono text-sm font-black text-amber-300">
                     {isDealerAuthorized ? 'Unlocked ✓' : 'Protected 🔒'}
@@ -506,7 +506,7 @@ export default function ProductCatalogPage() {
                   }}
                   className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
                     isActive
-                      ? 'bg-[#5428E8] text-white shadow-md shadow-[#5428E8]/30 scale-102'
+                      ? 'bg-[#7138F5] text-white shadow-md shadow-[#5428E8]/30 scale-102'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200/60'
                   }`}
                 >
@@ -543,7 +543,7 @@ export default function ProductCatalogPage() {
                 setSearchQuery(e.target.value);
                 setPage(1);
               }}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-9 py-2 text-xs font-medium text-slate-900 placeholder-slate-400 outline-none transition focus:border-[#5428E8] focus:bg-white focus:ring-2 focus:ring-[#5428E8]/10"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-9 py-2 text-xs font-medium text-slate-900 placeholder-slate-400 outline-none transition focus:border-[#7138F5] focus:bg-white focus:ring-2 focus:ring-[#5428E8]/10"
             />
             {searchQuery && (
               <button
@@ -571,7 +571,7 @@ export default function ProductCatalogPage() {
                   setSortBy(e.target.value);
                   setPage(1);
                 }}
-                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-[#5428E8]"
+                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-[#7138F5]"
               >
                 <option value="featured">Featured &amp; Recommended</option>
                 <option value="price_asc">Price: Low to High</option>
@@ -587,7 +587,7 @@ export default function ProductCatalogPage() {
                 type="button"
                 onClick={() => setViewMode('grid')}
                 className={`p-1.5 rounded-lg transition ${
-                  viewMode === 'grid' ? 'bg-white text-[#5428E8] shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                  viewMode === 'grid' ? 'bg-white text-[#7138F5] shadow-sm' : 'text-slate-500 hover:text-slate-900'
                 }`}
                 title="Grid View"
               >
@@ -597,7 +597,7 @@ export default function ProductCatalogPage() {
                 type="button"
                 onClick={() => setViewMode('list')}
                 className={`p-1.5 rounded-lg transition ${
-                  viewMode === 'list' ? 'bg-white text-[#5428E8] shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                  viewMode === 'list' ? 'bg-white text-[#7138F5] shadow-sm' : 'text-slate-500 hover:text-slate-900'
                 }`}
                 title="List View"
               >
@@ -626,7 +626,7 @@ export default function ProductCatalogPage() {
           <aside className="hidden lg:block lg:col-span-3 space-y-6 rounded-3xl bg-white p-6 border border-slate-200/80 shadow-sm sticky top-[140px] max-h-[82vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="h-4 w-4 text-[#5428E8]" />
+                <SlidersHorizontal className="h-4 w-4 text-[#7138F5]" />
                 <h3 className="font-extrabold text-sm text-slate-900">Refine Catalog</h3>
               </div>
               {activeFilterCount > 0 && (
@@ -651,14 +651,14 @@ export default function ProductCatalogPage() {
                   return (
                     <label
                       key={b.name}
-                      className="flex items-center justify-between text-xs font-medium text-slate-700 hover:text-[#5428E8] cursor-pointer py-1"
+                      className="flex items-center justify-between text-xs font-medium text-slate-700 hover:text-[#7138F5] cursor-pointer py-1"
                     >
                       <div className="flex items-center gap-2.5">
                         <input
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => toggleBrand(b.name)}
-                          className="rounded border-slate-300 text-[#5428E8] focus:ring-[#5428E8]/20 h-4 w-4"
+                          className="rounded border-slate-300 text-[#7138F5] focus:ring-[#5428E8]/20 h-4 w-4"
                         />
                         <span>{b.name}</span>
                       </div>
@@ -675,7 +675,7 @@ export default function ProductCatalogPage() {
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
                   Maximum Price
                 </span>
-                <span className="font-mono text-xs font-black text-[#5428E8]">
+                <span className="font-mono text-xs font-black text-[#7138F5]">
                   ₹{priceRange[1].toLocaleString('en-IN')}
                 </span>
               </div>
@@ -712,7 +712,7 @@ export default function ProductCatalogPage() {
                       onClick={() => toggleRAM(ramVal)}
                       className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${
                         isSelected
-                          ? 'bg-[#5428E8] text-white shadow-sm'
+                          ? 'bg-[#7138F5] text-white shadow-sm'
                           : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                       }`}
                     >
@@ -738,7 +738,7 @@ export default function ProductCatalogPage() {
                       onClick={() => toggleStorage(stVal)}
                       className={`px-2.5 py-1 rounded-lg text-xs font-bold transition ${
                         isSelected
-                          ? 'bg-[#5428E8] text-white shadow-sm'
+                          ? 'bg-[#7138F5] text-white shadow-sm'
                           : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                       }`}
                     >
@@ -772,7 +772,7 @@ export default function ProductCatalogPage() {
                         setSelectedAvailability(st.id);
                         setPage(1);
                       }}
-                      className="text-[#5428E8] focus:ring-[#5428E8]/20"
+                      className="text-[#7138F5] focus:ring-[#5428E8]/20"
                     />
                     <span>{st.label}</span>
                   </label>
@@ -801,7 +801,7 @@ export default function ProductCatalogPage() {
                     }}
                     className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
                       selectedWarranty === w.months
-                        ? 'bg-[#5428E8] text-white font-bold'
+                        ? 'bg-[#7138F5] text-white font-bold'
                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                     }`}
                   >
@@ -849,7 +849,7 @@ export default function ProductCatalogPage() {
                 <button
                   type="button"
                   onClick={clearAllFilters}
-                  className="rounded-xl bg-[#5428E8] px-5 py-2.5 text-xs font-bold text-white shadow-md hover:bg-[#431ecd] transition"
+                  className="rounded-xl bg-[#7138F5] px-5 py-2.5 text-xs font-bold text-white shadow-md hover:bg-[#431ecd] transition"
                 >
                   Reset All Filters
                 </button>
@@ -879,7 +879,7 @@ export default function ProductCatalogPage() {
 
                         {/* Top Badges */}
                         <div className="absolute top-3 left-3 flex flex-col gap-1">
-                          <span className="rounded-lg bg-slate-900/80 backdrop-blur-md px-2.5 py-1 text-[10px] font-black uppercase text-white tracking-wider">
+                          <span className="rounded-lg bg-slate-900/80  px-2.5 py-1 text-[10px] font-black uppercase text-white tracking-wider">
                             {p.brand}
                           </span>
                           {p.requiresImei && (
@@ -894,7 +894,7 @@ export default function ProductCatalogPage() {
                           <button
                             type="button"
                             onClick={() => setQuickViewProduct(p)}
-                            className="h-8 w-8 rounded-xl bg-white/90 backdrop-blur-md border border-slate-200 text-slate-700 hover:text-[#5428E8] hover:bg-white flex items-center justify-center shadow-sm transition"
+                            className="h-8 w-8 rounded-xl bg-white/90  border border-slate-200 text-slate-700 hover:text-[#7138F5] hover:bg-white flex items-center justify-center shadow-sm transition"
                             title="Quick View Specifications"
                           >
                             <Eye className="h-4 w-4" />
@@ -930,7 +930,7 @@ export default function ProductCatalogPage() {
 
                           <Link
                             href={`/catalog/${p._id}`}
-                            className="block font-extrabold text-sm text-slate-900 group-hover:text-[#5428E8] transition line-clamp-2"
+                            className="block font-extrabold text-sm text-slate-900 group-hover:text-[#7138F5] transition line-clamp-2"
                           >
                             {p.name}
                           </Link>
@@ -1005,7 +1005,7 @@ export default function ProductCatalogPage() {
                             <button
                               type="button"
                               onClick={() => openQuoteModalFor(p)}
-                              className="flex-1 rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-2 text-xs font-bold text-white shadow-md hover:opacity-95 transition text-center"
+                              className="flex-1 rounded-xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-2 text-xs font-bold text-white shadow-md hover:opacity-95 transition text-center"
                             >
                               Request Quote
                             </button>
@@ -1051,7 +1051,7 @@ export default function ProductCatalogPage() {
 
                         <Link
                           href={`/catalog/${p._id}`}
-                          className="block text-base font-extrabold text-slate-900 hover:text-[#5428E8] transition"
+                          className="block text-base font-extrabold text-slate-900 hover:text-[#7138F5] transition"
                         >
                           {p.name}
                         </Link>
@@ -1104,7 +1104,7 @@ export default function ProductCatalogPage() {
                           <button
                             type="button"
                             onClick={() => openQuoteModalFor(p)}
-                            className="w-full rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-2 text-xs font-bold text-white shadow-md hover:opacity-95 transition"
+                            className="w-full rounded-xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-2 text-xs font-bold text-white shadow-md hover:opacity-95 transition"
                           >
                             Request Quote
                           </button>
@@ -1123,7 +1123,7 @@ export default function ProductCatalogPage() {
                             <button
                               type="button"
                               onClick={() => setQuickViewProduct(p)}
-                              className="rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-slate-700 hover:text-[#5428E8]"
+                              className="rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-slate-700 hover:text-[#7138F5]"
                             >
                               <Eye className="h-4 w-4" />
                             </button>
@@ -1176,7 +1176,7 @@ export default function ProductCatalogPage() {
           5. COMPARISON TRAY (Fixed at Bottom when Products are selected)
           ========================================================================= */}
       {comparedProducts.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#080B1A]/95 border-t border-white/10 backdrop-blur-xl py-3 px-4 shadow-2xl text-white">
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#101225] border-t border-[#252A54]  py-3 px-4 shadow-2xl text-white">
           <div className="mx-auto max-w-7xl flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="text-xs font-bold">
@@ -1186,7 +1186,7 @@ export default function ProductCatalogPage() {
                 {comparedProducts.map((cp) => (
                   <div
                     key={cp._id}
-                    className="flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-2.5 py-1 text-xs"
+                    className="flex items-center gap-1.5 rounded-xl border border-[#252A54] bg-white/5 px-2.5 py-1 text-xs"
                   >
                     <span className="font-bold truncate max-w-[120px]">{cp.modelName || cp.name}</span>
                     <button
@@ -1212,7 +1212,7 @@ export default function ProductCatalogPage() {
               <button
                 type="button"
                 onClick={() => setComparisonModalOpen(true)}
-                className="rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] px-4 py-2 text-xs font-bold text-white shadow-lg shadow-indigo-600/30 hover:opacity-95 transition"
+                className="rounded-xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] px-4 py-2 text-xs font-bold text-white shadow-lg shadow-indigo-600/30 hover:opacity-95 transition"
               >
                 Compare Now ({comparedProducts.length})
               </button>
@@ -1225,7 +1225,7 @@ export default function ProductCatalogPage() {
           6. COMPARISON TABLE MODAL
           ========================================================================= */}
       {comparisonModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4  overflow-y-auto">
           <div className="w-full max-w-5xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto my-auto animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div>
@@ -1263,7 +1263,7 @@ export default function ProductCatalogPage() {
                           <button
                             type="button"
                             onClick={() => openQuoteModalFor(p)}
-                            className="w-full rounded-xl bg-[#5428E8] py-1.5 text-[11px] font-bold text-white shadow-sm"
+                            className="w-full rounded-xl bg-[#7138F5] py-1.5 text-[11px] font-bold text-white shadow-sm"
                           >
                             Quote Device
                           </button>
@@ -1346,7 +1346,7 @@ export default function ProductCatalogPage() {
           7. PRODUCT QUICK VIEW MODAL
           ========================================================================= */}
       {quickViewProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4  overflow-y-auto">
           <div className="w-full max-w-3xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto my-auto animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <span className="rounded-lg bg-slate-900 text-white font-black px-2.5 py-1 text-xs uppercase">
@@ -1422,7 +1422,7 @@ export default function ProductCatalogPage() {
                       setQuickViewProduct(null);
                       openQuoteModalFor(p);
                     }}
-                    className="flex-1 rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-2.5 text-xs font-bold text-white shadow-md text-center"
+                    className="flex-1 rounded-xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-2.5 text-xs font-bold text-white shadow-md text-center"
                   >
                     Request Bulk Quote
                   </button>
@@ -1444,11 +1444,11 @@ export default function ProductCatalogPage() {
           8. B2B QUOTE REQUEST MODAL
           ========================================================================= */}
       {quoteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4  overflow-y-auto">
           <div className="w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto my-auto animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#5428E8] text-white">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#7138F5] text-white">
                   <ShoppingBag className="h-4 w-4" />
                 </div>
                 <div>
@@ -1518,7 +1518,7 @@ export default function ProductCatalogPage() {
                     placeholder="e.g. Salman Mobile Hub"
                     value={quoteForm.businessName}
                     onChange={(e) => setQuoteForm({ ...quoteForm, businessName: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1529,7 +1529,7 @@ export default function ProductCatalogPage() {
                     placeholder="e.g. Vikas Malhotra"
                     value={quoteForm.contactPerson}
                     onChange={(e) => setQuoteForm({ ...quoteForm, contactPerson: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
               </div>
@@ -1543,7 +1543,7 @@ export default function ProductCatalogPage() {
                     placeholder="9811002233"
                     value={quoteForm.phone}
                     onChange={(e) => setQuoteForm({ ...quoteForm, phone: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1554,7 +1554,7 @@ export default function ProductCatalogPage() {
                     placeholder="procurement@store.com"
                     value={quoteForm.email}
                     onChange={(e) => setQuoteForm({ ...quoteForm, email: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1566,7 +1566,7 @@ export default function ProductCatalogPage() {
                     required
                     value={quoteForm.quantity}
                     onChange={(e) => setQuoteForm({ ...quoteForm, quantity: Number(e.target.value) })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 font-mono font-bold focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 font-mono font-bold focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
               </div>
@@ -1580,7 +1580,7 @@ export default function ProductCatalogPage() {
                     placeholder="Bangalore"
                     value={quoteForm.city}
                     onChange={(e) => setQuoteForm({ ...quoteForm, city: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1591,7 +1591,7 @@ export default function ProductCatalogPage() {
                     placeholder="Karnataka"
                     value={quoteForm.state}
                     onChange={(e) => setQuoteForm({ ...quoteForm, state: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
               </div>
@@ -1603,7 +1603,7 @@ export default function ProductCatalogPage() {
                   placeholder="Specify target delivery timeline, preferred billing entity, or batch requirements..."
                   value={quoteForm.additionalMessage}
                   onChange={(e) => setQuoteForm({ ...quoteForm, additionalMessage: e.target.value })}
-                  className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                  className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                 />
               </div>
 
@@ -1618,7 +1618,7 @@ export default function ProductCatalogPage() {
                 <button
                   type="submit"
                   disabled={quoteSubmitting}
-                  className="flex-1 rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-3 text-xs font-bold text-white shadow-md hover:opacity-95 transition disabled:opacity-50"
+                  className="flex-1 rounded-xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-3 text-xs font-bold text-white shadow-md hover:opacity-95 transition disabled:opacity-50"
                 >
                   {quoteSubmitting ? 'Transmitting Request...' : 'Submit Quotation Request'}
                 </button>
@@ -1632,11 +1632,11 @@ export default function ProductCatalogPage() {
           9. MOBILE SLIDE-OUT FILTER DRAWER
           ========================================================================= */}
       {mobileFilterOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm lg:hidden">
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/60  lg:hidden">
           <div className="w-full max-w-xs h-full bg-white p-6 overflow-y-auto space-y-6 shadow-2xl animate-in slide-in-from-right duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="h-4 w-4 text-[#5428E8]" />
+                <SlidersHorizontal className="h-4 w-4 text-[#7138F5]" />
                 <h3 className="font-extrabold text-sm text-slate-900">Filters</h3>
               </div>
               <button
@@ -1693,7 +1693,7 @@ export default function ProductCatalogPage() {
                     type="button"
                     onClick={() => toggleRAM(r)}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
-                      selectedRAMs.includes(r) ? 'bg-[#5428E8] text-white' : 'bg-slate-100 text-slate-700'
+                      selectedRAMs.includes(r) ? 'bg-[#7138F5] text-white' : 'bg-slate-100 text-slate-700'
                     }`}
                   >
                     {r}
@@ -1713,7 +1713,7 @@ export default function ProductCatalogPage() {
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
-                className="flex-1 rounded-xl bg-[#5428E8] py-2.5 text-xs font-bold text-white shadow-md"
+                className="flex-1 rounded-xl bg-[#7138F5] py-2.5 text-xs font-bold text-white shadow-md"
               >
                 Apply Filters
               </button>

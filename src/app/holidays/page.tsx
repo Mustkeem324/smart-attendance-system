@@ -162,7 +162,7 @@ export default function HolidaysPage() {
 
       {/* Modal: Add Holiday */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60  p-4">
           <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
             <h3 className="text-base font-extrabold text-slate-900">Add Statutory Holiday</h3>
             <p className="text-xs text-slate-400 mt-0.5">Configure statutory off-day for the organization</p>
@@ -237,7 +237,7 @@ export default function HolidaysPage() {
 
       {/* Modal: Bulk Import */}
       {isImportModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60  p-4">
           <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
             <h3 className="text-base font-extrabold text-slate-900">Bulk Import Holidays</h3>
             <p className="text-xs text-slate-400 mt-0.5">Paste JSON array of holidays to import in one click</p>

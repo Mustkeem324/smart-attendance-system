@@ -603,7 +603,7 @@ export default function ShiftsPage() {
 
       {/* Modal: Create Shift */}
       {isAddShiftOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60  p-4">
           <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
             <h3 className="text-base font-extrabold text-slate-900">Create Work Shift</h3>
             <p className="text-xs text-slate-400 mt-0.5">Configure schedule timings, thresholds, and overnight flags</p>

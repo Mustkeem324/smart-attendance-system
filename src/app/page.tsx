@@ -442,7 +442,7 @@ export default function B2BDistributionHomePage() {
     subheadline:
       'Connecting leading technology brands with retailers through reliable distribution, genuine products and smarter business partnerships.',
     phone: '+91 (080) 4129-8800',
-    email: 'distribution@apexelectronics.in',
+    email: 'contact@salmanenterprises.in',
     address: 'Nexus Technology Park, 4th Floor, Electronic City Phase 1',
     city: 'Bangalore',
     state: 'Karnataka',
@@ -711,7 +711,7 @@ export default function B2BDistributionHomePage() {
   const calcAnnualRoi = ((calcAnnualProfit / calcMonthlyWholesale) * 100).toFixed(1);
 
   return (
-    <div className="min-h-screen bg-[#080B1A] text-slate-100 font-sans selection:bg-[#5428E8] selection:text-white pb-16 sm:pb-0">
+    <div className="min-h-screen bg-[#101225] text-slate-100 font-sans selection:bg-[#7138F5] selection:text-white pb-16 sm:pb-0">
       {/* =========================================================================
           TOP NAVIGATION BAR (Responsive, Glassmorphic, Brand-Aligned)
           ========================================================================= */}
@@ -724,12 +724,12 @@ export default function B2BDistributionHomePage() {
         id="hero"
         className="relative pt-12 pb-20 md:pt-16 md:pb-28 overflow-hidden bg-gradient-to-b from-[#080B1A] via-[#0E122A] to-[#080B1A]"
       >
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-[#5428E8]/15 rounded-full blur-[140px] pointer-events-none" />
+        
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Core Value Proposition */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-bold text-indigo-300 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-bold text-indigo-300 ">
               <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
               <span>{content.tagline}</span>
             </div>
@@ -750,7 +750,7 @@ export default function B2BDistributionHomePage() {
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
               <a
                 href="#partnership"
-                className="rounded-2xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] px-6 py-3.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-indigo-600/30 hover:opacity-95 hover:shadow-indigo-600/40 active:scale-98 transition flex items-center gap-2"
+                className="rounded-2xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] px-6 py-3.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-indigo-600/30 hover:opacity-95 hover:shadow-indigo-600/40 active:scale-98 transition flex items-center gap-2"
               >
                 <span>Become a Retail Partner</span>
                 <ArrowRight className="h-4 w-4" />
@@ -766,7 +766,7 @@ export default function B2BDistributionHomePage() {
 
               <Link
                 href="/catalog"
-                className="rounded-2xl border border-white/15 bg-white/5 px-5 py-3.5 text-xs sm:text-sm font-bold text-slate-200 backdrop-blur-md hover:bg-white/10 transition flex items-center gap-2"
+                className="rounded-2xl border border-[#252A54] bg-white/5 px-5 py-3.5 text-xs sm:text-sm font-bold text-slate-200  hover:bg-white/10 transition flex items-center gap-2"
               >
                 <Smartphone className="h-4 w-4 text-indigo-400" />
                 <span>Explore Catalog</span>
@@ -793,8 +793,8 @@ export default function B2BDistributionHomePage() {
           {/* Right Column: Premium Studio Product Composition */}
           <div className="lg:col-span-5 relative flex items-center justify-center">
             <div className="relative w-full max-w-md">
-              <div className="relative rounded-3xl border border-white/15 bg-gradient-to-b from-white/10 to-white/5 p-6 backdrop-blur-2xl shadow-2xl shadow-indigo-950/60 overflow-hidden">
-                <div className="absolute top-0 right-0 -mr-16 -mt-16 h-48 w-48 rounded-full bg-[#5428E8]/30 blur-3xl" />
+              <div className="relative rounded-3xl border border-[#252A54] bg-gradient-to-b from-white/10 to-white/5 p-6  shadow-2xl shadow-indigo-950/60 overflow-hidden">
+                
 
                 <div className="relative z-10 space-y-4">
                   <div className="flex items-center justify-between">
@@ -804,7 +804,7 @@ export default function B2BDistributionHomePage() {
                     <span className="font-mono text-xs text-indigo-300 font-bold">FLAGSHIP SERIES</span>
                   </div>
 
-                  <div className="relative h-64 sm:h-72 w-full rounded-2xl overflow-hidden bg-[#0A0D1F] border border-white/10 group">
+                  <div className="relative h-64 sm:h-72 w-full rounded-2xl overflow-hidden bg-[#101225] border border-[#252A54] group">
                     <img
                       src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=800&q=80"
                       alt="Premium Flagship Smartphone"
@@ -823,15 +823,15 @@ export default function B2BDistributionHomePage() {
                   </div>
 
                   <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                    <div className="rounded-xl bg-white/5 p-2 border border-white/10">
+                    <div className="rounded-xl bg-white/5 p-2 border border-[#252A54]">
                       <span className="text-[10px] text-slate-400 block">HSN Code</span>
                       <span className="font-mono font-bold text-white">85171200</span>
                     </div>
-                    <div className="rounded-xl bg-white/5 p-2 border border-white/10">
+                    <div className="rounded-xl bg-white/5 p-2 border border-[#252A54]">
                       <span className="text-[10px] text-slate-400 block">GST Rate</span>
                       <span className="font-mono font-bold text-emerald-400">18% (9+9)</span>
                     </div>
-                    <div className="rounded-xl bg-white/5 p-2 border border-white/10">
+                    <div className="rounded-xl bg-white/5 p-2 border border-[#252A54]">
                       <span className="text-[10px] text-slate-400 block">Warranty</span>
                       <span className="font-mono font-bold text-indigo-300">12 Months</span>
                     </div>
@@ -839,7 +839,7 @@ export default function B2BDistributionHomePage() {
                 </div>
               </div>
 
-              <div className="absolute -bottom-5 -left-5 sm:-left-8 rounded-2xl border border-indigo-400/30 bg-[#0E122A]/95 p-3.5 backdrop-blur-xl shadow-xl flex items-center gap-3">
+              <div className="absolute -bottom-5 -left-5 sm:-left-8 rounded-2xl border border-indigo-400/30 bg-[#1B1D35]/95 p-3.5  shadow-xl flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
@@ -856,7 +856,7 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           COMPANY TRUST STRIP
           ========================================================================= */}
-      <section className="relative z-10 border-y border-white/10 bg-[#0B0E22]/90 backdrop-blur-md py-6">
+      <section className="relative z-10 border-y border-[#252A54] bg-[#1B1D35]/90  py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
             <div className="pt-2 md:pt-0">
@@ -882,7 +882,7 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           PRODUCT CATEGORIES (With Tech Specs Modal Trigger)
           ========================================================================= */}
-      <section id="categories" className="py-24 relative bg-[#080B1A]">
+      <section id="categories" className="py-24 relative bg-[#101225]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">COMMERCIAL CATALOG</span>
@@ -901,7 +901,7 @@ export default function B2BDistributionHomePage() {
               return (
                 <div
                   key={cat.id}
-                  className="group relative rounded-3xl border border-white/10 bg-[#0E122A] overflow-hidden transition-all duration-300 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 flex flex-col justify-between"
+                  className="group relative rounded-3xl border border-[#252A54] bg-[#1B1D35] overflow-hidden transition-all duration-300 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 flex flex-col justify-between"
                 >
                   <div className="relative h-48 w-full overflow-hidden bg-slate-900">
                     <img
@@ -911,12 +911,12 @@ export default function B2BDistributionHomePage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0E122A] via-[#0E122A]/40 to-transparent" />
                     <div className="absolute top-4 right-4">
-                      <span className="rounded-full bg-[#080B1A]/80 border border-white/15 px-3 py-1 text-[10px] font-bold text-indigo-300 backdrop-blur-md">
+                      <span className="rounded-full bg-[#101225]/80 border border-[#252A54] px-3 py-1 text-[10px] font-bold text-indigo-300 ">
                         {cat.badge}
                       </span>
                     </div>
                     <div className="absolute bottom-3 left-4 flex items-center gap-2">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600/80 text-white backdrop-blur-md">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600/80 text-white ">
                         <Icon className="h-4 w-4" />
                       </div>
                       <h3 className="text-lg font-bold text-white group-hover:text-indigo-300 transition">
@@ -928,7 +928,7 @@ export default function B2BDistributionHomePage() {
                   <div className="p-5 space-y-4 flex-1 flex flex-col justify-between">
                     <p className="text-xs text-slate-400 leading-relaxed">{cat.description}</p>
 
-                    <div className="pt-3 border-t border-white/5 flex items-center justify-between gap-2">
+                    <div className="pt-3 border-t border-[#1E2248] flex items-center justify-between gap-2">
                       <button
                         type="button"
                         onClick={() => specData && setSelectedSpecModal(specData)}
@@ -958,7 +958,7 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           INTERACTIVE B2B PROFIT MARGIN & RETAILER ROI CALCULATOR
           ========================================================================= */}
-      <section id="calculator" className="py-20 relative bg-[#0B0E22] border-y border-white/10">
+      <section id="calculator" className="py-20 relative bg-[#1B1D35] border-y border-[#252A54]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1 text-xs font-bold text-indigo-300">
@@ -973,7 +973,7 @@ export default function B2BDistributionHomePage() {
             </p>
           </div>
 
-          <div className="rounded-3xl border border-white/15 bg-[#0E122A] p-6 sm:p-10 shadow-2xl backdrop-blur-xl">
+          <div className="rounded-3xl border border-[#252A54] bg-[#1B1D35] p-6 sm:p-10 shadow-2xl ">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Left Column: Sliders & Controls */}
               <div className="lg:col-span-7 space-y-6">
@@ -999,8 +999,8 @@ export default function B2BDistributionHomePage() {
                           onClick={() => setCalcCategory(tab.key)}
                           className={`flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all ${
                             isSelected
-                              ? 'bg-[#5428E8] text-white shadow-lg shadow-[#5428E8]/30'
-                              : 'bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10'
+                              ? 'bg-[#7138F5] text-white shadow-lg shadow-[#5428E8]/30'
+                              : 'bg-white/5 text-slate-300 hover:bg-white/10 border border-[#252A54]'
                           }`}
                         >
                           <Icon className="h-3.5 w-3.5" />
@@ -1042,19 +1042,19 @@ export default function B2BDistributionHomePage() {
 
                 {/* Unit Price Metrics Strip */}
                 <div className="grid grid-cols-3 gap-3 pt-2">
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5">
+                  <div className="rounded-2xl border border-[#252A54] bg-white/5 p-3.5">
                     <span className="text-[10px] text-slate-400 block">Wholesale Price (Unit)</span>
                     <span className="text-sm sm:text-base font-extrabold text-white">
                       ₹{activeCalcSpec.wholesalePrice.toLocaleString('en-IN')}
                     </span>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5">
+                  <div className="rounded-2xl border border-[#252A54] bg-white/5 p-3.5">
                     <span className="text-[10px] text-slate-400 block">Suggested Retail (MSRP)</span>
                     <span className="text-sm sm:text-base font-extrabold text-indigo-300">
                       ₹{activeCalcSpec.retailMSRP.toLocaleString('en-IN')}
                     </span>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5">
+                  <div className="rounded-2xl border border-[#252A54] bg-white/5 p-3.5">
                     <span className="text-[10px] text-slate-400 block">Unit Gross Margin</span>
                     <span className="text-sm sm:text-base font-extrabold text-emerald-400">
                       +₹{(activeCalcSpec.retailMSRP - activeCalcSpec.wholesalePrice).toLocaleString('en-IN')}
@@ -1110,7 +1110,7 @@ export default function B2BDistributionHomePage() {
                 <button
                   type="button"
                   onClick={() => prefillCategoryInquiry(calcCategory, calcVolume)}
-                  className="w-full rounded-2xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-3.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-indigo-600/30 hover:opacity-95 transition flex items-center justify-center gap-2"
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-3.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-indigo-600/30 hover:opacity-95 transition flex items-center justify-center gap-2"
                 >
                   <span>Lock Allocation for this Tier</span>
                   <ArrowRight className="h-4 w-4" />
@@ -1124,9 +1124,9 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           FEATURED BRANDS ("Leading Technology Brands")
           ========================================================================= */}
-      <section id="brands" className="py-24 border-y border-white/10 bg-gradient-to-b from-[#080B1A] via-[#0B0E22] to-[#080B1A] relative overflow-hidden">
+      <section id="brands" className="py-24 border-y border-[#252A54] bg-gradient-to-b from-[#080B1A] via-[#0B0E22] to-[#080B1A] relative overflow-hidden">
         {/* Ambient background glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-purple-600/10 blur-[130px] rounded-full pointer-events-none" />
+        
         <div className="absolute bottom-10 right-10 w-[400px] h-[300px] bg-indigo-600/10 blur-[110px] rounded-full pointer-events-none" />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
@@ -1145,19 +1145,19 @@ export default function B2BDistributionHomePage() {
 
             {/* 4 Trust Metrics */}
             <div className="pt-2 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 text-[11px] sm:text-xs">
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0E122A] border border-white/10 text-slate-300 font-medium">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1B1D35] border border-[#252A54] text-slate-300 font-medium">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>10 Tier 1 Authorized Brands</span>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0E122A] border border-white/10 text-slate-300 font-medium">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1B1D35] border border-[#252A54] text-slate-300 font-medium">
                 <ShieldCheck className="w-3.5 h-3.5 text-purple-400 shrink-0" />
                 <span>100% Genuine Dual TAC IMEI</span>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0E122A] border border-white/10 text-slate-300 font-medium">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1B1D35] border border-[#252A54] text-slate-300 font-medium">
                 <Boxes className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                 <span>Karnataka Hubs Ready Stock</span>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0E122A] border border-white/10 text-slate-300 font-medium">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1B1D35] border border-[#252A54] text-slate-300 font-medium">
                 <Truck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                 <span>Same-Day B2B Dispatch</span>
               </div>
@@ -1166,12 +1166,12 @@ export default function B2BDistributionHomePage() {
 
           {/* Interactive Category Filter Tabs */}
           <div className="flex items-center justify-center">
-            <div className="inline-flex p-1 rounded-2xl bg-[#0E122A] border border-white/10 shadow-lg text-xs font-semibold">
+            <div className="inline-flex p-1 rounded-2xl bg-[#1B1D35] border border-[#252A54] shadow-lg text-xs font-semibold">
               <button
                 onClick={() => setSelectedBrandCategory('ALL')}
                 className={`px-3.5 py-1.5 rounded-xl transition-all ${
                   selectedBrandCategory === 'ALL'
-                    ? 'bg-gradient-to-r from-[#5428E8] to-[#8055F7] text-white shadow-md'
+                    ? 'bg-gradient-to-r from-[#7138F5] to-[#8055F7] text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -1181,7 +1181,7 @@ export default function B2BDistributionHomePage() {
                 onClick={() => setSelectedBrandCategory('SMARTPHONES')}
                 className={`px-3.5 py-1.5 rounded-xl transition-all ${
                   selectedBrandCategory === 'SMARTPHONES'
-                    ? 'bg-gradient-to-r from-[#5428E8] to-[#8055F7] text-white shadow-md'
+                    ? 'bg-gradient-to-r from-[#7138F5] to-[#8055F7] text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -1191,7 +1191,7 @@ export default function B2BDistributionHomePage() {
                 onClick={() => setSelectedBrandCategory('ACCESSORIES')}
                 className={`px-3.5 py-1.5 rounded-xl transition-all ${
                   selectedBrandCategory === 'ACCESSORIES'
-                    ? 'bg-gradient-to-r from-[#5428E8] to-[#8055F7] text-white shadow-md'
+                    ? 'bg-gradient-to-r from-[#7138F5] to-[#8055F7] text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -1201,7 +1201,7 @@ export default function B2BDistributionHomePage() {
                 onClick={() => setSelectedBrandCategory('AUDIO')}
                 className={`px-3.5 py-1.5 rounded-xl transition-all ${
                   selectedBrandCategory === 'AUDIO'
-                    ? 'bg-gradient-to-r from-[#5428E8] to-[#8055F7] text-white shadow-md'
+                    ? 'bg-gradient-to-r from-[#7138F5] to-[#8055F7] text-white shadow-md'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -1217,7 +1217,7 @@ export default function B2BDistributionHomePage() {
               .map((b) => (
                 <div
                   key={b.name}
-                  className="group rounded-2xl border border-white/10 bg-[#0E122A]/85 p-4 backdrop-blur-md hover:border-purple-500/50 hover:bg-[#121736] transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-950/40 flex flex-col justify-between overflow-hidden relative"
+                  className="group rounded-2xl border border-[#252A54] bg-[#1B1D35]/85 p-4  hover:border-purple-500/50 hover:bg-[#121736] transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-950/40 flex flex-col justify-between overflow-hidden relative"
                 >
                   {/* Subtle Brand Ambient Highlight */}
                   <div
@@ -1227,8 +1227,8 @@ export default function B2BDistributionHomePage() {
 
                   {/* Top Bar: Brand Logo & Tier Pill */}
                   <div>
-                    <div className="flex items-center justify-between gap-2 pb-3 border-b border-white/5">
-                      <div className="h-8 px-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:border-purple-400/40 transition">
+                    <div className="flex items-center justify-between gap-2 pb-3 border-b border-[#1E2248]">
+                      <div className="h-8 px-2.5 rounded-xl bg-white/5 border border-[#252A54] flex items-center justify-center shrink-0 group-hover:border-purple-400/40 transition">
                         <img
                           src={b.logoUrl}
                           alt={`${b.name} Official Logo`}
@@ -1241,7 +1241,7 @@ export default function B2BDistributionHomePage() {
                     </div>
 
                     {/* Scraped Hardware Product Image */}
-                    <div className="relative h-40 w-full rounded-xl overflow-hidden my-3 border border-white/10 bg-black/40">
+                    <div className="relative h-40 w-full rounded-xl overflow-hidden my-3 border border-[#252A54] bg-black/40">
                       <img
                         src={b.productImage}
                         alt={`${b.name} ${b.flagshipProduct}`}
@@ -1278,7 +1278,7 @@ export default function B2BDistributionHomePage() {
                       {b.keySpecs.map((spec, i) => (
                         <span
                           key={i}
-                          className="text-[9px] font-mono text-slate-300 bg-white/5 border border-white/5 rounded-md px-1.5 py-0.5 truncate text-center"
+                          className="text-[9px] font-mono text-slate-300 bg-white/5 border border-[#1E2248] rounded-md px-1.5 py-0.5 truncate text-center"
                           title={spec}
                         >
                           {spec}
@@ -1288,7 +1288,7 @@ export default function B2BDistributionHomePage() {
                   </div>
 
                   {/* Card Bottom: Margin, Warranty & CTA */}
-                  <div className="pt-4 border-t border-white/5 mt-3 space-y-2.5">
+                  <div className="pt-4 border-t border-[#1E2248] mt-3 space-y-2.5">
                     <div className="flex items-center justify-between text-[10px]">
                       <span className="font-mono text-emerald-400 font-semibold">{b.dealerMargin}</span>
                       <span className="text-slate-400 flex items-center gap-1 truncate max-w-[120px]">
@@ -1310,7 +1310,7 @@ export default function B2BDistributionHomePage() {
           </div>
 
           {/* Allocation & Trademark Disclaimer Banner */}
-          <div className="rounded-2xl border border-white/10 bg-[#0E122A]/80 p-5 backdrop-blur-md flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="rounded-2xl border border-[#252A54] bg-[#1B1D35]/80 p-5  flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="space-y-1 text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -1326,13 +1326,13 @@ export default function B2BDistributionHomePage() {
             <div className="flex items-center gap-2.5 shrink-0">
               <Link
                 href="/catalog"
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white transition"
+                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-[#252A54] text-xs font-semibold text-slate-200 hover:text-white transition"
               >
                 Browse Full Catalog
               </Link>
               <Link
                 href="#partnership"
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] text-white text-xs font-bold shadow-md shadow-purple-900/30 hover:brightness-110 transition"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] text-white text-xs font-bold shadow-md shadow-purple-900/30 hover:brightness-110 transition"
               >
                 Apply for Dealership
               </Link>
@@ -1344,7 +1344,7 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           WHY CHOOSE US ("Your Trusted Partner in Electronics Distribution")
           ========================================================================= */}
-      <section id="about" className="py-24 relative bg-[#080B1A]">
+      <section id="about" className="py-24 relative bg-[#101225]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-14">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
@@ -1359,7 +1359,7 @@ export default function B2BDistributionHomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="rounded-3xl border border-white/10 bg-[#0E122A] p-7 space-y-4 hover:border-indigo-500/40 transition">
+            <div className="rounded-3xl border border-[#252A54] bg-[#1B1D35] p-7 space-y-4 hover:border-indigo-500/40 transition">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
                 <ShieldCheck className="h-6 w-6" />
               </div>
@@ -1369,7 +1369,7 @@ export default function B2BDistributionHomePage() {
               </p>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-[#0E122A] p-7 space-y-4 hover:border-indigo-500/40 transition">
+            <div className="rounded-3xl border border-[#252A54] bg-[#1B1D35] p-7 space-y-4 hover:border-indigo-500/40 transition">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
                 <Truck className="h-6 w-6" />
               </div>
@@ -1379,7 +1379,7 @@ export default function B2BDistributionHomePage() {
               </p>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-[#0E122A] p-7 space-y-4 hover:border-indigo-500/40 transition">
+            <div className="rounded-3xl border border-[#252A54] bg-[#1B1D35] p-7 space-y-4 hover:border-indigo-500/40 transition">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
                 <Users className="h-6 w-6" />
               </div>
@@ -1389,7 +1389,7 @@ export default function B2BDistributionHomePage() {
               </p>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-[#0E122A] p-7 space-y-4 hover:border-indigo-500/40 transition">
+            <div className="rounded-3xl border border-[#252A54] bg-[#1B1D35] p-7 space-y-4 hover:border-indigo-500/40 transition">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
                 <FileCheck className="h-6 w-6" />
               </div>
@@ -1405,7 +1405,7 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           LOGISTICS & WAREHOUSING INFRASTRUCTURE
           ========================================================================= */}
-      <section id="network" className="py-20 relative bg-[#0B0E22] border-t border-white/10">
+      <section id="network" className="py-20 relative bg-[#1B1D35] border-t border-[#252A54]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
@@ -1420,7 +1420,7 @@ export default function B2BDistributionHomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="rounded-3xl border border-white/10 bg-[#0E122A] p-6 space-y-3">
+            <div className="rounded-3xl border border-[#252A54] bg-[#1B1D35] p-6 space-y-3">
               <div className="flex items-center justify-between">
                 <h4 className="text-base font-bold text-white">South Corridor DC</h4>
                 <span className="rounded-full bg-indigo-500/20 px-2 py-0.5 text-[10px] font-mono text-indigo-300">
@@ -1433,7 +1433,7 @@ export default function B2BDistributionHomePage() {
               <div className="text-[11px] text-emerald-400 font-medium">✓ Same-Day &bull; 24h Transit SLA</div>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-[#0E122A] p-6 space-y-3">
+            <div className="rounded-3xl border border-[#252A54] bg-[#1B1D35] p-6 space-y-3">
               <div className="flex items-center justify-between">
                 <h4 className="text-base font-bold text-white">West Logistics Depot</h4>
                 <span className="rounded-full bg-indigo-500/20 px-2 py-0.5 text-[10px] font-mono text-indigo-300">
@@ -1446,7 +1446,7 @@ export default function B2BDistributionHomePage() {
               <div className="text-[11px] text-emerald-400 font-medium">✓ High-Capacity Dual Inwarding</div>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-[#0E122A] p-6 space-y-3">
+            <div className="rounded-3xl border border-[#252A54] bg-[#1B1D35] p-6 space-y-3">
               <div className="flex items-center justify-between">
                 <h4 className="text-base font-bold text-white">North Logistics Hub</h4>
                 <span className="rounded-full bg-indigo-500/20 px-2 py-0.5 text-[10px] font-mono text-indigo-300">
@@ -1465,7 +1465,7 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           RETAILER PARTNERSHIP APPLICATION FORM
           ========================================================================= */}
-      <section id="partnership" className="py-24 relative bg-[#080B1A]">
+      <section id="partnership" className="py-24 relative bg-[#101225]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
@@ -1479,7 +1479,7 @@ export default function B2BDistributionHomePage() {
             </p>
           </div>
 
-          <div className="mx-auto max-w-3xl rounded-3xl border border-white/15 bg-[#0E122A] p-6 sm:p-10 shadow-2xl backdrop-blur-xl">
+          <div className="mx-auto max-w-3xl rounded-3xl border border-[#252A54] bg-[#1B1D35] p-6 sm:p-10 shadow-2xl ">
             {partnerFeedback && (
               <div
                 className={`mb-6 p-4 rounded-2xl text-xs font-semibold flex items-center gap-3 ${
@@ -1514,7 +1514,7 @@ export default function B2BDistributionHomePage() {
                     placeholder="e.g. Salman Mobile Hub"
                     value={partnerForm.businessName}
                     onChange={(e) => setPartnerForm({ ...partnerForm, businessName: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1525,7 +1525,7 @@ export default function B2BDistributionHomePage() {
                     placeholder="e.g. Vikas Malhotra"
                     value={partnerForm.ownerName}
                     onChange={(e) => setPartnerForm({ ...partnerForm, ownerName: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
               </div>
@@ -1539,7 +1539,7 @@ export default function B2BDistributionHomePage() {
                     placeholder="e.g. 9811002233"
                     value={partnerForm.phone}
                     onChange={(e) => setPartnerForm({ ...partnerForm, phone: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1550,7 +1550,7 @@ export default function B2BDistributionHomePage() {
                     placeholder="e.g. store@apexmobile.com"
                     value={partnerForm.email}
                     onChange={(e) => setPartnerForm({ ...partnerForm, email: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
               </div>
@@ -1564,7 +1564,7 @@ export default function B2BDistributionHomePage() {
                     placeholder="e.g. Bangalore"
                     value={partnerForm.city}
                     onChange={(e) => setPartnerForm({ ...partnerForm, city: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1575,7 +1575,7 @@ export default function B2BDistributionHomePage() {
                     placeholder="e.g. Karnataka"
                     value={partnerForm.state}
                     onChange={(e) => setPartnerForm({ ...partnerForm, state: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1585,7 +1585,7 @@ export default function B2BDistributionHomePage() {
                     placeholder="29ABCDE1234F1Z5"
                     value={partnerForm.gstin}
                     onChange={(e) => setPartnerForm({ ...partnerForm, gstin: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white font-mono focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white font-mono focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
               </div>
@@ -1597,14 +1597,14 @@ export default function B2BDistributionHomePage() {
                   placeholder="Specify desired brands, expected monthly volume, or existing retail showroom details..."
                   value={partnerForm.message}
                   onChange={(e) => setPartnerForm({ ...partnerForm, message: e.target.value })}
-                  className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                  className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={partnerSubmitting}
-                className="w-full rounded-2xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-3 text-xs sm:text-sm font-bold text-white shadow-xl hover:opacity-95 transition disabled:opacity-50"
+                className="w-full rounded-2xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-3 text-xs sm:text-sm font-bold text-white shadow-xl hover:opacity-95 transition disabled:opacity-50"
               >
                 {partnerSubmitting ? 'Submitting Application...' : 'Submit Partnership Application'}
               </button>
@@ -1616,7 +1616,7 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           BUSINESS PORTAL CTA SECTION
           ========================================================================= */}
-      <section className="py-20 relative bg-gradient-to-r from-[#5428E8]/20 via-[#0E122A] to-[#5428E8]/20 border-y border-white/10">
+      <section className="py-20 relative bg-gradient-to-r from-[#5428E8]/20 via-[#0E122A] to-[#5428E8]/20 border-y border-[#252A54]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
             REGISTERED PARTNERS &amp; STAFF
@@ -1648,7 +1648,7 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           CONTACT OFFICE
           ========================================================================= */}
-      <section id="contact" className="py-24 relative bg-[#080B1A]">
+      <section id="contact" className="py-24 relative bg-[#101225]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
@@ -1663,7 +1663,7 @@ export default function B2BDistributionHomePage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-5 rounded-3xl border border-white/10 bg-[#0E122A] p-6 sm:p-8 space-y-6">
+            <div className="lg:col-span-5 rounded-3xl border border-[#252A54] bg-[#1B1D35] p-6 sm:p-8 space-y-6">
               <div>
                 <h3 className="text-xl font-bold text-white">{content.companyName}</h3>
                 <p className="text-xs text-slate-400 mt-1">{content.tagline}</p>
@@ -1706,7 +1706,7 @@ export default function B2BDistributionHomePage() {
               </div>
             </div>
 
-            <div className="lg:col-span-7 rounded-3xl border border-white/10 bg-[#0E122A] p-6 sm:p-8">
+            <div className="lg:col-span-7 rounded-3xl border border-[#252A54] bg-[#1B1D35] p-6 sm:p-8">
               <h3 className="text-lg font-bold text-white mb-4">Send a General Corporate Message</h3>
 
               {contactFeedback && (
@@ -1731,7 +1731,7 @@ export default function B2BDistributionHomePage() {
                       placeholder="e.g. Rajesh Kumar"
                       value={contactForm.name}
                       onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
-                      className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                      className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                     />
                   </div>
                   <div>
@@ -1742,7 +1742,7 @@ export default function B2BDistributionHomePage() {
                       placeholder="e.g. rajesh@company.com"
                       value={contactForm.email}
                       onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                      className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                      className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -1755,7 +1755,7 @@ export default function B2BDistributionHomePage() {
                     placeholder="e.g. Master Supply Agreement Inquiry"
                     value={contactForm.subject}
                     onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
 
@@ -1767,14 +1767,14 @@ export default function B2BDistributionHomePage() {
                     placeholder="Describe your inquiry..."
                     value={contactForm.message}
                     onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={contactSubmitting}
-                  className="w-full rounded-2xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-3 text-xs font-bold text-white shadow-lg hover:opacity-95 transition disabled:opacity-50"
+                  className="w-full rounded-2xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-3 text-xs font-bold text-white shadow-lg hover:opacity-95 transition disabled:opacity-50"
                 >
                   {contactSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
@@ -1787,12 +1787,12 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           ENTERPRISE FOOTER
           ========================================================================= */}
-      <footer className="border-t border-white/10 bg-[#080B1A] pt-16 pb-12 text-xs text-slate-400">
+      <footer className="border-t border-[#252A54] bg-[#101225] pt-16 pb-12 text-xs text-slate-400">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
             <div className="col-span-2 space-y-4">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-[#5428E8] to-[#8055F7] text-white">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-[#7138F5] to-[#8055F7] text-white">
                   <Smartphone className="h-4 w-4" />
                 </div>
                 <span className="font-extrabold text-sm text-white tracking-tight">SALMAN ENTERPRISES</span>
@@ -1839,7 +1839,7 @@ export default function B2BDistributionHomePage() {
             </div>
           </div>
 
-          <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
+          <div className="pt-8 border-t border-[#1E2248] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
             <p>&copy; {new Date().getFullYear()} {content.companyName}. All rights reserved.</p>
             <p>Integrated within SmartAttendance Pro Enterprise Technology Ecosystem.</p>
           </div>
@@ -1850,9 +1850,9 @@ export default function B2BDistributionHomePage() {
           PRODUCT SPECIFICATIONS & WHOLESALE SHEET MODAL
           ========================================================================= */}
       {selectedSpecModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md overflow-y-auto">
-          <div className="w-full max-w-2xl rounded-3xl bg-[#0E122A] border border-white/15 p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto my-auto animate-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4  overflow-y-auto">
+          <div className="w-full max-w-2xl rounded-3xl bg-[#1B1D35] border border-[#252A54] p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto my-auto animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-4 border-b border-[#252A54]">
               <div>
                 <span className="rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-3 py-0.5 text-[10px] font-mono font-bold">
                   {selectedSpecModal.badge}
@@ -1871,28 +1871,28 @@ export default function B2BDistributionHomePage() {
 
             {/* Spec Sheet Table */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5">
+              <div className="rounded-2xl border border-[#252A54] bg-white/5 p-3.5">
                 <span className="text-[10px] text-slate-400 uppercase font-bold block mb-1">
                   Processor / Architecture
                 </span>
                 <span className="font-semibold text-white">{selectedSpecModal.chipset}</span>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5">
+              <div className="rounded-2xl border border-[#252A54] bg-white/5 p-3.5">
                 <span className="text-[10px] text-slate-400 uppercase font-bold block mb-1">
                   Display / Acoustics
                 </span>
                 <span className="font-semibold text-white">{selectedSpecModal.displayOrAcoustics}</span>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5">
+              <div className="rounded-2xl border border-[#252A54] bg-white/5 p-3.5">
                 <span className="text-[10px] text-slate-400 uppercase font-bold block mb-1">
                   Optics / Ports / Sensors
                 </span>
                 <span className="font-semibold text-white">{selectedSpecModal.cameraOrPorts}</span>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-3.5">
+              <div className="rounded-2xl border border-[#252A54] bg-white/5 p-3.5">
                 <span className="text-[10px] text-slate-400 uppercase font-bold block mb-1">
                   Battery &amp; Charging SLA
                 </span>
@@ -1951,14 +1951,14 @@ export default function B2BDistributionHomePage() {
               <button
                 type="button"
                 onClick={() => setSelectedSpecModal(null)}
-                className="flex-1 rounded-2xl border border-white/15 bg-white/5 py-3 text-xs font-bold text-slate-300 hover:bg-white/10 transition"
+                className="flex-1 rounded-2xl border border-[#252A54] bg-white/5 py-3 text-xs font-bold text-slate-300 hover:bg-white/10 transition"
               >
                 Close Sheet
               </button>
               <button
                 type="button"
                 onClick={() => prefillCategoryInquiry(selectedSpecModal.id)}
-                className="flex-1 rounded-2xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-3 text-xs font-bold text-white shadow-lg hover:opacity-95 transition"
+                className="flex-1 rounded-2xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-3 text-xs font-bold text-white shadow-lg hover:opacity-95 transition"
               >
                 Book Wholesale Allocation
               </button>
@@ -1970,7 +1970,7 @@ export default function B2BDistributionHomePage() {
       {/* =========================================================================
           MOBILE STICKY ACTION STRIP (Visible only on < 640px)
           ========================================================================= */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-[#0E122A]/95 border-t border-white/10 backdrop-blur-md p-2.5 flex items-center justify-between gap-2 shadow-2xl">
+      <div className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-[#1B1D35]/95 border-t border-[#252A54]  p-2.5 flex items-center justify-between gap-2 shadow-2xl">
         <Link
           href="/catalog"
           className="flex-1 rounded-xl bg-indigo-500/20 border border-indigo-500/40 py-2.5 text-center text-[11px] font-bold text-indigo-300"
@@ -1979,13 +1979,13 @@ export default function B2BDistributionHomePage() {
         </Link>
         <a
           href="#partnership"
-          className="flex-1 rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-2.5 text-center text-[11px] font-bold text-white shadow-md"
+          className="flex-1 rounded-xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-2.5 text-center text-[11px] font-bold text-white shadow-md"
         >
           Become Retailer
         </a>
         <Link
           href="/login"
-          className="flex-1 rounded-xl border border-white/15 bg-white/5 py-2.5 text-center text-[11px] font-bold text-slate-200"
+          className="flex-1 rounded-xl border border-[#252A54] bg-white/5 py-2.5 text-center text-[11px] font-bold text-slate-200"
         >
           Portal Login
         </Link>
@@ -1993,9 +1993,9 @@ export default function B2BDistributionHomePage() {
 
       {/* Quick Catalog Search Drawer Modal */}
       {searchOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/75 p-4 pt-20 backdrop-blur-md">
-          <div className="w-full max-w-xl rounded-3xl bg-[#0E122A] border border-white/15 p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/75 p-4 pt-20 ">
+          <div className="w-full max-w-xl rounded-3xl bg-[#1B1D35] border border-[#252A54] p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#252A54]">
               <div className="flex items-center gap-2 text-white">
                 <Search className="h-4 w-4 text-indigo-400" />
                 <h3 className="font-bold text-sm">Search Commercial Catalog</h3>
@@ -2011,7 +2011,7 @@ export default function B2BDistributionHomePage() {
                 placeholder="Search by brand (e.g. Samsung, Apple, Xiaomi), model, or HSN code..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-xl border border-white/15 bg-white/5 pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:border-[#5428E8] focus:outline-none"
+                className="w-full rounded-xl border border-[#252A54] bg-white/5 pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:border-[#7138F5] focus:outline-none"
               />
             </div>
 

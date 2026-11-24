@@ -76,7 +76,7 @@ export default function CameraVerificationPage() {
                   alt="Verified selfie"
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-slate-900/80 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur">
+                <div className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-slate-900/80 px-2 py-0.5 text-[10px] font-bold text-white ">
                   <CheckCircle2 className="h-3 w-3 text-emerald-400" />
                   <span>Verified Check-In</span>
                 </div>
@@ -121,7 +121,7 @@ export default function CameraVerificationPage() {
 
       {/* Enlarged Photo Modal */}
       {selectedImage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4 ">
           <div className="relative max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-center justify-between pb-3">
               <span className="text-xs font-bold text-slate-900 dark:text-white">

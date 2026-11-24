@@ -183,7 +183,7 @@ export default function ProductDetailPage() {
     return (
       <div className="min-h-screen bg-[#F8F9FD] flex items-center justify-center p-6">
         <div className="text-center space-y-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#5428E8] border-t-transparent mx-auto" />
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#7138F5] border-t-transparent mx-auto" />
           <p className="text-xs font-bold text-slate-600">Loading verified product specifications...</p>
         </div>
       </div>
@@ -203,7 +203,7 @@ export default function ProductDetailPage() {
           </p>
           <Link
             href="/catalog"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-[#5428E8] px-5 py-2.5 text-xs font-bold text-white shadow-md hover:bg-[#431ecd] transition"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[#7138F5] px-5 py-2.5 text-xs font-bold text-white shadow-md hover:bg-[#431ecd] transition"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Return to Catalog</span>
@@ -218,13 +218,13 @@ export default function ProductDetailPage() {
     : [product.photograph || ''];
 
   return (
-    <div className="min-h-screen bg-[#F8F9FD] text-slate-900 font-sans selection:bg-[#5428E8] selection:text-white pb-24">
+    <div className="min-h-screen bg-[#F8F9FD] text-slate-900 font-sans selection:bg-[#7138F5] selection:text-white pb-24">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#080B1A]/95 backdrop-blur-xl border-b border-white/10 text-white shadow-xl shadow-black/30">
+      <header className="sticky top-0 z-40 bg-[#101225]  border-b border-[#252A54] text-white shadow-xl shadow-black/30">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3.5">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-[#5428E8] to-[#8055F7] p-0.5 shadow-lg">
-              <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-[#0E122A]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-[#7138F5] to-[#8055F7] p-0.5 shadow-lg">
+              <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-[#1B1D35]">
                 <Smartphone className="h-5 w-5 text-indigo-400" />
               </div>
             </div>
@@ -252,7 +252,7 @@ export default function ProductDetailPage() {
                 setQuoteFeedback(null);
                 setQuoteModalOpen(true);
               }}
-              className="rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] px-4 py-2 text-xs font-bold text-white shadow-md hover:opacity-95 transition"
+              className="rounded-xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] px-4 py-2 text-xs font-bold text-white shadow-md hover:opacity-95 transition"
             >
               Request Quote
             </button>
@@ -289,7 +289,7 @@ export default function ProductDetailPage() {
                   {product.brand}
                 </span>
                 {product.requiresImei && (
-                  <span className="rounded-lg bg-[#5428E8] text-white font-mono font-bold px-2 py-0.5 text-[10px]">
+                  <span className="rounded-lg bg-[#7138F5] text-white font-mono font-bold px-2 py-0.5 text-[10px]">
                     DUAL IMEI VALIDATED
                   </span>
                 )}
@@ -315,7 +315,7 @@ export default function ProductDetailPage() {
                     onClick={() => setActiveImage(imgUrl)}
                     className={`h-20 w-20 shrink-0 rounded-xl p-2 bg-slate-50 border transition ${
                       activeImage === imgUrl
-                        ? 'border-[#5428E8] ring-2 ring-[#5428E8]/20 shadow-sm'
+                        ? 'border-[#7138F5] ring-2 ring-[#5428E8]/20 shadow-sm'
                         : 'border-slate-200 hover:border-slate-300'
                     }`}
                   >
@@ -429,7 +429,7 @@ export default function ProductDetailPage() {
                       onClick={() => setSelectedColor(clr)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
                         selectedColor === clr
-                          ? 'border-[#5428E8] bg-indigo-50 text-[#5428E8] shadow-sm'
+                          ? 'border-[#7138F5] bg-indigo-50 text-[#7138F5] shadow-sm'
                           : 'border-slate-200 text-slate-700 hover:bg-slate-50'
                       }`}
                     >
@@ -447,7 +447,7 @@ export default function ProductDetailPage() {
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
                     RAM Configuration
                   </span>
-                  <div className="rounded-xl border border-[#5428E8] bg-indigo-50/50 p-2.5 text-xs font-bold text-indigo-900 text-center">
+                  <div className="rounded-xl border border-[#7138F5] bg-indigo-50/50 p-2.5 text-xs font-bold text-indigo-900 text-center">
                     {product.ram} High-Speed RAM
                   </div>
                 </div>
@@ -457,7 +457,7 @@ export default function ProductDetailPage() {
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
                     Internal Storage
                   </span>
-                  <div className="rounded-xl border border-[#5428E8] bg-indigo-50/50 p-2.5 text-xs font-bold text-indigo-900 text-center">
+                  <div className="rounded-xl border border-[#7138F5] bg-indigo-50/50 p-2.5 text-xs font-bold text-indigo-900 text-center">
                     {product.storage} UFS 4.0 Storage
                   </div>
                 </div>
@@ -472,7 +472,7 @@ export default function ProductDetailPage() {
                   setQuoteFeedback(null);
                   setQuoteModalOpen(true);
                 }}
-                className="w-full rounded-2xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-4 text-sm font-bold text-white shadow-xl shadow-indigo-600/30 hover:opacity-95 transition flex items-center justify-center gap-2"
+                className="w-full rounded-2xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-4 text-sm font-bold text-white shadow-xl shadow-indigo-600/30 hover:opacity-95 transition flex items-center justify-center gap-2"
               >
                 <ShoppingBag className="h-4 w-4" />
                 <span>Request Wholesale Quotation / Book Allocation</span>
@@ -506,7 +506,7 @@ export default function ProductDetailPage() {
               onClick={() => setActiveTab('overview')}
               className={`pb-4 border-b-2 transition ${
                 activeTab === 'overview'
-                  ? 'border-[#5428E8] text-[#5428E8]'
+                  ? 'border-[#7138F5] text-[#7138F5]'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
               }`}
             >
@@ -516,7 +516,7 @@ export default function ProductDetailPage() {
               onClick={() => setActiveTab('specs')}
               className={`pb-4 border-b-2 transition ${
                 activeTab === 'specs'
-                  ? 'border-[#5428E8] text-[#5428E8]'
+                  ? 'border-[#7138F5] text-[#7138F5]'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
               }`}
             >
@@ -526,7 +526,7 @@ export default function ProductDetailPage() {
               onClick={() => setActiveTab('logistics')}
               className={`pb-4 border-b-2 transition ${
                 activeTab === 'logistics'
-                  ? 'border-[#5428E8] text-[#5428E8]'
+                  ? 'border-[#7138F5] text-[#7138F5]'
                   : 'border-transparent text-slate-500 hover:text-slate-900'
               }`}
             >
@@ -647,7 +647,7 @@ export default function ProductDetailPage() {
                   <div className="mt-4 space-y-1.5 flex-1 flex flex-col justify-between">
                     <div>
                       <span className="text-[10px] font-bold text-slate-400 uppercase">{rp.brand}</span>
-                      <h4 className="text-xs font-bold text-slate-900 group-hover:text-[#5428E8] transition line-clamp-2">
+                      <h4 className="text-xs font-bold text-slate-900 group-hover:text-[#7138F5] transition line-clamp-2">
                         {rp.name}
                       </h4>
                     </div>
@@ -670,11 +670,11 @@ export default function ProductDetailPage() {
 
       {/* Quote Request Modal */}
       {quoteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4  overflow-y-auto">
           <div className="w-full max-w-2xl rounded-3xl bg-white p-6 sm:p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto my-auto animate-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#5428E8] text-white">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#7138F5] text-white">
                   <ShoppingBag className="h-4 w-4" />
                 </div>
                 <div>
@@ -722,7 +722,7 @@ export default function ProductDetailPage() {
                     placeholder="e.g. Salman Mobile Hub"
                     value={quoteForm.businessName}
                     onChange={(e) => setQuoteForm({ ...quoteForm, businessName: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -733,7 +733,7 @@ export default function ProductDetailPage() {
                     placeholder="e.g. Vikas Malhotra"
                     value={quoteForm.contactPerson}
                     onChange={(e) => setQuoteForm({ ...quoteForm, contactPerson: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
               </div>
@@ -747,7 +747,7 @@ export default function ProductDetailPage() {
                     placeholder="9811002233"
                     value={quoteForm.phone}
                     onChange={(e) => setQuoteForm({ ...quoteForm, phone: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -758,7 +758,7 @@ export default function ProductDetailPage() {
                     placeholder="store@domain.com"
                     value={quoteForm.email}
                     onChange={(e) => setQuoteForm({ ...quoteForm, email: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -770,7 +770,7 @@ export default function ProductDetailPage() {
                     required
                     value={quoteQuantity}
                     onChange={(e) => setQuoteQuantity(Number(e.target.value))}
-                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 font-mono font-bold focus:border-[#5428E8] focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 font-mono font-bold focus:border-[#7138F5] focus:outline-none"
                   />
                 </div>
               </div>
@@ -782,7 +782,7 @@ export default function ProductDetailPage() {
                   placeholder="Specify destination warehouse, target delivery schedule, or payment preferences..."
                   value={quoteForm.additionalMessage}
                   onChange={(e) => setQuoteForm({ ...quoteForm, additionalMessage: e.target.value })}
-                  className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"
+                  className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#7138F5] focus:outline-none"
                 />
               </div>
 
@@ -797,7 +797,7 @@ export default function ProductDetailPage() {
                 <button
                   type="submit"
                   disabled={quoteSubmitting}
-                  className="flex-1 rounded-xl bg-gradient-to-r from-[#5428E8] to-[#8055F7] py-3 text-xs font-bold text-white shadow-md hover:opacity-95 transition disabled:opacity-50"
+                  className="flex-1 rounded-xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-3 text-xs font-bold text-white shadow-md hover:opacity-95 transition disabled:opacity-50"
                 >
                   {quoteSubmitting ? 'Submitting Request...' : 'Send Quotation Request'}
                 </button>

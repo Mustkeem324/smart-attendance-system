@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
         aboutSummary:
           'A technology-driven B2B electronics distribution platform providing authentic flagship smartphones, wearables, wireless audio, and fast charging gear to authorized retail networks across India.',
         phone: '+91 (080) 4129-8800',
-        email: 'distribution@apexelectronics.in',
+        email: 'contact@salmanenterprises.in',
         address: 'Nexus Technology Park, 4th Floor, Electronic City Phase 1',
         city: 'Bangalore',
         state: 'Karnataka',

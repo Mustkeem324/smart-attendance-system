@@ -454,7 +454,7 @@ export default function LeavesPage() {
 
       {/* Apply Leave Modal */}
       {isApplyModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60  p-4">
           <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
             <h3 className="text-base font-extrabold text-slate-900">Apply for Leave</h3>
             <p className="text-xs text-slate-400 mt-0.5">

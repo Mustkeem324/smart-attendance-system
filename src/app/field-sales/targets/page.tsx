@@ -197,7 +197,7 @@ export default function SalesTargetsPage() {
 
       {/* Modal: Assign Target */}
       {isAddOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 ">
           <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">Assign Monthly Sales Quota</h3>

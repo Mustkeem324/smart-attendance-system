@@ -206,7 +206,7 @@ export default function LiveCameraModal({
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
               <div className="h-52 w-40 rounded-[50%] border-2 border-dashed border-white/60 shadow-lg"></div>
             </div>
-            <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-slate-900/80 px-2.5 py-1 text-[10px] text-white backdrop-blur">
+            <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full bg-slate-900/80 px-2.5 py-1 text-[10px] text-white ">
               <span className="h-2 w-2 animate-ping rounded-full bg-emerald-400"></span>
               <span>Live Feed Active</span>
             </div>

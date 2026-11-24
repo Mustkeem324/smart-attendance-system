@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import SalmanLogo, { SalmanIcon } from '@/components/brand/SalmanLogo';
 import {
   LayoutDashboard,
   Smartphone,
@@ -166,13 +167,11 @@ export function DistributionSidebar({
     <div className="flex flex-col h-full bg-[#10132A] border-r border-[#23294E] select-none text-slate-300">
       {/* Brand Header */}
       <div className="h-16 flex items-center justify-between px-4 border-b border-[#23294E] shrink-0 bg-[#0c0e22]">
-        <Link href="/distribution" className="flex items-center gap-3 overflow-hidden group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#713BFF] to-[#9A5CFF] flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/25 ring-1 ring-purple-400/40 group-hover:scale-105 transition-transform">
-            <Sparkles className="w-5 h-5 text-white" />
-          </div>
+        <Link href="/distribution" className="flex items-center gap-2.5 overflow-hidden group">
+          <SalmanIcon className="w-8 h-8 shrink-0" />
           {!collapsed && (
             <div className="flex flex-col leading-tight">
-              <span className="font-bold text-base text-white tracking-wide">SALMAN ENTERPRISES</span>
+              <span className="font-bold text-sm text-white tracking-wide">SALMAN ENTERPRISES</span>
               <span className="text-[10px] text-purple-400 font-semibold uppercase tracking-wider">Enterprise Distribution</span>
             </div>
           )}
@@ -290,7 +289,7 @@ export function DistributionSidebar({
       {isMobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           <div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/70  transition-opacity"
             onClick={() => setIsMobileOpen(false)}
           />
           <div className="relative w-72 max-w-[85vw] h-full shadow-2xl z-10 animate-in slide-in-from-left duration-200">

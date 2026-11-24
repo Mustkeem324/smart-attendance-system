@@ -8,14 +8,24 @@ import { createAuditLog } from '@/lib/audit';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, password } = body;
+    const identifier = (body.email || body.phone || body.username || '').trim();
+    const { password } = body;
 
-    if (!email || !password) {
-      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
+    if (!identifier || !password) {
+      return NextResponse.json({ error: 'Email or mobile number, and password are required' }, { status: 400 });
     }
 
+    const cleanIdentifier = identifier.toLowerCase();
+    const cleanPhone = identifier.replace(/[\s-]/g, '');
+
     const user = await prisma.user.findFirst({
-      where: { email: email.toLowerCase().trim() },
+      where: {
+        OR: [
+          { email: cleanIdentifier },
+          { phone: cleanPhone },
+          { phone: identifier },
+        ],
+      },
       include: {
         organization: true,
         employee: {
@@ -109,13 +119,13 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Set HTTP-Only Cookie
+    // Set HTTP-Only Cookie (Active for 30 Days)
     response.cookies.set('auth_token', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      maxAge: 30 * 24 * 60 * 60, // 30 days active session
     });
 
     return response;

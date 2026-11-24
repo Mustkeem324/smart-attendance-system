@@ -116,7 +116,7 @@ export default function AuditLogsPage() {
 
       {/* Log Payload Inspection Modal */}
       {selectedLog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 ">
           <div className="max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
               <h2 className="text-sm font-bold text-slate-900 dark:text-white">

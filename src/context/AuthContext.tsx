@@ -29,7 +29,7 @@ export interface UserSession {
 interface AuthContextType {
   user: UserSession | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (email: string, password: string) => Promise<{ success: boolean; user?: UserSession; error?: string }>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       setUser(data.user);
-      return { success: true };
+      return { success: true, user: data.user };
     } catch (err: any) {
       return { success: false, error: err.message || 'Network error' };
     }
@@ -92,6 +92,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await fetch('/api/auth/logout', { method: 'POST' });
     } catch (e) {
       // ignore
+    }
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      sessionStorage.clear();
     }
     setUser(null);
     router.push('/login');

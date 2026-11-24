@@ -308,7 +308,7 @@ export default function AdminLiveAttendancePage() {
             ))}
           </div>
 
-          <div className="absolute bottom-3 right-3 rounded-lg bg-slate-900/80 px-2.5 py-1 text-[10px] text-slate-300 backdrop-blur">
+          <div className="absolute bottom-3 right-3 rounded-lg bg-slate-900/80 px-2.5 py-1 text-[10px] text-slate-300 ">
             Active Geofence Boundaries Enforced
           </div>
         </div>
@@ -628,7 +628,7 @@ export default function AdminLiveAttendancePage() {
 
       {/* Selfie Photograph Modal */}
       {selectedPunchPhoto && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 p-4 ">
           <div className="max-w-sm rounded-3xl border border-slate-200 bg-white p-5 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
             <div className="flex items-center justify-between pb-3">
               <span className="text-xs font-bold text-slate-900 dark:text-white">Live Punch Selfie</span>
