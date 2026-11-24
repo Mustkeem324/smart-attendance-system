@@ -756,6 +756,7 @@ export default function B2BDistributionHomePage() {
                 <ArrowRight className="h-4 w-4" />
               </a>
 
+              {/* ROI Calculator CTA - Commented out as requested
               <a
                 href="#calculator"
                 className="rounded-2xl border border-indigo-500/40 bg-indigo-500/10 px-5 py-3.5 text-xs sm:text-sm font-bold text-indigo-300 hover:bg-indigo-500/20 transition flex items-center gap-2"
@@ -763,6 +764,7 @@ export default function B2BDistributionHomePage() {
                 <Calculator className="h-4 w-4" />
                 <span>Calculate Dealer Profit</span>
               </a>
+              */}
 
               <Link
                 href="/catalog"
@@ -956,8 +958,9 @@ export default function B2BDistributionHomePage() {
       </section>
 
       {/* =========================================================================
-          INTERACTIVE B2B PROFIT MARGIN & RETAILER ROI CALCULATOR
+          INTERACTIVE B2B PROFIT MARGIN & RETAILER ROI CALCULATOR (COMMENTED OUT)
           ========================================================================= */}
+      {false && (
       <section id="calculator" className="py-20 relative bg-[#1B1D35] border-y border-[#252A54]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
@@ -1111,6 +1114,7 @@ export default function B2BDistributionHomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* =========================================================================
           FEATURED BRANDS ("Leading Technology Brands")
@@ -1811,7 +1815,7 @@ export default function B2BDistributionHomePage() {
               <h4 className="font-bold text-white uppercase text-[11px] tracking-wider">Business</h4>
               <ul className="space-y-2">
                 <li><a href="#partnership" className="hover:text-white transition">Become a Retailer</a></li>
-                <li><a href="#calculator" className="hover:text-white transition">ROI Calculator</a></li>
+                {/* <li><a href="#calculator" className="hover:text-white transition">ROI Calculator</a></li> */}
                 <li><a href="#network" className="hover:text-white transition">Distribution Network</a></li>
                 <li><Link href="/login" className="hover:text-white transition">Retailer Portal Login</Link></li>
                 <li><a href="#contact" className="hover:text-white transition">Corporate Contact</a></li>

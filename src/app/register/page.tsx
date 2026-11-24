@@ -147,7 +147,7 @@ export default function RegisterPage() {
 
         <div className="text-xs text-slate-400 border-t border-[#252A54] pt-4 flex items-center justify-between">
           <span>&copy; {new Date().getFullYear()} Salman Enterprises Distribution Ltd.</span>
-          <span className="text-emerald-400 font-semibold">PostgreSQL &bull; MongoDB Live</span>
+          <span className="text-emerald-400 font-semibold">Verified Business Portal</span>
         </div>
       </div>
 

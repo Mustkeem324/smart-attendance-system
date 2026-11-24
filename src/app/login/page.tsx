@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import SalmanLogo from '@/components/brand/SalmanLogo';
 import {
-  Shield,
   Lock,
   Mail,
   ArrowRight,
@@ -14,9 +13,13 @@ import {
   Eye,
   EyeOff,
   ChevronLeft,
-  Building2,
-  CheckCircle2,
-  Cpu,
+  Users,
+  Truck,
+  BarChart3,
+  Package,
+  Layers,
+  Sparkles,
+  HelpCircle,
 } from 'lucide-react';
 
 export default function LoginPage() {
@@ -54,65 +57,119 @@ export default function LoginPage() {
     if (res.success) {
       routeByRoleOrEmail(email, res.user?.role);
     } else {
-      setError(res.error || 'Authentication failed. Please check your email and password.');
+      setError(res.error || 'Authentication failed. Please check your credentials and try again.');
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-[#101225] text-slate-100 font-sans">
-      {/* Left Feature Section */}
-      <div className="hidden lg:flex w-5/12 flex-col justify-between bg-[#1B1D35] p-12 border-r border-[#252A54]">
+    <div className="flex min-h-screen bg-[#0C0E22] text-slate-100 font-sans selection:bg-[#7138F5]/30">
+      {/* =========================================================================
+          LEFT BRANDING SECTION (Enterprise Business Value)
+          ========================================================================= */}
+      <div className="hidden lg:flex w-5/12 flex-col justify-between bg-[#111432] p-12 xl:p-14 border-r border-[#22274F]">
+        {/* Top Branding & Public Navigation */}
         <div className="flex items-center justify-between">
           <SalmanLogo href="/" size="lg" />
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[#252A54] bg-[#161A3C] px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:border-[#7138F5]/50 transition"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-3.5 w-3.5" />
             <span>Public Website</span>
           </Link>
         </div>
 
-        <div className="space-y-6 my-auto max-w-md">
-          <div className="inline-flex items-center gap-2 rounded-lg bg-[#242850] px-3.5 py-1.5 text-xs font-bold text-purple-300 border border-[#353B75]">
-            <Shield className="h-3.5 w-3.5 text-purple-400" />
-            <span>Enterprise Telemetry &amp; Access Control</span>
+        {/* Center Content: Headline, Description & 3 Business Highlights */}
+        <div className="space-y-8 my-auto max-w-lg">
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-lg bg-[#1C214C] px-3.5 py-1.5 text-xs font-bold text-purple-300 border border-[#2E3570]">
+              <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+              <span>Business Operations Platform</span>
+            </div>
+
+            <h2 className="text-3xl xl:text-4xl font-extrabold text-white leading-tight tracking-tight">
+              One Platform.<br />
+              <span className="bg-gradient-to-r from-white via-slate-100 to-purple-200 bg-clip-text text-transparent">
+                Smarter Business Operations.
+              </span>
+            </h2>
+
+            <p className="text-sm text-slate-300 leading-relaxed">
+              Manage your distribution network, workforce, attendance, inventory, and business operations through one seamless platform.
+            </p>
           </div>
 
-          <h2 className="text-3xl font-extrabold text-white leading-tight">
-            Unified B2B Distribution &amp; Workforce Portal.
-          </h2>
-
-          <p className="text-sm text-slate-300 leading-relaxed">
-            One platform powering anti-spoof biometric attendance, real-time geofence enforcement, and nationwide mobile electronics field sales tracking with dual-IMEI inventory.
-          </p>
-
-          <div className="grid grid-cols-3 gap-3 pt-2">
-            <div className="rounded-xl border border-[#252A54] bg-[#14162E] p-3.5">
-              <span className="block text-xl font-extrabold text-purple-400">50m</span>
-              <p className="mt-0.5 text-[11px] text-slate-400">Strict Geofence</p>
+          {/* Three Attractive Business-Focused Highlights */}
+          <div className="space-y-3.5 pt-2">
+            {/* 1. Workforce Management */}
+            <div className="flex items-start gap-3.5 rounded-2xl border border-[#22274F] bg-[#141838] p-4 transition hover:border-[#7138F5]/40 hover:bg-[#181D44]">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
+                <Users className="h-5 w-5" />
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-white">Workforce Management</h3>
+                  <span className="rounded-md bg-purple-500/10 px-2 py-0.5 text-[10px] font-semibold text-purple-300 border border-purple-500/20">
+                    Location-Based Attendance
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Verified team check-ins, automated shift rosters, and real-time operational availability.
+                </p>
+              </div>
             </div>
-            <div className="rounded-xl border border-[#252A54] bg-[#14162E] p-3.5">
-              <span className="block text-xl font-extrabold text-emerald-400">100%</span>
-              <p className="mt-0.5 text-[11px] text-slate-400">IMEI Traceability</p>
+
+            {/* 2. Nationwide Distribution */}
+            <div className="flex items-start gap-3.5 rounded-2xl border border-[#22274F] bg-[#141838] p-4 transition hover:border-emerald-500/40 hover:bg-[#181D44]">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                <Truck className="h-5 w-5" />
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-white">Nationwide Distribution</h3>
+                  <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-300 border border-emerald-500/20">
+                    Enterprise Fulfillment
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Fast order routing, regional logistics hubs, and connected retail partner channels.
+                </p>
+              </div>
             </div>
-            <div className="rounded-xl border border-[#252A54] bg-[#14162E] p-3.5">
-              <span className="block text-xl font-extrabold text-indigo-400">23 Modules</span>
-              <p className="mt-0.5 text-[11px] text-slate-400">Enterprise Suite</p>
+
+            {/* 3. Smart Business Operations */}
+            <div className="flex items-start gap-3.5 rounded-2xl border border-[#22274F] bg-[#141838] p-4 transition hover:border-indigo-500/40 hover:bg-[#181D44]">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                <BarChart3 className="h-5 w-5" />
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-white">Smart Business Operations</h3>
+                  <span className="rounded-md bg-indigo-500/10 px-2 py-0.5 text-[10px] font-semibold text-indigo-300 border border-indigo-500/20">
+                    Device &amp; Inventory Management
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Real-time product availability, dealer pricing tiers, and integrated business insights.
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-xs text-slate-400 border-t border-[#252A54] pt-4">
-          <span>&copy; {new Date().getFullYear()} Salman Enterprises Distribution Ltd.</span>
-          <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
+        {/* Clean Corporate Footer */}
+        <div className="flex items-center justify-between text-xs text-slate-400 border-t border-[#22274F] pt-5">
+          <span>&copy; {new Date().getFullYear()} Salman Enterprises Distribution Ltd. All rights reserved.</span>
+          <span className="flex items-center gap-2 font-medium text-purple-300">
             <span className="h-2 w-2 rounded-full bg-emerald-400" />
-            PostgreSQL &amp; MongoDB Operational
+            <span>Platform Active</span>
           </span>
         </div>
       </div>
 
-      {/* Right Column: Login Form */}
+      {/* =========================================================================
+          RIGHT COLUMN: LOGIN INTERFACE & BUSINESS PORTALS
+          ========================================================================= */}
       <div className="flex flex-1 flex-col justify-center px-4 py-8 sm:px-8 lg:px-12 xl:px-16 overflow-y-auto">
         <div className="mx-auto w-full max-w-lg">
           {/* Mobile Back & Brand */}
@@ -127,31 +184,36 @@ export default function LoginPage() {
             <SalmanLogo href="/" size="sm" />
           </div>
 
-          <div className="mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#1B1D35] border border-[#252A54] text-purple-300 text-xs font-semibold mb-3">
-              <Lock className="h-3 w-3" />
-              <span>Secure Single Sign-On (SSO) Portal</span>
+          {/* Login Section Header */}
+          <div className="mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#161A3C] border border-[#252A54] text-purple-300 text-xs font-semibold mb-3">
+              <Lock className="h-3 w-3 text-purple-400" />
+              <span>Welcome to Your Business Portal</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Enterprise Portal Login
+              Welcome Back
             </h1>
             <p className="mt-1.5 text-xs sm:text-sm text-slate-400">
-              Sign in with your corporate credentials to access HRMS attendance, field sales operations, and warehouse distribution systems.
+              Sign in to access your business workspace and manage your operations.
             </p>
           </div>
 
+          {/* Error Notification */}
           {error && (
-            <div className="mb-5 flex items-center gap-2.5 rounded-xl border border-rose-500/40 bg-rose-500/10 p-3.5 text-xs font-semibold text-rose-300">
+            <div className="mb-5 flex items-center gap-3 rounded-xl border border-rose-500/40 bg-rose-500/10 p-3.5 text-xs font-semibold text-rose-300 animate-fadeIn">
               <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
               <span>{error}</span>
             </div>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl bg-[#1B1D35] p-6 sm:p-7 border border-[#252A54] shadow-xl">
+          {/* Login Form Card */}
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 rounded-2xl bg-[#141838] p-6 sm:p-7 border border-[#22274F] shadow-2xl shadow-black/40"
+          >
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Corporate Email or Mobile Phone
+                Corporate Email or Mobile Number
               </label>
               <div className="relative">
                 <Mail className="pointer-events-none absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
@@ -159,9 +221,10 @@ export default function LoginPage() {
                   type="text"
                   required
                   value={email}
+                  disabled={loading}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="salmanenterprisesphu@gmail.com or 9876543210"
-                  className="w-full rounded-xl border border-[#2A2E5A] bg-[#101225] py-3 pl-10 pr-4 text-xs font-medium text-white placeholder-slate-500 outline-none transition focus:border-[#7138F5]"
+                  className="w-full rounded-xl border border-[#2A2E5A] bg-[#0C0E22] py-3 pl-10 pr-4 text-xs font-medium text-white placeholder-slate-500 outline-none transition focus:border-[#7138F5] focus:ring-1 focus:ring-[#7138F5] disabled:opacity-50"
                 />
               </div>
             </div>
@@ -175,7 +238,7 @@ export default function LoginPage() {
                   href="/forgot-password"
                   className="text-[11px] font-semibold text-purple-400 hover:text-purple-300 transition"
                 >
-                  Forgot password?
+                  Forgot Password?
                 </Link>
               </div>
               <div className="relative">
@@ -184,14 +247,17 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
+                  disabled={loading}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full rounded-xl border border-[#2A2E5A] bg-[#101225] py-3 pl-10 pr-10 text-xs font-medium text-white placeholder-slate-500 outline-none transition focus:border-[#7138F5]"
+                  className="w-full rounded-xl border border-[#2A2E5A] bg-[#0C0E22] py-3 pl-10 pr-10 text-xs font-medium text-white placeholder-slate-500 outline-none transition focus:border-[#7138F5] focus:ring-1 focus:ring-[#7138F5] disabled:opacity-50"
                 />
                 <button
                   type="button"
+                  tabIndex={-1}
+                  disabled={loading}
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-3.5 text-slate-400 hover:text-white"
+                  className="absolute right-3.5 top-3.5 text-slate-400 hover:text-white transition disabled:opacity-50"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -199,82 +265,109 @@ export default function LoginPage() {
             </div>
 
             <div className="flex items-center justify-between pt-1">
-              <label className="flex items-center gap-2 cursor-pointer">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={rememberMe}
+                  disabled={loading}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-3.5 w-3.5 rounded border-[#2A2E5A] bg-[#101225] text-[#7138F5] focus:ring-0"
+                  className="h-3.5 w-3.5 rounded border-[#2A2E5A] bg-[#0C0E22] text-[#7138F5] focus:ring-0 focus:ring-offset-0 cursor-pointer"
                 />
-                <span className="text-xs text-slate-400">Remember this session (30 Days)</span>
+                <span className="text-xs text-slate-400 hover:text-slate-300 transition">
+                  Remember Me
+                </span>
               </label>
-              <div className="flex items-center gap-1 text-[11px] text-emerald-400">
-                <CheckCircle2 className="h-3 w-3" />
-                <span>TLS 256-bit Encrypted</span>
-              </div>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#7138F5] hover:bg-[#5E2DD4] py-3.5 text-xs font-bold text-white shadow-lg shadow-purple-900/30 transition active:scale-[0.99] disabled:opacity-50"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#7138F5] hover:bg-[#5E2DD4] py-3.5 text-xs font-bold text-white shadow-lg shadow-purple-900/30 transition active:scale-[0.99] disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <div className="flex items-center gap-2">
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  <span>Verifying Credentials...</span>
+                  <span>Signing In to Your Account...</span>
                 </div>
               ) : (
                 <>
-                  <span>Sign In to Platform</span>
+                  <span>Sign In to Your Account</span>
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
             </button>
           </form>
 
-          {/* Registration Promotion Card */}
-          <div className="mt-5 p-4 rounded-xl bg-[#1B1D35] border border-[#252A54] flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-white">New Retailer or Sub-Distributor?</p>
-              <p className="text-[11px] text-slate-400">Create an account for wholesale catalog &amp; dealer pricing.</p>
+          {/* =====================================================================
+              REGISTRATION SECTION (Section 6)
+              ===================================================================== */}
+          <div className="mt-5 rounded-2xl bg-[#141838] border border-[#22274F] p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3.5">
+            <div className="space-y-0.5">
+              <p className="text-xs font-bold text-white">New to Salman Enterprises?</p>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Register your business account to access our distribution network and business services.
+              </p>
             </div>
             <Link
               href="/register"
-              className="px-3.5 py-1.5 rounded-lg bg-[#252A54] hover:bg-[#353B75] text-purple-300 text-xs font-bold transition shrink-0"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#22274F] hover:bg-[#2C3366] text-purple-300 hover:text-white text-xs font-bold transition shrink-0 border border-[#323972]"
             >
-              Register &rarr;
+              <span>Create Business Account</span>
+              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
-          {/* Quick Platform Portals Nav */}
-          <div className="mt-5 grid grid-cols-2 gap-3">
+          {/* =====================================================================
+              BUSINESS PORTAL ACCESS CARDS (Section 7)
+              ===================================================================== */}
+          <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Distribution Management */}
             <Link
               href="/distribution"
-              className="flex items-center gap-2.5 p-3 rounded-xl border border-[#252A54] bg-[#14162E] hover:bg-[#1B1D35] transition group text-left"
+              className="flex items-center gap-3 p-3.5 rounded-2xl border border-[#22274F] bg-[#111432] hover:bg-[#161A3C] hover:border-[#7138F5]/40 transition group text-left shadow-sm"
             >
-              <Building2 className="h-4 w-4 text-purple-400 shrink-0" />
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 group-hover:scale-105 transition-transform">
+                <Package className="h-5 w-5" />
+              </div>
               <div>
-                <p className="text-xs font-bold text-white group-hover:text-purple-300">Distribution Portal</p>
-                <p className="text-[10px] text-slate-400">Orders, Warehouses &amp; B2B</p>
+                <p className="text-xs font-bold text-white group-hover:text-purple-300 transition-colors">
+                  Distribution Management
+                </p>
+                <p className="text-[10px] text-slate-400">
+                  Orders, Warehouses &amp; Business Operations.
+                </p>
               </div>
             </Link>
 
+            {/* Product Catalogue */}
             <Link
               href="/catalog"
-              className="flex items-center gap-2.5 p-3 rounded-xl border border-[#252A54] bg-[#14162E] hover:bg-[#1B1D35] transition group text-left"
+              className="flex items-center gap-3 p-3.5 rounded-2xl border border-[#22274F] bg-[#111432] hover:bg-[#161A3C] hover:border-[#7138F5]/40 transition group text-left shadow-sm"
             >
-              <Cpu className="h-4 w-4 text-purple-400 shrink-0" />
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 group-hover:scale-105 transition-transform">
+                <Layers className="h-5 w-5" />
+              </div>
               <div>
-                <p className="text-xs font-bold text-white group-hover:text-purple-300">Product Catalog</p>
-                <p className="text-[10px] text-slate-400">Wholesale Electronics</p>
+                <p className="text-xs font-bold text-white group-hover:text-purple-300 transition-colors">
+                  Product Catalogue
+                </p>
+                <p className="text-[10px] text-slate-400">
+                  Explore Products, Pricing &amp; Availability.
+                </p>
               </div>
             </Link>
           </div>
 
-          {/* Security Compliance Micro-Footer */}
-          <div className="mt-6 text-center text-[11px] text-slate-500">
-            Protected by enterprise geofence telemetry, biometric multi-factor authentication and role-based access control.
+          {/* Assistance Support Footer */}
+          <div className="mt-6 flex items-center justify-center gap-1.5 text-center text-xs text-slate-500">
+            <HelpCircle className="h-3.5 w-3.5 text-slate-500" />
+            <span>Need assistance accessing your account?</span>
+            <Link
+              href="/contact"
+              className="text-purple-400 hover:text-purple-300 font-semibold transition"
+            >
+              Contact Business Support
+            </Link>
           </div>
         </div>
       </div>
