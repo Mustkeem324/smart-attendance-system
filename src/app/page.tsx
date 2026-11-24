@@ -1106,15 +1106,6 @@ export default function B2BDistributionHomePage() {
                     </span>
                   </div>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => prefillCategoryInquiry(calcCategory, calcVolume)}
-                  className="w-full rounded-2xl bg-gradient-to-r from-[#7138F5] to-[#8055F7] py-3.5 text-xs sm:text-sm font-bold text-white shadow-xl shadow-indigo-600/30 hover:opacity-95 transition flex items-center justify-center gap-2"
-                >
-                  <span>Lock Allocation for this Tier</span>
-                  <ArrowRight className="h-4 w-4" />
-                </button>
               </div>
             </div>
           </div>
