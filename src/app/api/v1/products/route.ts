@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
     let warehouse = await Warehouse.findOne({ isActive: true });
     if (!warehouse) {
       warehouse = await Warehouse.create({
-        name: 'Apex Central Distribution Hub',
+        name: 'Salman Enterprises Central Hub',
         code: 'WH-BLR-01',
         address: 'Plot 45, Tech Zone Industrial Corridor, Electronic City',
         city: 'Bangalore',

@@ -5,8 +5,8 @@ import { Settings, Save, Building, CreditCard, ShieldCheck, CheckCircle2 } from 
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<any>({
-    companyName: 'Apex Mobile & Electronics Distribution Ltd.',
-    brandName: 'Apex Electronics',
+    companyName: 'Salman Enterprises Distribution Ltd.',
+    brandName: 'Salman Enterprises',
     gstin: '29AAACA1234A1Z5',
     pan: 'AAACA1234A',
     registeredAddress: 'Nexus Technology Park, 4th Floor, Electronic City Phase 1',

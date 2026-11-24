@@ -95,7 +95,7 @@ export function DistributionHeader({
 
         <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#151A38] border border-white/5 text-xs text-slate-300">
           <Building2 className="w-4 h-4 text-purple-400 shrink-0" />
-          <span className="font-semibold text-white truncate max-w-[150px] md:max-w-none">Apex HQ Bangalore Hub</span>
+          <span className="font-semibold text-white truncate max-w-[150px] md:max-w-none">Salman Enterprises Central Hub</span>
           <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 font-medium shrink-0">
             Live Node
           </span>

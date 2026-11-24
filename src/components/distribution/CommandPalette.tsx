@@ -148,7 +148,7 @@ export function CommandPalette({
             <span><kbd className="px-1.5 py-0.5 rounded bg-[#151A38] border border-white/10 text-[10px]">↵</kbd> Select</span>
             <span><kbd className="px-1.5 py-0.5 rounded bg-[#151A38] border border-white/10 text-[10px]">ESC</kbd> Close</span>
           </div>
-          <span className="text-purple-400 font-semibold">APEX Command</span>
+          <span className="text-purple-400 font-semibold">Salman Enterprises Command</span>
         </div>
       </div>
     </div>

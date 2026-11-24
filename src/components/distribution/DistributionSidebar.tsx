@@ -172,7 +172,7 @@ export function DistributionSidebar({
           </div>
           {!collapsed && (
             <div className="flex flex-col leading-tight">
-              <span className="font-bold text-base text-white tracking-wide">APEX ELECTRONICS</span>
+              <span className="font-bold text-base text-white tracking-wide">SALMAN ENTERPRISES</span>
               <span className="text-[10px] text-purple-400 font-semibold uppercase tracking-wider">Enterprise Distribution</span>
             </div>
           )}

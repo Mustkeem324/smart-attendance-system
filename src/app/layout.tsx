@@ -5,7 +5,7 @@ import AppShell from '@/components/AppShell';
 import PWARegister from '@/components/mobile/PWARegister';
 
 export const metadata: Metadata = {
-  title: 'Apex Mobile & Electronics Distribution Ltd. | B2B Smartphone & Hardware Supply',
+  title: 'Salman Enterprises Distribution Ltd. | B2B Smartphone & Hardware Supply',
   description:
     'Premier B2B technology distributor connecting leading smartphone brands, wireless audio, GaN chargers, and mobile accessories with authorized retail dealer networks.',
   keywords: [
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: 'APEX Electronics',
   },
   openGraph: {
-    title: 'Apex Mobile & Electronics Distribution Ltd.',
+    title: 'Salman Enterprises Distribution Ltd.',
     description:
       'Powering the Future of Mobile & Electronics Distribution. Connecting leading technology brands with retailers through reliable distribution and genuine products.',
     type: 'website',

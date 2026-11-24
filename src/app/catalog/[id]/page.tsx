@@ -230,7 +230,7 @@ export default function ProductDetailPage() {
             </div>
             <div>
               <span className="text-base font-black tracking-tight text-white block leading-tight">
-                APEX ELECTRONICS
+                SALMAN ENTERPRISES
               </span>
               <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 block">
                 B2B Distribution
@@ -719,7 +719,7 @@ export default function ProductDetailPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Apex Mobile Hub"
+                    placeholder="e.g. Salman Mobile Hub"
                     value={quoteForm.businessName}
                     onChange={(e) => setQuoteForm({ ...quoteForm, businessName: e.target.value })}
                     className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"

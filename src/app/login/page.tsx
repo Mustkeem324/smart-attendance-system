@@ -119,7 +119,7 @@ export default function LoginPage() {
         </div>
 
         <div className="relative z-10 flex items-center justify-between text-xs text-slate-400 border-t border-white/5 pt-4">
-          <span>Apex Electronics &bull; Enterprise Platform</span>
+          <span>Salman Enterprises &bull; Enterprise Platform</span>
           <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             PostgreSQL &amp; MongoDB Operational

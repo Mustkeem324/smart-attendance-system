@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     if (!content) {
       content = await WebsiteContent.create({
         slug: 'default',
-        companyName: 'Apex Mobile & Electronics Distribution Ltd.',
+        companyName: 'Salman Enterprises Distribution Ltd.',
         tagline: 'Authorized Master Distributor for Leading Mobile & Electronics Brands',
         headline: 'Powering the Future of Mobile & Electronics Distribution.',
         subheadline:

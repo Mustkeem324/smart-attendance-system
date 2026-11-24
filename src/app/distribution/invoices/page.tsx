@@ -206,7 +206,7 @@ export default function InvoicesPage() {
               <div className="flex justify-between items-start">
                 <div>
                   <h2 className="text-xl font-black text-slate-900">
-                    {selectedInvoice.sellerDetails?.companyName || 'Apex Mobile & Electronics Distribution Ltd.'}
+                    {selectedInvoice.sellerDetails?.companyName || 'Salman Enterprises Distribution Ltd.'}
                   </h2>
                   <p className="text-slate-600 mt-1 max-w-sm">
                     {selectedInvoice.sellerDetails?.address}
@@ -308,7 +308,7 @@ export default function InvoicesPage() {
                 </div>
                 <div className="text-right">
                   <div className="h-10 border-b border-slate-400 w-44 ml-auto mb-1" />
-                  <p className="font-semibold text-slate-700">For Apex Mobile & Electronics Distribution Ltd.</p>
+                  <p className="font-semibold text-slate-700">For Salman Enterprises Distribution Ltd.</p>
                   <p>Authorized Signatory</p>
                 </div>
               </div>

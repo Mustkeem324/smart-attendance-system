@@ -1057,7 +1057,7 @@ export default function AdvancedFieldSalesMobileApp() {
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-sm text-white tracking-tight">APEX FIELD SALES</span>
+                <span className="font-extrabold text-sm text-white tracking-tight">SALMAN ENTERPRISES FIELD SALES</span>
                 <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 text-[9px] font-mono font-bold">
                   PRO
                 </span>
@@ -1979,7 +1979,7 @@ export default function AdvancedFieldSalesMobileApp() {
                       </label>
                       <input
                         type="text"
-                        placeholder="e.g. Apex South India Logistics Hub"
+                        placeholder="e.g. Salman Enterprises Logistics Hub"
                         value={distributorName}
                         onChange={(e) => setDistributorName(e.target.value)}
                         className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white focus:outline-none focus:border-[#5428E8]"

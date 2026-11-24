@@ -396,7 +396,7 @@ export default function RetailerDirectoryPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Apex Mobile World"
+                    placeholder="e.g. Salman Mobile World"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     className="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-sm text-slate-800 focus:border-[#5428E8] focus:outline-none"

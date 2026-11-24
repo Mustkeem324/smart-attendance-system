@@ -1515,7 +1515,7 @@ export default function ProductCatalogPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Apex Mobile Hub"
+                    placeholder="e.g. Salman Mobile Hub"
                     value={quoteForm.businessName}
                     onChange={(e) => setQuoteForm({ ...quoteForm, businessName: e.target.value })}
                     className="w-full rounded-xl border border-slate-200 p-2.5 text-xs text-slate-900 focus:border-[#5428E8] focus:outline-none"

@@ -1180,7 +1180,7 @@ export interface IWebsiteContent extends Document {
 const WebsiteContentSchema = new Schema<IWebsiteContent>(
   {
     slug: { type: String, default: 'default', unique: true },
-    companyName: { type: String, default: 'Apex Mobile & Electronics Distribution Ltd.' },
+    companyName: { type: String, default: 'Salman Enterprises Distribution Ltd.' },
     tagline: { type: String, default: 'Authorized Master Distributor for Leading Mobile & Electronics Brands' },
     headline: { type: String, default: 'Powering the Future of Mobile & Electronics Distribution.' },
     subheadline: {
@@ -1525,8 +1525,8 @@ export interface IDistributionSetting extends Document {
 const DistributionSettingSchema = new Schema<IDistributionSetting>(
   {
     slug: { type: String, default: 'default', unique: true },
-    companyName: { type: String, default: 'Apex Mobile & Electronics Distribution Ltd.' },
-    brandName: { type: String, default: 'Apex Electronics' },
+    companyName: { type: String, default: 'Salman Enterprises Distribution Ltd.' },
+    brandName: { type: String, default: 'Salman Enterprises' },
     gstin: { type: String, default: '29AAACA1234A1Z5' },
     pan: { type: String, default: 'AAACA1234A' },
     registeredAddress: { type: String, default: 'Nexus Technology Park, 4th Floor, Electronic City Phase 1' },

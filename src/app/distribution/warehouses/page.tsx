@@ -147,7 +147,7 @@ export default function WarehousesPage() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Apex South Regional Hub"
+                  placeholder="e.g. Salman Enterprises Regional Hub"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl bg-[#10132A] border border-[#23294E] text-white"

@@ -293,6 +293,24 @@ export default function B2BDistributionHomePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Handle smooth scroll to hash anchors on mount and hash changes
+  useEffect(() => {
+    const handleHashScroll = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const el = document.querySelector(hash);
+        if (el) {
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        }
+      }
+    };
+    handleHashScroll();
+    window.addEventListener('hashchange', handleHashScroll);
+    return () => window.removeEventListener('hashchange', handleHashScroll);
+  }, []);
+
   // Fetch verified company info from MongoDB
   useEffect(() => {
     const fetchCompanyData = async () => {
@@ -418,7 +436,7 @@ export default function B2BDistributionHomePage() {
   };
 
   const content = companyInfo?.content || {
-    companyName: 'Apex Mobile & Electronics Distribution Ltd.',
+    companyName: 'Salman Enterprises Distribution Ltd.',
     tagline: 'Authorized Master Distributor for Leading Mobile & Electronics Brands',
     headline: 'Powering the Future of Mobile & Electronics Distribution.',
     subheadline:
@@ -1493,7 +1511,7 @@ export default function B2BDistributionHomePage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Apex Mobile Hub"
+                    placeholder="e.g. Salman Mobile Hub"
                     value={partnerForm.businessName}
                     onChange={(e) => setPartnerForm({ ...partnerForm, businessName: e.target.value })}
                     className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs text-white focus:border-[#5428E8] focus:outline-none"
@@ -1777,7 +1795,7 @@ export default function B2BDistributionHomePage() {
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-tr from-[#5428E8] to-[#8055F7] text-white">
                   <Smartphone className="h-4 w-4" />
                 </div>
-                <span className="font-extrabold text-sm text-white tracking-tight">APEX ELECTRONICS</span>
+                <span className="font-extrabold text-sm text-white tracking-tight">SALMAN ENTERPRISES</span>
               </div>
               <p className="text-xs text-slate-400 max-w-sm leading-relaxed">
                 Authorized B2B distributor of smartphones, accessories, and electronics to retail dealers, enterprise networks, and showroom partners nationwide.

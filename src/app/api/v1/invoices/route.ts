@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
       retailerId: retailer._id,
       invoiceDate: new Date(),
       sellerDetails: {
-        companyName: 'Apex Mobile & Electronics Distribution Ltd.',
+        companyName: 'Salman Enterprises Distribution Ltd.',
         gstin: '29AAACA1234A1Z5',
         pan: 'AAACA1234A',
         address: 'Nexus Technology Park, 4th Floor, Electronic City Phase 1',

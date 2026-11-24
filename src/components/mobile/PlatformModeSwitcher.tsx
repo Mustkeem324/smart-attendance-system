@@ -68,7 +68,7 @@ export default function PlatformModeSwitcher() {
         <button
           onClick={handleInstallPWA}
           className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 px-2.5 py-1 text-xs font-bold text-white shadow-md hover:from-purple-500 hover:to-indigo-500 transition-all animate-pulse"
-          title="Install APEX Android / Desktop App"
+          title="Install Salman Enterprises Android / Desktop App"
         >
           <Download className="h-3.5 w-3.5" />
           <span className="hidden sm:inline">Install</span>
