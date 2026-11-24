@@ -45,6 +45,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const notifRef = useRef<HTMLDivElement>(null);
 
   // Office Location Selector
   const [selectedBranch, setSelectedBranch] = useState('All Branches (HQ + Satellites)');
@@ -98,11 +99,14 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Close search dropdown on click outside
+  // Close search & notification dropdown on click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setShowSearchDropdown(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setShowNotifications(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -134,7 +138,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-master-line bg-white/95 px-4  dark:border-white/10 dark:bg-master-navy/95 lg:px-8">
+    <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-master-line bg-white/95 px-4 overflow-visible dark:border-white/10 dark:bg-master-navy/95 lg:px-8">
       {/* Left: Mobile Toggle & Global Search Bar */}
       <div className="flex items-center gap-3">
         {onToggleSidebar && (
@@ -261,7 +265,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
         </Link>
 
         {/* Notifications Dropdown */}
-        <div className="relative">
+        <div ref={notifRef} className="relative">
           <button
             type="button"
             onClick={() => setShowNotifications(!showNotifications)}

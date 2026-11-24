@@ -37,6 +37,26 @@ export function DistributionHeader({
   const [showQuickActions, setShowQuickActions] = useState(false);
   const [dateRange, setDateRange] = useState('This Month (Nov 2026)');
 
+  const notificationsRef = React.useRef<HTMLDivElement>(null);
+  const userMenuRef = React.useRef<HTMLDivElement>(null);
+  const quickActionsRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
+        setShowNotifications(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false);
+      }
+      if (quickActionsRef.current && !quickActionsRef.current.contains(event.target as Node)) {
+        setShowQuickActions(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   useEffect(() => {
     async function loadData() {
       try {
@@ -82,7 +102,7 @@ export function DistributionHeader({
   };
 
   return (
-    <header className="h-16 bg-[#10132A] border-b border-[#23294E] sticky top-0 z-20 flex items-center justify-between px-3 sm:px-4 lg:px-6 w-full max-w-full overflow-hidden">
+    <header className="h-16 bg-[#10132A] border-b border-[#23294E] sticky top-0 z-40 flex items-center justify-between px-3 sm:px-4 lg:px-6 w-full max-w-full overflow-visible">
       {/* Left: Mobile Toggle & Workspace Switcher */}
       <div className="flex items-center gap-3 shrink-0">
         <button
@@ -138,7 +158,7 @@ export function DistributionHeader({
         </div>
 
         {/* Quick Action Button */}
-        <div className="relative">
+        <div ref={quickActionsRef} className="relative">
           <button
             onClick={() => setShowQuickActions(!showQuickActions)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#713BFF] to-[#804DFF] hover:from-[#6228F5] hover:to-[#713BFF] text-white text-xs font-semibold shadow-md shadow-purple-900/30 transition-all"
@@ -187,7 +207,7 @@ export function DistributionHeader({
         </div>
 
         {/* Notifications Bell */}
-        <div className="relative">
+        <div ref={notificationsRef} className="relative">
           <button
             onClick={() => setShowNotifications(!showNotifications)}
             className="p-2 rounded-xl bg-[#151A38] hover:bg-[#1C234E] text-slate-300 hover:text-white border border-[#23294E] relative transition-colors"
@@ -267,7 +287,7 @@ export function DistributionHeader({
         </div>
 
         {/* User Profile Dropdown */}
-        <div className="relative">
+        <div ref={userMenuRef} className="relative">
           <button
             onClick={() => setShowUserMenu(!showUserMenu)}
             className="flex items-center gap-2 p-1.5 rounded-xl bg-[#151A38] hover:bg-[#1C234E] border border-[#23294E] transition-colors"
