@@ -4,7 +4,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useUi } from '@/components/providers/UiProvider';
+import { useLiveNotifications } from '@/components/notifications/LiveNotificationContext';
 import Modal from './Modal';
+import EmployeePhotoUploadModal, { saveOwnProfilePhoto } from '@/components/employees/EmployeePhotoUploadModal';
 import {
   Bell,
   Search,
@@ -24,23 +27,37 @@ import {
   HelpCircle,
   Smartphone,
   ChevronDown,
+  Camera,
+  Radio,
 } from 'lucide-react';
 import PlatformModeSwitcher from '@/components/mobile/PlatformModeSwitcher';
 
 export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => void }) {
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user, logout, refreshUser } = useAuth();
+  const { toast } = useUi();
+  const {
+    notifications,
+    unreadCount,
+    liveMode,
+    setLiveMode,
+    liveStatus,
+    openNotification,
+    markAllRead,
+  } = useLiveNotifications();
   const [isDark, setIsDark] = useState(false);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
 
   // Reflect the theme applied by the pre-hydration script in layout.tsx
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains('dark'));
   }, []);
 
-  const [notifications, setNotifications] = useState<any[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showAiModal, setShowAiModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
+  const [copilotData, setCopilotData] = useState<any>(null);
+  const [copilotLoading, setCopilotLoading] = useState(false);
 
   // Global Search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -57,13 +74,6 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
 
   useEffect(() => {
     if (user) {
-      fetch('/api/admin/notifications')
-        .then((r) => r.json())
-        .then((d) => {
-          if (d.notifications) setNotifications(d.notifications);
-        })
-        .catch(() => {});
-
       fetch('/api/branches')
         .then((r) => r.json())
         .then((d) => {
@@ -134,18 +144,8 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
     } catch {}
   };
 
-  const markAllRead = async () => {
-    try {
-      await fetch('/api/admin/notifications', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ markAllRead: true }),
-      });
-      setNotifications(notifications.map((n) => ({ ...n, isRead: true })));
-    } catch (e) {}
-  };
-
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const isElevatedNotificationsUser =
+    user?.role && ['SUPER_ADMIN', 'COMPANY_ADMIN', 'HR_MANAGER', 'TEAM_MANAGER'].includes(user.role);
 
   return (
     <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-slate-200/80 bg-white/95 px-4 backdrop-blur-md overflow-visible dark:border-white/10 dark:bg-[#0C0E22]/95 lg:px-8">
@@ -237,10 +237,18 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
 
         {/* Branch Selector Dropdown */}
         <div className="hidden items-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50/80 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 md:flex">
-          <MapPin className="h-3.5 w-3.5 text-[#7138F5]" />
+          <MapPin className="h-3.5 w-3.5 text-[#6538ED]" />
           <select
             value={selectedBranch}
-            onChange={(e) => setSelectedBranch(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              setSelectedBranch(val);
+              try {
+                sessionStorage.setItem('se_selected_branch', val);
+                window.dispatchEvent(new CustomEvent('se:branch-changed', { detail: val }));
+              } catch {}
+            }}
+            aria-label="Global branch filter"
             className="bg-transparent font-medium focus:outline-none dark:bg-transparent dark:text-white"
           >
             <option value="ALL" className="dark:bg-slate-900 text-slate-800 dark:text-white">All Branches (HQ + Satellites)</option>
@@ -258,10 +266,10 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
         {/* Mobile App Shortcut */}
         <Link
           href="/field-sales/mobile"
-          className="hidden sm:flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 shadow-xs transition hover:border-[#7138F5] hover:text-[#7138F5] dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:text-white"
-          title="Mobile Attendance App"
+          className="hidden sm:flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 shadow-xs transition hover:border-[#6538ED] hover:text-[#6538ED] dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:text-white"
+          title="Mobile Field & Attendance App"
         >
-          <Smartphone className="h-3.5 w-3.5 text-[#7138F5]" />
+          <Smartphone className="h-3.5 w-3.5 text-[#6538ED]" />
           <span className="hidden md:inline">Mobile App</span>
         </Link>
 
@@ -276,13 +284,24 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
           {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </button>
 
-        {/* AI Assistant Button */}
+        {/* Operations Copilot Button */}
         <button
-          onClick={() => setShowAiModal(true)}
-          className="flex items-center gap-1.5 rounded-2xl bg-[#7138F5] px-3 py-1.5 text-xs font-bold text-white shadow-md shadow-[#7138F5]/25 transition hover:bg-[#6025e8]"
+          type="button"
+          onClick={() => {
+            setShowAiModal(true);
+            setCopilotLoading(true);
+            fetch('/api/admin/dashboard/overview')
+              .then((r) => (r.ok ? r.json() : null))
+              .then((d) => {
+                if (d) setCopilotData(d);
+              })
+              .catch(() => {})
+              .finally(() => setCopilotLoading(false));
+          }}
+          className="flex items-center gap-1.5 rounded-2xl bg-[#6538ED] px-3 py-1.5 text-xs font-bold text-white shadow-md shadow-[#6538ED]/25 transition hover:bg-[#562BD4]"
         >
           <Sparkles className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">AI Copilot</span>
+          <span className="hidden sm:inline">Live Briefing</span>
         </button>
 
         {/* Help & Support */}
@@ -313,43 +332,74 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
 
           {showNotifications && (
             <div className="absolute right-0 mt-2 z-50 w-80 sm:w-96 rounded-3xl border border-slate-200 bg-white p-4 shadow-2xl dark:border-slate-700 dark:bg-[#0F122B]">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2 dark:border-slate-800">
-                <span className="text-xs font-bold text-slate-900 dark:text-white">Admin Notifications</span>
+              <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5 dark:border-slate-800">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-900 dark:text-white">Live Notifications</span>
+                  <button
+                    type="button"
+                    onClick={() => setLiveMode(!liveMode)}
+                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold ${
+                      liveMode && liveStatus === 'LIVE'
+                        ? 'bg-emerald-500/15 text-[#12B886]'
+                        : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
+                    }`}
+                    title="Toggle real-time live notification stream"
+                  >
+                    <Radio className={`h-2.5 w-2.5 ${liveMode && liveStatus === 'LIVE' ? 'animate-pulse' : ''}`} />
+                    <span>{liveMode ? (liveStatus === 'LIVE' ? 'LIVE' : 'SYNC') : 'PAUSED'}</span>
+                  </button>
+                </div>
                 {unreadCount > 0 && (
-                  <button onClick={markAllRead} className="text-[11px] font-bold text-[#7138F5] hover:underline">
+                  <button
+                    type="button"
+                    onClick={() => markAllRead()}
+                    className="text-[11px] font-bold text-[#6538ED] hover:underline"
+                  >
                     Mark all read
                   </button>
                 )}
               </div>
-              <div className="max-h-64 divide-y divide-slate-100 overflow-y-auto dark:divide-slate-800">
+
+              <div className="max-h-72 divide-y divide-slate-100 overflow-y-auto dark:divide-slate-800">
                 {notifications.length === 0 ? (
                   <div className="py-6 text-center text-xs text-slate-400">No active notifications</div>
                 ) : (
-                  notifications.map((n) => (
-                    <div key={n.id} className={`py-2 text-xs ${n.isRead ? 'opacity-65' : 'font-medium'}`}>
-                      <div className="flex items-center justify-between">
-                        <p className="font-semibold text-slate-800 dark:text-slate-100">{n.title}</p>
+                  notifications.slice(0, 12).map((n) => (
+                    <button
+                      key={n.id}
+                      type="button"
+                      onClick={async () => {
+                        setShowNotifications(false);
+                        await openNotification(n);
+                      }}
+                      className={`w-full text-left py-2.5 px-2 rounded-xl my-0.5 text-xs transition hover:bg-[#F6F5FF] dark:hover:bg-white/5 ${
+                        n.isRead ? 'opacity-65' : 'bg-[#F6F5FF]/60 font-medium dark:bg-[#6538ED]/10'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{n.title}</p>
                         {n.type === 'ALERT' || n.type === 'WARNING' ? (
-                          <AlertTriangle className="h-3 w-3 text-amber-500" />
+                          <AlertTriangle className="h-3.5 w-3.5 text-amber-500 shrink-0" />
                         ) : (
-                          <CheckCircle2 className="h-3 w-3 text-emerald-500" />
+                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                         )}
                       </div>
-                      <p className="mt-0.5 text-slate-500 dark:text-slate-400">{n.message}</p>
-                      <span className="text-[10px] text-slate-400">
-                        {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                    </div>
+                      <p className="mt-0.5 text-slate-500 dark:text-slate-400 line-clamp-2">{n.message}</p>
+                      <div className="mt-1 flex items-center justify-between text-[10px] text-slate-400">
+                        <span>{new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        <span className="font-semibold text-[#6538ED]">Click for details →</span>
+                      </div>
+                    </button>
                   ))
                 )}
               </div>
-              <div className="border-t border-slate-100 pt-2 text-center dark:border-slate-800">
+              <div className="border-t border-slate-100 pt-2.5 text-center dark:border-slate-800">
                 <Link
-                  href="/admin/notifications"
+                  href={isElevatedNotificationsUser ? '/admin/notifications' : '/notifications'}
                   onClick={() => setShowNotifications(false)}
-                  className="text-[11px] font-bold text-[#7138F5] hover:underline"
+                  className="text-[11px] font-bold text-[#6538ED] hover:underline"
                 >
-                  View All Notifications →
+                  Open Live Notification Center →
                 </Link>
               </div>
             </div>
@@ -362,19 +412,48 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
         {/* User Profile & Role Badge */}
         {user && (
           <div className="flex items-center gap-2.5 border-l border-slate-200 pl-3 dark:border-white/10">
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[#7138F5]/10 text-xs font-black text-[#7138F5] overflow-hidden shrink-0 border border-[#7138F5]/20">
-              SE
-            </div>
+            <button
+              type="button"
+              onClick={() => setShowPhotoModal(true)}
+              title="Add or update your professional profile photo"
+              aria-label="Add or update your professional profile photo"
+              className="group relative flex h-9 w-9 items-center justify-center rounded-2xl bg-[#6538ED]/10 text-xs font-black text-[#6538ED] overflow-hidden shrink-0 border border-[#6538ED]/25 hover:border-[#6538ED] uppercase transition"
+            >
+              {user.employee?.profilePhoto || user.profilePhoto ? (
+                <img
+                  src={user.employee?.profilePhoto || user.profilePhoto || ''}
+                  alt={user.employee ? `${user.employee.firstName} ${user.employee.lastName}` : user.email}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <>
+                  {user.employee
+                    ? `${user.employee.firstName?.[0] || ''}${user.employee.lastName?.[0] || ''}`
+                    : user.email.slice(0, 2)}
+                </>
+              )}
+              <span className="absolute inset-0 flex items-center justify-center bg-[#15172B]/65 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <Camera className="h-3.5 w-3.5" />
+              </span>
+            </button>
             <div className="hidden text-left lg:block">
               <div className="flex items-center gap-1.5">
                 <span className="text-xs font-bold text-slate-900 dark:text-white">
-                  Salman Enterprises
+                  {user.employee
+                    ? `${user.employee.firstName} ${user.employee.lastName}`
+                    : user.email.split('@')[0]}
                 </span>
-                <span className="rounded-md bg-[#7138F5]/10 px-1.5 py-0.2 text-[9px] font-extrabold text-[#7138F5] dark:text-purple-300">
-                  {user.role?.replace('_', ' ') || 'SUPER ADMIN'}
+                <span className="rounded-md bg-[#6538ED]/10 px-1.5 py-0.2 text-[9px] font-extrabold text-[#6538ED] dark:text-purple-300">
+                  {user.role?.replace(/_/g, ' ') || 'USER'}
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 dark:text-slate-400">{user.email}</p>
+              <button
+                type="button"
+                onClick={() => setShowPhotoModal(true)}
+                className="text-[10px] font-medium text-slate-400 hover:text-[#6538ED] dark:text-slate-400 dark:hover:text-purple-300 transition"
+              >
+                {user.employee?.profilePhoto || user.profilePhoto ? 'Update my photo' : 'Add own photo'} • {user.email}
+              </button>
             </div>
 
             <button
@@ -389,12 +468,12 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
         )}
       </div>
 
-      {/* AI Assistant Modal */}
+      {/* Live Workforce Briefing Modal */}
       <Modal
         isOpen={showAiModal}
         onClose={() => setShowAiModal(false)}
-        title="SmartHRMS AI Copilot"
-        description="Contextual workforce intelligence and biometric auditor"
+        title="Executive Operations Briefing"
+        description="Live workspace summary across attendance, leaves, and exceptions"
         maxWidthClass="max-w-lg"
         panelClassName="p-6"
         footer={
@@ -402,7 +481,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
             <button
               type="button"
               onClick={() => setShowAiModal(false)}
-              className="rounded-xl bg-[#7138F5] px-4 py-2 text-xs font-bold text-white hover:bg-[#6025e8]"
+              className="rounded-xl bg-[#6538ED] px-4 py-2 text-xs font-bold text-white hover:bg-[#562BD4]"
             >
               Done
             </button>
@@ -411,17 +490,53 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
       >
         <div className="space-y-3">
           <div className="space-y-2 rounded-2xl bg-purple-50/60 p-4 text-xs dark:bg-white/5">
-            <p className="font-bold text-[#7138F5] dark:text-purple-300">✨ Daily Workforce Observations</p>
-            <ul className="list-inside list-disc space-y-1 text-slate-700 dark:text-slate-300">
-              <li>Delhi Central Hub has 2 staff checked in within the 100m geofence perimeter.</li>
-              <li>Noida DC has 1 staff completed shift and 1 staff currently on site (88m from center).</li>
-              <li>1 staff (Bilal Qureshi) reported outside geofence roadblock exception (135m).</li>
-              <li>Casual Leave approved for Rehan Shaikh today.</li>
-            </ul>
+            <p className="font-bold text-[#6538ED] dark:text-purple-300">Today&apos;s Live Operational Snapshot</p>
+            {copilotLoading ? (
+              <p className="text-slate-500 dark:text-slate-400 py-2">Loading live workforce metrics...</p>
+            ) : copilotData?.kpis ? (
+              <ul className="list-inside list-disc space-y-1.5 text-slate-700 dark:text-slate-300">
+                <li>
+                  <span className="font-semibold">{copilotData.kpis.presentToday ?? 0}</span> of{' '}
+                  <span className="font-semibold">{copilotData.kpis.totalEmployees ?? 0}</span> staff present today ({copilotData.kpis.attendancePercentage ?? 0}% turnout).
+                </li>
+                <li>
+                  <span className="font-semibold">{copilotData.kpis.currentlyCheckedIn ?? 0}</span> active on shift and{' '}
+                  <span className="font-semibold">{copilotData.kpis.lateArrivals ?? 0}</span> late arrival record(s).
+                </li>
+                <li>
+                  <span className="font-semibold">{copilotData.kpis.onLeave ?? 0}</span> approved leave(s) and{' '}
+                  <span className="font-semibold">{copilotData.kpis.pendingCorrections ?? 0}</span> pending exception(s) awaiting review.
+                </li>
+              </ul>
+            ) : (
+              <p className="text-slate-500 dark:text-slate-400 py-2">
+                Overview metrics are available to manager and HR accounts from the executive dashboard.
+              </p>
+            )}
           </div>
 
-          <div className="rounded-2xl border border-slate-100 p-3 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
-            Type natural language commands: <em>&quot;Approve Bilal&apos;s geofence exception&quot;</em> or <em>&quot;Export attendance summary for North zone&quot;</em>
+          <div className="grid grid-cols-3 gap-2">
+            <Link
+              href="/admin/attendance/live"
+              onClick={() => setShowAiModal(false)}
+              className="rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 text-center text-[11px] font-semibold text-slate-700 dark:text-slate-200 hover:border-[#6538ED]"
+            >
+              Live Monitor
+            </Link>
+            <Link
+              href="/attendance/exceptions"
+              onClick={() => setShowAiModal(false)}
+              className="rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 text-center text-[11px] font-semibold text-slate-700 dark:text-slate-200 hover:border-[#6538ED]"
+            >
+              Exceptions
+            </Link>
+            <Link
+              href="/reports"
+              onClick={() => setShowAiModal(false)}
+              className="rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 text-center text-[11px] font-semibold text-slate-700 dark:text-slate-200 hover:border-[#6538ED]"
+            >
+              Export Reports
+            </Link>
           </div>
         </div>
       </Modal>
@@ -430,8 +545,8 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
       <Modal
         isOpen={showHelpModal}
         onClose={() => setShowHelpModal(false)}
-        title="SmartHRMS Support & Documentation"
-        description="Salman Enterprises Enterprise Cloud Suite Helpdesk"
+        title="Salman Enterprises Support & Documentation"
+        description="Enterprise Operations Helpdesk"
         maxWidthClass="max-w-md"
         panelClassName="p-6"
         footer={
@@ -439,7 +554,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
             <button
               type="button"
               onClick={() => setShowHelpModal(false)}
-              className="rounded-xl bg-[#7138F5] px-4 py-2 text-xs font-bold text-white hover:bg-[#6025e8]"
+              className="rounded-xl bg-[#6538ED] px-4 py-2 text-xs font-bold text-white hover:bg-[#562BD4]"
             >
               Close
             </button>
@@ -448,16 +563,41 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar?: () => vo
       >
         <div className="space-y-3 text-xs text-slate-600 dark:text-slate-300">
           <p>
-            Welcome to the <strong>SmartHRMS Enterprise Suite</strong> for Salman Enterprises B2B Distribution.
+            Welcome to the <strong>Salman Enterprises Business Workspace</strong> covering Workforce, Field Sales, and B2B Distribution operations.
           </p>
           <div className="rounded-xl bg-slate-50 p-3 dark:bg-white/5 space-y-1">
             <p className="font-bold text-slate-800 dark:text-white">Direct Enterprise Support:</p>
-            <p>Email: <span className="text-[#7138F5] font-semibold">salmanenterprisesphu@gmail.com</span></p>
-            <p>Phone: <span className="font-semibold">+91 9876543210</span></p>
+            <p>Email: <span className="text-[#6538ED] font-semibold">contact@salmanenterprises.in</span></p>
+            <p>Phone: <span className="font-semibold">+91 (080) 4129-8800</span></p>
             <p>Operating Hours: Monday – Saturday (9:00 AM – 7:00 PM IST)</p>
           </div>
         </div>
       </Modal>
+
+      {user && (
+        <EmployeePhotoUploadModal
+          isOpen={showPhotoModal}
+          onClose={() => setShowPhotoModal(false)}
+          isSelfService
+          targetEmployeeId={user.employee?.id}
+          targetUserId={user.id}
+          currentPhoto={user.employee?.profilePhoto || user.profilePhoto || null}
+          employeeName={
+            user.employee
+              ? `${user.employee.firstName} ${user.employee.lastName}`
+              : user.email.split('@')[0]
+          }
+          onSave={async (photoUrl) => {
+            const data = await saveOwnProfilePhoto(photoUrl);
+            await refreshUser();
+            toast.success(
+              photoUrl
+                ? `Professional photo saved in folder ${data.folder || 'your ID'}.`
+                : 'Profile photo removed.'
+            );
+          }}
+        />
+      )}
     </header>
   );
 }

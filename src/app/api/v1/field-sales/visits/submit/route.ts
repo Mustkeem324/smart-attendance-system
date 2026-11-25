@@ -4,6 +4,7 @@ import { NextRequest } from 'next/server';
 import mongoose from 'mongoose';
 import { connectToDatabase } from '@/lib/mongodb';
 import { authenticateApi, apiSuccess, apiError } from '@/lib/distribution-helper';
+import { calculateHaversineDistanceMeters } from '@/lib/geo';
 import {
   ShopVisit,
   Retailer,
@@ -130,6 +131,33 @@ export async function POST(req: NextRequest) {
     const calculatedGst = actualSalesValue * 0.18;
     const finalTotal = actualSalesValue + calculatedGst;
 
+    const visitLat = Number(latitude);
+    const visitLon = Number(longitude);
+    const hasRetailerCoords =
+      typeof (retailer as any).latitude === 'number' &&
+      typeof (retailer as any).longitude === 'number' &&
+      (retailer as any).latitude !== 0 &&
+      (retailer as any).longitude !== 0;
+
+    const computedDistance =
+      hasRetailerCoords && Number.isFinite(visitLat) && Number.isFinite(visitLon)
+        ? Math.round(
+            calculateHaversineDistanceMeters(
+              visitLat,
+              visitLon,
+              Number((retailer as any).latitude),
+              Number((retailer as any).longitude)
+            )
+          )
+        : 0;
+
+    const withinGeofence = hasRetailerCoords ? computedDistance <= 100 : true;
+    const verificationStatus: 'VERIFIED' | 'OUTSIDE_GEOFENCE' | 'FLAGGED_REVIEW' = hasRetailerCoords
+      ? withinGeofence
+        ? 'VERIFIED'
+        : 'OUTSIDE_GEOFENCE'
+      : 'FLAGGED_REVIEW';
+
     const newVisit: any = await ShopVisit.create({
       visitId,
       idempotencyKey,
@@ -141,16 +169,17 @@ export async function POST(req: NextRequest) {
       endTime: new Date(checkOutTime),
       checkInTime: new Date(checkInTime),
       checkOutTime: new Date(checkOutTime),
-      latitude: Number(latitude) || 12.9716,
-      longitude: Number(longitude) || 77.5946,
+      latitude: Number.isFinite(visitLat) ? visitLat : undefined,
+      longitude: Number.isFinite(visitLon) ? visitLon : undefined,
       accuracyMeters: Number(accuracyMeters) || 10,
-      distanceFromShopMeters: 12,
-      isWithinGeofence: true,
-      googleMapsUrl: googleMapsUrl || `https://maps.google.com/?q=${latitude},${longitude}`,
-      locationVerificationStatus: 'VERIFIED',
-      confirmedAccurate: true,
+      distanceFromShopMeters: computedDistance,
+      isWithinGeofence: withinGeofence,
+      googleMapsUrl: googleMapsUrl || `https://maps.google.com/?q=${visitLat},${visitLon}`,
+      locationVerificationStatus: verificationStatus,
+      confirmedAccurate: withinGeofence,
       status: 'COMPLETED',
-      visitStatus: pendingOverrides.length > 0 ? 'FLAGGED_REVIEW' : 'SUBMITTED',
+      visitStatus:
+        pendingOverrides.length > 0 || !withinGeofence ? 'FLAGGED_REVIEW' : 'SUBMITTED',
       submissionStatus: 'SYNCED_FROM_OFFLINE',
       visitRemarks: remarks || 'Synchronized offline field sales report',
       photos: [],

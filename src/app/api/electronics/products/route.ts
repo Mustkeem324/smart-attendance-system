@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthSession } from '@/lib/auth';
+import { hasAnyRole, ROLE_GROUPS } from '@/lib/rbac';
 import { connectToDatabase } from '@/lib/mongodb';
 import { Product, ProductCategory, Inventory } from '@/models/electronics-sales';
 import { createProduct } from '@/lib/electronics-sales-engine';
@@ -63,6 +64,9 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getAuthSession(req);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!hasAnyRole(session.user.role, ROLE_GROUPS.INVENTORY_WRITE)) {
+      return NextResponse.json({ error: 'Forbidden: Inventory or Sales manager role required.' }, { status: 403 });
+    }
 
     const body = await req.json();
     const product = await createProduct(body);

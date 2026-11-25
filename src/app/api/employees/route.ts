@@ -5,6 +5,7 @@ import { getAuthSession, requireRole } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { hashPassword } from '@/lib/auth';
 import { createAuditLog } from '@/lib/audit';
+import { relocatePhotoToEmployeeFolder } from '@/lib/profile-photo-storage';
 import { Role, EmploymentType, EmploymentStatus } from '@prisma/client';
 
 export async function GET(req: NextRequest) {
@@ -135,14 +136,39 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: `Employee code '${employeeCode}' already exists.` }, { status: 409 });
     }
 
+    // Validate duplicate login email and allowed employee role
+    const normalizedEmail = String(email).toLowerCase().trim();
+    const existingEmailUser = await prisma.user.findFirst({
+      where: { email: normalizedEmail },
+    });
+    if (existingEmailUser) {
+      return NextResponse.json({ error: `Email '${normalizedEmail}' is already registered.` }, { status: 409 });
+    }
+
+    const ALLOWED_EMP_ROLES = [
+      'COMPANY_ADMIN',
+      'HR_MANAGER',
+      'TEAM_MANAGER',
+      'EMPLOYEE',
+      'SALES_MANAGER',
+      'FIELD_SALES_REP',
+      'DELIVERY_AGENT',
+      'INVENTORY_MANAGER',
+      ...(session.user.role === 'SUPER_ADMIN' ? ['SUPER_ADMIN'] : []),
+    ];
+    const requestedRole = String(role || 'EMPLOYEE').toUpperCase();
+    if (!ALLOWED_EMP_ROLES.includes(requestedRole)) {
+      return NextResponse.json({ error: 'Invalid or unauthorized staff role specified.' }, { status: 403 });
+    }
+
     // Create User login account
     const passwordHash = await hashPassword(password);
     const user = await prisma.user.create({
       data: {
         organizationId: session.user.organizationId,
-        email: email.toLowerCase().trim(),
+        email: normalizedEmail,
         passwordHash,
-        role: role as Role,
+        role: requestedRole as Role,
       },
     });
 
@@ -177,6 +203,32 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Move any pre-creation uploaded photo into this new employee's own ID folder
+    let finalEmployee = employee;
+    if (profilePhoto && String(profilePhoto).startsWith('/api/uploads/profiles/')) {
+      try {
+        const relocatedUrl = await relocatePhotoToEmployeeFolder(
+          profilePhoto,
+          employee.id,
+          session.user.organizationId,
+          session.user.id
+        );
+        if (relocatedUrl && relocatedUrl !== employee.profilePhoto) {
+          finalEmployee = await prisma.employee.update({
+            where: { id: employee.id },
+            data: { profilePhoto: relocatedUrl },
+            include: {
+              department: true,
+              branch: true,
+              shift: true,
+            },
+          });
+        }
+      } catch (relocateErr) {
+        console.error('Relocate new employee photo warning:', relocateErr);
+      }
+    }
+
     // Initialize Leave Balances
     const currentYear = new Date().getFullYear();
     const leaveTypes = await prisma.leaveType.findMany({
@@ -210,7 +262,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Employee registered successfully',
-      employee,
+      employee: finalEmployee,
     });
   } catch (error: any) {
     console.error('Create employee error:', error);

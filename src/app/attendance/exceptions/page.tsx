@@ -12,9 +12,11 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { useUi } from '@/components/providers/UiProvider';
 
 export default function AttendanceExceptionsPage() {
   const { user } = useAuth();
+  const { toast, prompt } = useUi();
   const [exceptions, setExceptions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
@@ -56,7 +58,8 @@ export default function AttendanceExceptionsPage() {
 
       const data = await res.json();
       if (res.ok) {
-        setFeedback('Exception request submitted for supervisor approval!');
+        setFeedback('Exception request submitted for supervisor approval.');
+        toast.success('Exception request submitted.');
         setIsSubmitModalOpen(false);
         setForm({
           reason: 'OUTSIDE_GEOFENCE',
@@ -65,15 +68,21 @@ export default function AttendanceExceptionsPage() {
         });
         fetchExceptions();
       } else {
-        alert(data.error || 'Failed to submit exception');
+        toast.error(data.error || 'Failed to submit exception');
       }
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
   const handleDecision = async (id: string, action: 'APPROVE' | 'REJECT') => {
-    const remark = prompt(`Enter ${action.toLowerCase()} remark:`) || '';
+    const remark = await prompt({
+      title: `${action === 'APPROVE' ? 'Approve' : 'Reject'} Exception Request`,
+      message: 'Add an optional supervisor note for the attendance audit trail.',
+      placeholder: `Enter ${action.toLowerCase()} remark...`,
+      confirmText: action === 'APPROVE' ? 'Approve' : 'Reject',
+    });
+    if (remark === null) return;
     try {
       const res = await fetch(`/api/attendance/exception/${id}`, {
         method: 'PUT',
@@ -83,13 +92,14 @@ export default function AttendanceExceptionsPage() {
 
       const data = await res.json();
       if (res.ok) {
-        setFeedback(`Exception request ${action.toLowerCase()}d!`);
+        setFeedback(`Exception request ${action.toLowerCase()}d.`);
+        toast.success(`Exception request ${action.toLowerCase()}d.`);
         fetchExceptions();
       } else {
-        alert(data.error || 'Action failed');
+        toast.error(data.error || 'Action failed');
       }
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 

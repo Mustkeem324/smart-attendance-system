@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyToken } from '@/lib/auth';
 import { apiSuccess } from '@/lib/distribution-helper';
+import { buildAuthCookieOptions } from '@/lib/cookies';
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,14 +27,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = apiSuccess({ message: '30-day session logged out successfully' });
-    response.cookies.set('auth_token', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 0,
-      expires: new Date(0),
-    });
+    response.cookies.set('auth_token', '', buildAuthCookieOptions(req, 0));
     return response;
   } catch {
     const response = apiSuccess({ message: 'Logged out' });

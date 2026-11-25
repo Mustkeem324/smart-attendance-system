@@ -19,8 +19,10 @@ import {
   Check,
 } from 'lucide-react';
 import EmployeePhotoUploadModal from '@/components/employees/EmployeePhotoUploadModal';
+import { useUi } from '@/components/providers/UiProvider';
 
 export default function EmployeeDetailPage() {
+  const { toast } = useUi();
   const params = useParams();
   const id = params?.id as string;
   const [employee, setEmployee] = useState<any | null>(null);
@@ -52,12 +54,13 @@ export default function EmployeeDetailPage() {
       if (res.ok) {
         setEmployee(data.employee);
         setToastMessage('Profile photo updated successfully!');
+        toast.success('Profile photo updated.');
         setTimeout(() => setToastMessage(null), 4000);
       } else {
-        alert(data.error || 'Failed to update photo');
+        toast.error(data.error || 'Failed to update photo');
       }
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -237,6 +240,7 @@ export default function EmployeeDetailPage() {
       <EmployeePhotoUploadModal
         isOpen={isPhotoModalOpen}
         onClose={() => setIsPhotoModalOpen(false)}
+        targetEmployeeId={employee.id}
         currentPhoto={employee.profilePhoto}
         employeeName={`${employee.firstName} ${employee.lastName}`}
         onSave={handleUpdatePhoto}

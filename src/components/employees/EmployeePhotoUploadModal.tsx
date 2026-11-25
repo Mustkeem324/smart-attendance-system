@@ -12,14 +12,84 @@ import {
   Link as LinkIcon,
   RefreshCw,
   UserCheck,
+  FolderCheck,
+  ShieldCheck,
 } from 'lucide-react';
+
+export async function saveOwnProfilePhoto(photoUrl: string) {
+  const res = await fetch('/api/auth/profile-photo', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ profilePhoto: photoUrl }),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || 'Failed to update profile photo');
+  }
+  return data as { success: boolean; profilePhoto: string | null; folder?: string };
+}
 
 interface EmployeePhotoUploadModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentPhoto?: string | null;
   employeeName?: string;
+  targetEmployeeId?: string;
+  targetUserId?: string;
+  isSelfService?: boolean;
   onSave: (photoUrl: string) => Promise<void> | void;
+}
+
+/**
+ * Compresses large portrait files client-side before upload so mobile cameras and serverless hosts succeed fast.
+ */
+async function compressPortraitIfNeeded(file: File): Promise<File> {
+  if (file.size <= 450 * 1024 && file.type === 'image/jpeg') {
+    return file;
+  }
+
+  return new Promise((resolve) => {
+    const objectUrl = URL.createObjectURL(file);
+    const img = new window.Image();
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      const maxDim = 900;
+      let width = img.naturalWidth || 800;
+      let height = img.naturalHeight || 800;
+      if (width > maxDim || height > maxDim) {
+        const scale = Math.min(maxDim / width, maxDim / height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        resolve(file);
+        return;
+      }
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            resolve(file);
+            return;
+          }
+          const baseName = file.name.replace(/\.[^.]+$/, '') || 'portrait';
+          resolve(new File([blob], `${baseName}.jpg`, { type: 'image/jpeg' }));
+        },
+        'image/jpeg',
+        0.88
+      );
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(file);
+    };
+    img.src = objectUrl;
+  });
 }
 
 export const CORPORATE_PORTRAITS = [
@@ -43,10 +113,14 @@ export default function EmployeePhotoUploadModal({
   onClose,
   currentPhoto,
   employeeName = 'Employee',
+  targetEmployeeId,
+  targetUserId,
+  isSelfService = false,
   onSave,
 }: EmployeePhotoUploadModalProps) {
-  const [activeTab, setActiveTab] = useState<'presets' | 'upload' | 'camera' | 'url'>('presets');
+  const [activeTab, setActiveTab] = useState<'upload' | 'camera' | 'url' | 'presets'>('upload');
   const [selectedPhoto, setSelectedPhoto] = useState<string>(currentPhoto || '');
+  const [uploadedFolder, setUploadedFolder] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -59,6 +133,8 @@ export default function EmployeePhotoUploadModal({
   useEffect(() => {
     if (isOpen) {
       setSelectedPhoto(currentPhoto || '');
+      setUploadedFolder(null);
+      setActiveTab('upload');
       setErrorMsg(null);
       setIsCameraActive(false);
     } else {
@@ -132,8 +208,11 @@ export default function EmployeePhotoUploadModal({
     setErrorMsg(null);
 
     try {
+      const preparedFile = await compressPortraitIfNeeded(file);
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', preparedFile);
+      if (targetEmployeeId) formData.append('targetEmployeeId', targetEmployeeId);
+      if (targetUserId) formData.append('targetUserId', targetUserId);
 
       const res = await fetch('/api/upload', {
         method: 'POST',
@@ -146,6 +225,9 @@ export default function EmployeePhotoUploadModal({
       }
 
       setSelectedPhoto(data.url);
+      if (data.folder) {
+        setUploadedFolder(data.folder);
+      }
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to upload photo');
     } finally {
@@ -164,17 +246,25 @@ export default function EmployeePhotoUploadModal({
       setIsUploading(true);
       setErrorMsg(null);
 
-      // If it's a data URL, upload to get persistent file URL
+      // If it's a data URL, upload to get persistent folder URL
       let finalUrl = selectedPhoto;
       if (selectedPhoto.startsWith('data:image/')) {
         const res = await fetch('/api/upload', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ base64Data: selectedPhoto }),
+          body: JSON.stringify({
+            base64Data: selectedPhoto,
+            targetEmployeeId,
+            targetUserId,
+          }),
         });
         const data = await res.json();
-        if (res.ok && data.url) {
-          finalUrl = data.url;
+        if (!res.ok || !data.url) {
+          throw new Error(data.error || 'Failed to save captured photo');
+        }
+        finalUrl = data.url;
+        if (data.folder) {
+          setUploadedFolder(data.folder);
         }
       }
 
@@ -202,6 +292,8 @@ export default function EmployeePhotoUploadModal({
     }
   };
 
+  const resolvedFolderId = uploadedFolder || targetEmployeeId || targetUserId || null;
+
   return (
     <Modal
       isOpen={isOpen}
@@ -209,11 +301,32 @@ export default function EmployeePhotoUploadModal({
         stopCamera();
         onClose();
       }}
-      title={`Update Profile Photo`}
-      description={`Set an executive, high-resolution portrait for ${employeeName}`}
+      title={isSelfService ? 'Add / Update Your Own Photo' : 'Update Profile Photo'}
+      description={`Please upload a clear, professional headshot photo for ${employeeName}`}
       maxWidthClass="max-w-2xl"
     >
-      <div className="space-y-5">
+      <div className="space-y-4">
+        {/* Mandatory Professional Photo Notice */}
+        <div className="rounded-2xl border border-[#6538ED]/25 bg-[#F6F5FF] p-3.5 text-xs dark:border-[#6538ED]/35 dark:bg-[#191C3A]">
+          <div className="flex items-start gap-2.5">
+            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#6538ED] dark:text-[#8255FF]" />
+            <div className="space-y-1">
+              <p className="font-bold text-[#15172B] dark:text-white">
+                Please upload a clear, professional photo
+              </p>
+              <p className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-300">
+                Use a front-facing business portrait with good lighting, a plain neutral background, and formal or smart-casual attire (avoid sunglasses, caps, group shots, or heavy filters).
+              </p>
+              {resolvedFolderId && (
+                <p className="inline-flex items-center gap-1.5 rounded-lg bg-white/80 px-2 py-0.5 font-mono text-[10px] font-semibold text-[#6538ED] border border-[#6538ED]/20 dark:bg-black/30 dark:text-purple-300">
+                  <FolderCheck className="h-3 w-3" />
+                  <span>Folder: uploads/profiles/{resolvedFolderId}/</span>
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* Top Current Preview & Identity */}
         <div className="flex flex-col sm:flex-row items-center gap-4 rounded-2xl bg-slate-50 p-4 border border-slate-200/80 dark:bg-slate-800/50 dark:border-slate-700">
           <div className="relative shrink-0">
@@ -269,23 +382,7 @@ export default function EmployeePhotoUploadModal({
         )}
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-slate-200 dark:border-slate-700">
-          <button
-            type="button"
-            onClick={() => {
-              stopCamera();
-              setActiveTab('presets');
-            }}
-            className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition-all ${
-              activeTab === 'presets'
-                ? 'border-brand-600 text-brand-600 dark:border-brand-400 dark:text-brand-400'
-                : 'border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400'
-            }`}
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Corporate Headshots ({CORPORATE_PORTRAITS.length})</span>
-          </button>
-
+        <div className="flex flex-wrap border-b border-slate-200 dark:border-slate-700">
           <button
             type="button"
             onClick={() => {
@@ -299,7 +396,7 @@ export default function EmployeePhotoUploadModal({
             }`}
           >
             <Upload className="h-3.5 w-3.5" />
-            <span>Upload File</span>
+            <span>Upload Own Photo</span>
           </button>
 
           <button
@@ -315,7 +412,7 @@ export default function EmployeePhotoUploadModal({
             }`}
           >
             <Camera className="h-3.5 w-3.5" />
-            <span>Take Photo</span>
+            <span>Take Live Photo</span>
           </button>
 
           <button
@@ -333,6 +430,24 @@ export default function EmployeePhotoUploadModal({
             <LinkIcon className="h-3.5 w-3.5" />
             <span>Image URL</span>
           </button>
+
+          {!isSelfService && (
+            <button
+              type="button"
+              onClick={() => {
+                stopCamera();
+                setActiveTab('presets');
+              }}
+              className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-xs font-bold transition-all ${
+                activeTab === 'presets'
+                  ? 'border-brand-600 text-brand-600 dark:border-brand-400 dark:text-brand-400'
+                  : 'border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400'
+              }`}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>Corporate Headshots ({CORPORATE_PORTRAITS.length})</span>
+            </button>
+          )}
         </div>
 
         {/* Tab 1: Corporate Headshot Library */}
@@ -390,9 +505,11 @@ export default function EmployeePhotoUploadModal({
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-50 text-brand-600 dark:bg-brand-950 dark:text-brand-300 mb-3">
                 <Upload className="h-6 w-6" />
               </div>
-              <h5 className="text-sm font-bold text-slate-800 dark:text-white">Click or drag image file here</h5>
+              <h5 className="text-sm font-bold text-slate-800 dark:text-white">
+                Click to choose a professional photo from your device
+              </h5>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Supports JPG, PNG, WebP up to 8MB. Recommended square aspect ratio (400x400 or higher).
+                Upload a clear front-facing headshot (JPG, PNG, WebP). Saved securely inside your employee/user ID folder.
               </p>
               <input
                 ref={fileInputRef}

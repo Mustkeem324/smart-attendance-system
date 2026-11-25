@@ -3,7 +3,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import { useUi } from '@/components/providers/UiProvider';
 import { SalmanIcon } from '@/components/brand/SalmanLogo';
+import EmployeePhotoUploadModal, { saveOwnProfilePhoto } from '@/components/employees/EmployeePhotoUploadModal';
 import {
   Store,
   MapPin,
@@ -115,7 +117,16 @@ interface SalesLine {
 }
 
 export default function AdvancedFieldSalesMobileApp() {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
+  const { prompt, toast: uiToast } = useUi();
+  const [headerDate, setHeaderDate] = useState<string>('');
+  const [isOwnPhotoModalOpen, setIsOwnPhotoModalOpen] = useState(false);
+
+  useEffect(() => {
+    setHeaderDate(
+      new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })
+    );
+  }, []);
 
   // Navigation tab
   const [activeTab, setActiveTab] = useState<'dashboard' | 'visit_wizard' | 'history' | 'offline_sync'>('dashboard');
@@ -968,7 +979,7 @@ export default function AdvancedFieldSalesMobileApp() {
     setOfflineQueue(remaining);
     localStorage.setItem('apex_field_sales_offline_queue', JSON.stringify(remaining));
     setSyncing(false);
-    showToast('success', `Synchronized ${syncedCount} visits to central MongoDB.`);
+    showToast('success', `Synchronized ${syncedCount} visits to headquarters.`);
     loadInitialData();
   };
 
@@ -1062,8 +1073,8 @@ export default function AdvancedFieldSalesMobileApp() {
                 </span>
               </div>
               <p className="text-[10px] text-slate-400 font-medium">
-                {new Date().toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })} &bull;{' '}
-                {dashboardData?.employee?.territory || 'Bangalore Central'}
+                {headerDate ? `${headerDate} • ` : ''}
+                {dashboardData?.employee?.territory || 'Field Territory'}
               </p>
             </div>
           </div>
@@ -1168,21 +1179,44 @@ export default function AdvancedFieldSalesMobileApp() {
             <div className="rounded-2xl border border-[#252A54] bg-[#1B1D35] p-4 flex items-center justify-between shadow-xl">
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <img
-                    src={dashboardData?.employee?.photoUrl || user?.employee?.profilePhoto || '/employees/alex-wong.jpg'}
-                    alt="Employee"
-                    className="h-12 w-12 rounded-xl object-cover border border-purple-500/40"
-                  />
-                  <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-emerald-500 border-2 border-[#0E122A]" />
+                  {dashboardData?.employee?.photoUrl || user?.employee?.profilePhoto || user?.profilePhoto ? (
+                    <img
+                      src={dashboardData?.employee?.photoUrl || user?.employee?.profilePhoto || user?.profilePhoto || ''}
+                      alt="Employee"
+                      className="h-12 w-12 rounded-xl object-cover border border-purple-500/40"
+                    />
+                  ) : (
+                    <div className="h-12 w-12 rounded-xl border border-purple-500/40 bg-[#6538ED]/25 text-white font-bold text-sm flex items-center justify-center">
+                      {(dashboardData?.employee?.name || user?.employee?.firstName || user?.email || 'S').slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setIsOwnPhotoModalOpen(true)}
+                    title="Add or update your professional profile photo"
+                    aria-label="Add or update your professional profile photo"
+                    className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-lg bg-[#6538ED] text-white border border-[#0E122A] shadow hover:bg-[#562BD4] transition"
+                  >
+                    <Camera className="h-3 w-3" />
+                  </button>
                 </div>
                 <div>
                   <h2 className="text-sm font-extrabold text-white">
-                    {dashboardData?.employee?.name || (user?.employee ? `${user.employee.firstName} ${user.employee.lastName}` : (user as any)?.name) || 'Alex Wong'}
+                    {dashboardData?.employee?.name || (user?.employee ? `${user.employee.firstName} ${user.employee.lastName}` : (user as any)?.name) || 'Sales Representative'}
                   </h2>
                   <p className="text-[11px] text-indigo-300 font-mono">
                     {dashboardData?.employee?.employeeCode || 'EMP-SALES-001'} &bull;{' '}
                     <span className="text-slate-400">{dashboardData?.employee?.designation || 'Field Sales Rep'}</span>
                   </p>
+                  <button
+                    type="button"
+                    onClick={() => setIsOwnPhotoModalOpen(true)}
+                    className="mt-0.5 text-[10px] font-semibold text-purple-300 hover:text-white underline-offset-2 hover:underline"
+                  >
+                    {dashboardData?.employee?.photoUrl || user?.employee?.profilePhoto || user?.profilePhoto
+                      ? 'Update own photo'
+                      : 'Add own professional photo'}
+                  </button>
                 </div>
               </div>
 
@@ -1894,8 +1928,14 @@ export default function AdvancedFieldSalesMobileApp() {
 
                       <button
                         type="button"
-                        onClick={() => {
-                          const reason = prompt('Specify authorized exception reason why shopkeeper declined photography:');
+                        onClick={async () => {
+                          const reason = await prompt({
+                            title: 'Photo Consent Declined Exception',
+                            message: 'Specify the authorized reason why the shopkeeper declined photography.',
+                            placeholder: 'e.g. Store owner prefers privacy inside counter area',
+                            required: true,
+                            confirmText: 'Record Exception',
+                          });
                           if (reason) {
                             setInteractionPhoto({
                               dataUrl: '',
@@ -2223,7 +2263,7 @@ export default function AdvancedFieldSalesMobileApp() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-base font-extrabold text-white">Final Visit &amp; Sales Summary</h3>
-                    <p className="text-xs text-slate-400">Review all details before recording permanently in MongoDB</p>
+                    <p className="text-xs text-slate-400">Review all details before submitting your verified visit</p>
                   </div>
                   <button
                     onClick={() => setWizardStep(4)}
@@ -2245,7 +2285,7 @@ export default function AdvancedFieldSalesMobileApp() {
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div>
                       <span className="text-[10px] text-slate-400 block">Representative</span>
-                      <span className="font-bold text-white">{(user?.employee ? `${user.employee.firstName} ${user.employee.lastName}` : (user as any)?.name) || 'Alex Wong'}</span>
+                      <span className="font-bold text-white">{(user?.employee ? `${user.employee.firstName} ${user.employee.lastName}` : (user as any)?.name) || 'Sales Representative'}</span>
                     </div>
                     <div>
                       <span className="text-[10px] text-slate-400 block">Retailer Shop</span>
@@ -2472,7 +2512,7 @@ export default function AdvancedFieldSalesMobileApp() {
                           <h4 className="text-sm font-bold text-white">{v.retailerId?.name || 'Retailer Shop'}</h4>
                         </div>
                         <p className="text-xs text-slate-400 mt-0.5">
-                          {v.visitDate} &bull; {(v.retailerId as any)?.city || 'Karnataka'} &bull; Rep: {(user?.employee ? `${user.employee.firstName} ${user.employee.lastName}` : (user as any)?.name) || 'Alex Wong'}
+                          {v.visitDate} &bull; {(v.retailerId as any)?.city || 'Regional'} &bull; Rep: {(user?.employee ? `${user.employee.firstName} ${user.employee.lastName}` : (user as any)?.name) || 'Sales Representative'}
                         </p>
                       </div>
 
@@ -2826,8 +2866,8 @@ export default function AdvancedFieldSalesMobileApp() {
               </span>
               <h3 className="text-lg font-black text-white mt-2">Shop Visit Successfully Recorded!</h3>
               <p className="text-xs text-slate-300 mt-1">
-                Sales transaction for <strong>{submissionSuccessModal.shopName}</strong> has been stored permanently in
-                MongoDB.
+                Sales transaction for <strong>{submissionSuccessModal.shopName}</strong> has been verified and recorded
+                successfully.
               </p>
             </div>
 
@@ -2991,6 +3031,45 @@ export default function AdvancedFieldSalesMobileApp() {
 
       {/* Android Native Bottom Navigation Bar */}
       <AndroidBottomNav />
+
+      <EmployeePhotoUploadModal
+        isOpen={isOwnPhotoModalOpen}
+        onClose={() => setIsOwnPhotoModalOpen(false)}
+        isSelfService
+        targetEmployeeId={user?.employee?.id}
+        targetUserId={user?.id}
+        currentPhoto={
+          dashboardData?.employee?.photoUrl ||
+          user?.employee?.profilePhoto ||
+          user?.profilePhoto ||
+          null
+        }
+        employeeName={
+          dashboardData?.employee?.name ||
+          (user?.employee ? `${user.employee.firstName} ${user.employee.lastName}` : user?.email?.split('@')[0]) ||
+          'Sales Representative'
+        }
+        onSave={async (photoUrl) => {
+          const data = await saveOwnProfilePhoto(photoUrl);
+          setDashboardData((prev: any) =>
+            prev
+              ? {
+                  ...prev,
+                  employee: {
+                    ...(prev.employee || {}),
+                    photoUrl: data.profilePhoto || '',
+                  },
+                }
+              : prev
+          );
+          await refreshUser();
+          uiToast.success(
+            photoUrl
+              ? `Professional photo updated in folder ${data.folder || 'your ID'}.`
+              : 'Profile photo removed.'
+          );
+        }}
+      />
     </div>
   );
 }

@@ -286,7 +286,6 @@ export default function RegisterPage() {
                 >
                   <option value="RETAILER">Retail Partner (Shop Owner)</option>
                   <option value="DISTRIBUTOR">Sub-Distributor / Wholesaler</option>
-                  <option value="SALES_EXECUTIVE">Field Sales Executive</option>
                 </select>
               </div>
 

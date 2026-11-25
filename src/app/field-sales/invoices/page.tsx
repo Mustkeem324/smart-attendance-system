@@ -205,7 +205,7 @@ export default function TaxInvoicesPage() {
         {loading ? (
           <div className="p-12 text-center text-slate-400">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent mb-3" />
-            <p className="text-sm font-semibold">Loading tax invoices from MongoDB...</p>
+            <p className="text-sm font-semibold">Loading tax invoices...</p>
           </div>
         ) : filteredInvoices.length === 0 ? (
           <div className="p-16 text-center">

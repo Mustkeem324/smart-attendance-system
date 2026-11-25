@@ -33,16 +33,31 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(true);
 
   const routeByRoleOrEmail = (userEmail: string, role?: string) => {
+    const navigateTo = (target: string) => {
+      if (typeof window !== 'undefined') {
+        window.location.assign(target);
+      } else {
+        router.push(target);
+      }
+    };
+
+    const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const redirectParam = params?.get('redirect');
+    if (redirectParam && redirectParam.startsWith('/') && !redirectParam.startsWith('//')) {
+      navigateTo(redirectParam);
+      return;
+    }
+
     const e = userEmail.toLowerCase();
     const r = (role || '').toUpperCase();
     if (r === 'FIELD_SALES_REP' || e.includes('field') || e.includes('zaid')) {
-      router.push('/field-sales/mobile');
-    } else if (r === 'RETAILER' || e.includes('retailer')) {
-      router.push('/catalog');
+      navigateTo('/field-sales/mobile');
+    } else if (r === 'RETAILER' || r === 'DISTRIBUTOR' || e.includes('retailer')) {
+      navigateTo('/catalog');
     } else if (r === 'EMPLOYEE' || r === 'INVENTORY_MANAGER' || r === 'DELIVERY_AGENT') {
-      router.push('/employee/dashboard');
+      navigateTo('/employee/dashboard');
     } else {
-      router.push('/distribution');
+      navigateTo('/distribution');
     }
   };
 
@@ -55,6 +70,13 @@ export default function LoginPage() {
     setLoading(false);
 
     if (res.success) {
+      try {
+        if (rememberMe) {
+          localStorage.setItem('se_remembered_email', email.trim());
+        } else {
+          localStorage.removeItem('se_remembered_email');
+        }
+      } catch {}
       routeByRoleOrEmail(email, res.user?.role);
     } else {
       setError(res.error || 'Authentication failed. Please check your credentials and try again.');
@@ -62,7 +84,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0C0E22] text-slate-100 font-sans selection:bg-[#7138F5]/30">
+    <div className="flex min-h-screen bg-[#15172B] text-slate-100 font-sans selection:bg-[#6538ED]/30">
       {/* =========================================================================
           LEFT BRANDING SECTION (Enterprise Business Value)
           ========================================================================= */}
@@ -282,7 +304,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#7138F5] hover:bg-[#5E2DD4] py-3.5 text-xs font-bold text-white shadow-lg shadow-purple-900/30 transition active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#6538ED] hover:bg-[#562BD4] py-3.5 text-xs font-bold text-white shadow-lg shadow-purple-900/30 transition active:scale-[0.99] disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <div className="flex items-center gap-2">
@@ -324,7 +346,8 @@ export default function LoginPage() {
             {/* Distribution Management */}
             <Link
               href="/distribution"
-              className="flex items-center gap-3 p-3.5 rounded-2xl border border-[#22274F] bg-[#111432] hover:bg-[#161A3C] hover:border-[#7138F5]/40 transition group text-left shadow-sm"
+              prefetch={false}
+              className="flex items-center gap-3 p-3.5 rounded-2xl border border-[#22274F] bg-[#111432] hover:bg-[#161A3C] hover:border-[#6538ED]/40 transition group text-left shadow-sm"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 group-hover:scale-105 transition-transform">
                 <Package className="h-5 w-5" />

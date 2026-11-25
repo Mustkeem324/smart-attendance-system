@@ -16,7 +16,7 @@ export default function DistributionLayout({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#080A1B] text-[#F8F9FF] font-sans antialiased flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-[#15172B] text-[#F8F9FF] font-sans antialiased flex flex-col lg:flex-row">
       {/* 23-Module Enterprise Sidebar */}
       <DistributionSidebar
         isMobileOpen={isMobileOpen}
@@ -43,6 +43,7 @@ export default function DistributionLayout({
       <CommandPalette
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
+        onToggle={() => setIsSearchOpen((prev) => !prev)}
       />
     </div>
   );

@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic';
 import React, { useCallback, useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useUi } from '@/components/providers/UiProvider';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -24,6 +25,7 @@ import {
 } from 'lucide-react';
 
 function VerificationContent() {
+  const { toast } = useUi();
   const searchParams = useSearchParams();
   const highlightId = searchParams.get('id');
 
@@ -65,7 +67,7 @@ function VerificationContent() {
   const handleDecision = async (action: 'APPROVE' | 'REJECT') => {
     if (!selectedDelivery) return;
     if (action === 'REJECT' && !remarks.trim()) {
-      alert('A rejection reason or remark is required.');
+      toast.error('A rejection reason or remark is required.');
       return;
     }
 

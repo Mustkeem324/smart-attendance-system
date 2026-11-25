@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 export interface UserSession {
   id: string;
   email: string;
-  role: 'SUPER_ADMIN' | 'COMPANY_ADMIN' | 'HR_MANAGER' | 'TEAM_MANAGER' | 'EMPLOYEE' | 'SALES_MANAGER' | 'FIELD_SALES_REP' | 'DELIVERY_AGENT' | 'INVENTORY_MANAGER';
+  role: 'SUPER_ADMIN' | 'COMPANY_ADMIN' | 'HR_MANAGER' | 'TEAM_MANAGER' | 'EMPLOYEE' | 'SALES_MANAGER' | 'FIELD_SALES_REP' | 'DELIVERY_AGENT' | 'INVENTORY_MANAGER' | 'RETAILER' | 'DISTRIBUTOR';
+  profilePhoto?: string | null;
   organization: {
     id: string;
     name: string;
@@ -99,7 +100,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       sessionStorage.clear();
     }
     setUser(null);
-    router.push('/login');
+    if (typeof window !== 'undefined') {
+      window.location.assign('/login');
+    } else {
+      router.push('/login');
+    }
   };
 
   const refreshUser = async () => {

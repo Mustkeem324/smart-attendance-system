@@ -46,9 +46,11 @@ const PALETTE_ITEMS: PaletteItem[] = [
 export function CommandPalette({
   isOpen,
   onClose,
+  onToggle,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  onToggle?: () => void;
 }) {
   const router = useRouter();
   const [query, setQuery] = useState('');
@@ -58,8 +60,11 @@ export function CommandPalette({
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        if (isOpen) onClose();
-        else onClose(); // parent can toggle
+        if (onToggle) {
+          onToggle();
+        } else if (isOpen) {
+          onClose();
+        }
       }
       if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -67,7 +72,7 @@ export function CommandPalette({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, onToggle]);
 
   if (!isOpen) return null;
 

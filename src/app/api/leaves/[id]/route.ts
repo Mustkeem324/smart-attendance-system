@@ -5,7 +5,8 @@ import { getAuthSession, requireRole } from '@/lib/auth';
 import { processLeaveDecision } from '@/lib/leave-engine';
 import { prisma } from '@/lib/prisma';
 import { createAuditLog } from '@/lib/audit';
-import { Role, AttendanceStatus } from '@prisma/client';
+import { dispatchNotifications } from '@/lib/notifications';
+import { Role, AttendanceStatus, NotificationType } from '@prisma/client';
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -74,6 +75,35 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       entityId: id,
       newValues: { status: updated.status, reviewRemark },
     });
+
+    // Notify employee of leave decision with full remark & dates
+    const targetEmployee = await prisma.employee.findUnique({
+      where: { id: updated.employeeId },
+      select: { userId: true, firstName: true, employeeCode: true },
+    });
+    if (targetEmployee?.userId) {
+      const startIso = new Date(updated.startDate).toISOString().split('T')[0];
+      const endIso = new Date(updated.endDate).toISOString().split('T')[0];
+      await dispatchNotifications({
+        organizationId: session.user.organizationId,
+        userIds: [targetEmployee.userId],
+        title: `Leave Request ${action === 'APPROVE' ? 'Approved' : 'Rejected'}`,
+        message: `Your leave request (${startIso} to ${endIso}, ${updated.totalDays} day(s)) was ${action === 'APPROVE' ? 'approved' : 'declined'}${reviewRemark ? `. Remark: "${reviewRemark}"` : '.'}`,
+        type: action === 'APPROVE' ? NotificationType.SUCCESS : NotificationType.ALERT,
+        category: 'LEAVE',
+        priority: action === 'APPROVE' ? 'NORMAL' : 'HIGH',
+        link: '/leaves',
+        actionLabel: 'View Leave Status',
+        actorName: session.employee ? `${session.employee.firstName} ${session.employee.lastName}` : session.user.email,
+        actorRole: session.user.role,
+        details: {
+          Dates: `${startIso} to ${endIso}`,
+          TotalDays: updated.totalDays,
+          Status: updated.status,
+          ...(reviewRemark ? { Remark: reviewRemark } : {}),
+        },
+      }).catch(() => {});
+    }
 
     return NextResponse.json({
       success: true,

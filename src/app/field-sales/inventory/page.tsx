@@ -72,7 +72,7 @@ export default function WarehouseInventoryPage() {
               WAREHOUSE LOGISTICS
             </span>
             <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
-              MongoDB Live Inventory
+              Live Warehouse Stock
             </span>
           </div>
           <h1 className="text-3xl font-extrabold text-[#11152F] tracking-tight">
@@ -159,7 +159,7 @@ export default function WarehouseInventoryPage() {
         {loading ? (
           <div className="p-12 text-center text-slate-400">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent mb-3" />
-            <p className="text-sm font-semibold">Loading warehouse inventory from MongoDB...</p>
+            <p className="text-sm font-semibold">Loading warehouse inventory...</p>
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="p-16 text-center">

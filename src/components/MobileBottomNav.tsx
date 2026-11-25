@@ -13,6 +13,7 @@ import {
   ShoppingBag,
   Radio,
   Clock,
+  CheckSquare,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
@@ -31,7 +32,7 @@ export default function MobileBottomNav() {
       { name: 'Field App', href: '/field-sales/mobile', icon: Store },
       { name: 'Visits', href: '/field-sales/visits', icon: Radio },
       { name: 'Orders', href: '/field-sales/orders', icon: ShoppingBag },
-      { name: 'Punch', href: '/employee/dashboard', icon: CheckCircle2 },
+      { name: 'Punch', href: '/employee/attendance', icon: CheckCircle2 },
       { name: 'Sales Hub', href: '/field-sales', icon: LayoutDashboard },
     ];
   } else if (isElevated) {
@@ -44,11 +45,11 @@ export default function MobileBottomNav() {
     ];
   } else {
     links = [
-      { name: 'Punch', href: '/employee/dashboard', icon: CheckCircle2 },
+      { name: 'Dashboard', href: '/employee/dashboard', icon: LayoutDashboard },
+      { name: 'Punch', href: '/employee/attendance', icon: CheckCircle2 },
       { name: 'History', href: '/attendance/my-history', icon: History },
       { name: 'Leaves', href: '/leaves', icon: CalendarDays },
-      { name: 'Field App', href: '/field-sales/mobile', icon: Store },
-      { name: 'Shifts', href: '/shifts', icon: Clock },
+      { name: 'Tasks', href: '/employee/tasks', icon: CheckSquare },
     ];
   }
 

@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { comparePassword, generateTokens } from '@/lib/auth';
 import { logDistributionAction, apiSuccess, apiError } from '@/lib/distribution-helper';
+import { buildAuthCookieOptions } from '@/lib/cookies';
 
 export async function POST(req: NextRequest) {
   try {
@@ -91,13 +92,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Set auth cookie (Active for 30 Days)
-    response.cookies.set('auth_token', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 30 * 24 * 60 * 60, // 30 days active session
-    });
+    response.cookies.set('auth_token', accessToken, buildAuthCookieOptions(req, 30 * 24 * 60 * 60));
 
     return response;
   } catch (err: any) {

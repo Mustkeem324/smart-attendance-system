@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useUi } from '@/components/providers/UiProvider';
 import {
   FileSpreadsheet,
   Download,
@@ -12,6 +13,7 @@ import {
 } from 'lucide-react';
 
 export default function ExcelImportPage() {
+  const { toast } = useUi();
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState<{
@@ -51,11 +53,12 @@ export default function ExcelImportPage() {
       const data = await res.json();
       if (res.ok) {
         setResult(data);
+        toast.success(`Imported ${data.importedCount ?? 0} employee record(s).`);
       } else {
-        alert(data.error || 'Failed to upload and import Excel');
+        toast.error(data.error || 'Failed to upload and import Excel');
       }
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
     } finally {
       setUploading(false);
     }

@@ -15,7 +15,9 @@ export async function PUT(req: NextRequest) {
     const { id } = body;
 
     if (id) {
-      await DistributionNotification.findByIdAndUpdate(id, { isRead: true });
+      const cleanId = String(id).replace(/^dist-/, '');
+      const nextRead = body.isRead !== undefined ? Boolean(body.isRead) : true;
+      await DistributionNotification.findByIdAndUpdate(cleanId, { isRead: nextRead });
     } else {
       await DistributionNotification.updateMany({ isRead: false }, { isRead: true });
     }

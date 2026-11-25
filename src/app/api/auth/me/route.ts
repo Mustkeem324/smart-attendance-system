@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { resolveUserAvatar } from '@/lib/profile-photo-storage';
 
 export async function GET(req: NextRequest) {
   try {
@@ -29,11 +30,17 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    const profilePhoto = await resolveUserAvatar(
+      userWithDetails.id,
+      userWithDetails.employee?.profilePhoto
+    );
+
     return NextResponse.json({
       user: {
         id: userWithDetails.id,
         email: userWithDetails.email,
         role: userWithDetails.role,
+        profilePhoto,
         organization: {
           id: userWithDetails.organization.id,
           name: userWithDetails.organization.name,

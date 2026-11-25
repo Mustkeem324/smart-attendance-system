@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useCallback, useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import {
   MapPin,
   PlusCircle,
   Users,
   Navigation,
   Edit2,
+  Trash2,
   CheckCircle2,
   XCircle,
   X,
@@ -14,9 +16,20 @@ import {
   Building,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { useUi } from '@/components/providers/UiProvider';
+
+const LiveGeofenceMap = dynamic(() => import('@/components/maps/LiveGeofenceMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="mt-4 flex h-80 w-full items-center justify-center rounded-2xl bg-slate-100 text-xs text-slate-500 dark:bg-slate-800/60 dark:text-slate-400">
+      Loading interactive geofence map...
+    </div>
+  ),
+});
 
 export default function OfficeLocationsPage() {
   const { user } = useAuth();
+  const { toast, confirm } = useUi();
   const [offices, setOffices] = useState<any[]>([]);
   const [branches, setBranches] = useState<any[]>([]);
   const [employees, setEmployees] = useState<any[]>([]);
@@ -119,12 +132,36 @@ export default function OfficeLocationsPage() {
       const data = await res.json();
       if (res.ok) {
         setIsModalOpen(false);
+        toast.success(editingOffice ? 'Office geofence updated.' : 'Office geofence created.');
         fetchOffices();
       } else {
-        alert(data.error || 'Operation failed');
+        toast.error(data.error || 'Operation failed');
       }
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
+    }
+  };
+
+  const handleDeleteOffice = async (off: any) => {
+    const ok = await confirm({
+      title: 'Delete Office Geofence',
+      message: `Remove "${off.name}" (${off.code})? Assigned employees will have their specific office location cleared.`,
+      confirmText: 'Delete Location',
+      variant: 'danger',
+    });
+    if (!ok) return;
+
+    try {
+      const res = await fetch(`/api/admin/office-locations/${off.id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success('Geofence location removed.');
+        fetchOffices();
+      } else {
+        toast.error(data.error || 'Could not remove location');
+      }
+    } catch (err: any) {
+      toast.error(err.message);
     }
   };
 
@@ -168,48 +205,26 @@ export default function OfficeLocationsPage() {
             )}
           </div>
 
-          {/* Interactive SVG Radar Map View */}
-          <div className="relative mt-6 flex h-80 w-full items-center justify-center overflow-hidden rounded-2xl bg-slate-950 p-4">
-            {/* Grid Lines */}
-            <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px] opacity-70"></div>
-
-            {selectedOfficeForMap ? (
-              <div className="relative flex flex-col items-center">
-                {/* Geofence Outer Radius Ring */}
-                <div
-                  style={{
-                    width: `${Math.min(260, selectedOfficeForMap.radiusMeters * 2.8)}px`,
-                    height: `${Math.min(260, selectedOfficeForMap.radiusMeters * 2.8)}px`,
-                  }}
-                  className="animate-pulse-ring flex items-center justify-center rounded-full border-2 border-emerald-400 bg-emerald-500/10 shadow-lg shadow-emerald-500/20"
-                >
-                  {/* Inner Target Ring */}
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-dashed border-emerald-300 bg-emerald-500/20">
-                    <Building className="h-6 w-6 text-white" />
-                  </div>
-                </div>
-
-                {/* Marker Card Overlay */}
-                <div className="absolute -bottom-10 rounded-xl bg-slate-900/90 px-4 py-2 text-center text-xs text-white  shadow-xl border border-slate-800">
-                  <span className="font-bold text-emerald-400">{selectedOfficeForMap.name}</span>
-                  <p className="text-[10px] text-slate-300">
-                    Lat: {selectedOfficeForMap.latitude.toFixed(4)}, Lon: {selectedOfficeForMap.longitude.toFixed(4)}
-                  </p>
-                  <span className="text-[10px] text-slate-400">
-                    Enforcing {selectedOfficeForMap.radiusMeters}m Geofence • Min Accuracy ±{selectedOfficeForMap.minGpsAccuracyMeters}m
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <p className="text-xs text-slate-400">Select an office location below to inspect geofence</p>
-            )}
-
-            {/* Map Controls */}
-            <div className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-slate-900/80 px-2.5 py-1 text-[10px] text-white ">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span>Geofence Simulator Active</span>
-            </div>
-          </div>
+          {/* Live Interactive Leaflet OpenStreetMap Geofence View */}
+          <LiveGeofenceMap
+            officeLocations={offices.map((off) => ({
+              id: off.id,
+              name: off.name,
+              code: off.code,
+              latitude: Number(off.latitude),
+              longitude: Number(off.longitude),
+              radiusMeters: Number(off.radiusMeters) || 50,
+              branch: off.branch,
+              assignedEmployeesCount: off._count?.employees || 0,
+            }))}
+            punchMarkers={[]}
+            activeFilter="OFFICES"
+            className="mt-4 h-80 rounded-2xl"
+            onMarkerClick={(marker) => {
+              const found = offices.find((o) => o.id === marker.id);
+              if (found) setSelectedOfficeForMap(found);
+            }}
+          />
         </div>
 
         {/* Quick Office Selection Column */}
@@ -318,12 +333,24 @@ export default function OfficeLocationsPage() {
                       </span>
                     </td>
                     <td className="whitespace-nowrap px-5 py-3.5 text-right">
-                      <button
-                        onClick={() => handleOpenEdit(off)}
-                        className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800"
-                      >
-                        <Edit2 className="h-4 w-4" />
-                      </button>
+                      <div className="inline-flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEdit(off)}
+                          className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800"
+                          title="Edit location"
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteOffice(off)}
+                          className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950/50"
+                          title="Delete location"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

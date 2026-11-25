@@ -173,7 +173,7 @@ export default function RetailersPage() {
         {loading ? (
           <div className="col-span-full py-16 text-center text-slate-400">
             <RefreshCw className="w-6 h-6 animate-spin text-purple-400 mx-auto mb-2" />
-            Loading retailers from MongoDB...
+            Loading retailer directory...
           </div>
         ) : retailers.length === 0 ? (
           <div className="col-span-full py-16 text-center text-slate-400">

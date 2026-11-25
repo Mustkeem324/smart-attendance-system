@@ -1542,7 +1542,7 @@ export default function B2BDistributionHomePage() {
                   <input
                     type="email"
                     required
-                    placeholder="e.g. store@apexmobile.com"
+                    placeholder="e.g. orders@primeelectronics.in"
                     value={partnerForm.email}
                     onChange={(e) => setPartnerForm({ ...partnerForm, email: e.target.value })}
                     className="w-full rounded-xl border border-[#252A54] bg-white/5 p-2.5 text-xs text-white focus:border-[#7138F5] focus:outline-none"
@@ -1836,7 +1836,7 @@ export default function B2BDistributionHomePage() {
 
           <div className="pt-8 border-t border-[#1E2248] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
             <p>&copy; {new Date().getFullYear()} {content.companyName}. All rights reserved.</p>
-            <p>Integrated within SmartAttendance Pro Enterprise Technology Ecosystem.</p>
+            <p>Unified B2B Distribution, Field Operations &amp; Workforce Platform.</p>
           </div>
         </div>
       </footer>

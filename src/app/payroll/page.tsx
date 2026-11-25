@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useState, useEffect } from 'react';
+import { useUi } from '@/components/providers/UiProvider';
 import {
   CreditCard,
   Download,
@@ -20,6 +21,7 @@ import {
 } from 'lucide-react';
 
 export default function PayrollPage() {
+  const { toast, prompt } = useUi();
   const [activeTab, setActiveTab] = useState<'runs' | 'payslips' | 'structures' | 'loans'>('runs');
   const [runs, setRuns] = useState<any[]>([]);
   const [payslips, setPayslips] = useState<any[]>([]);
@@ -128,7 +130,13 @@ export default function PayrollPage() {
 
   // Disburse payroll
   const handleDisburse = async (runId: string) => {
-    const ref = prompt('Enter Bank Disbursement Reference / Batch ID (e.g. TXN-HDFC-99214):');
+    const ref = await prompt({
+      title: 'Record Bank Disbursement',
+      message: 'Enter the bank NEFT/RTGS or batch payment reference number.',
+      placeholder: 'e.g. TXN-HDFC-99214',
+      required: true,
+      confirmText: 'Mark as Paid',
+    });
     if (!ref) return;
 
     setActionLoading(true);
@@ -141,12 +149,15 @@ export default function PayrollPage() {
       const data = await res.json();
       if (res.ok) {
         setFeedback(`Disbursement recorded successfully. Status updated to PAID.`);
+        toast.success('Payroll batch marked as PAID.');
         fetchData();
       } else {
         setFeedback(`Error: ${data.error}`);
+        toast.error(data.error || 'Disbursement failed');
       }
     } catch (err: any) {
       setFeedback(`Error: ${err.message}`);
+      toast.error(err.message);
     } finally {
       setActionLoading(false);
     }

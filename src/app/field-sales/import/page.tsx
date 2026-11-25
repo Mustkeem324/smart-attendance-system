@@ -209,7 +209,7 @@ export default function RealDataImportCenter() {
               DATA ONBOARDING ENGINE
             </span>
             <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
-              MongoDB Native
+              Batch Validation Engine
             </span>
           </div>
           <h1 className="text-3xl font-extrabold text-[#11152F] tracking-tight">
@@ -279,7 +279,7 @@ export default function RealDataImportCenter() {
                 Import Successfully Completed!
               </h4>
               <p className="text-xs text-emerald-700 mt-0.5">
-                Processed real records and synced with MongoDB 7.0 database.
+                Processed validated records and synchronized with live operational catalog.
               </p>
             </div>
           </div>
@@ -367,7 +367,7 @@ export default function RealDataImportCenter() {
         <div className="flex items-center justify-between pt-2">
           <div className="flex items-center gap-2 text-xs text-slate-400">
             <Database className="h-4 w-4 text-indigo-500" />
-            <span>Direct write to MongoDB 7.0 (`smart_electronics_db`)</span>
+            <span>Validated import to production distribution catalog</span>
           </div>
 
           <button

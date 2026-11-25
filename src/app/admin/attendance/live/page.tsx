@@ -3,6 +3,7 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { useUi } from '@/components/providers/UiProvider';
 import {
   Users,
   UserCheck,
@@ -45,6 +46,7 @@ const LiveGeofenceMap = dynamic(() => import('@/components/maps/LiveGeofenceMap'
 
 export default function AdminLiveAttendancePage() {
   const { user } = useAuth();
+  const { toast, prompt } = useUi();
   const [data, setData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -110,7 +112,13 @@ export default function AdminLiveAttendancePage() {
   }, [fetchLiveMonitor]);
 
   const handleExceptionDecision = async (id: string, action: 'APPROVE' | 'REJECT') => {
-    const remark = prompt(`Enter ${action.toLowerCase()} remark:`) || '';
+    const remark = await prompt({
+      title: `${action === 'APPROVE' ? 'Approve' : 'Reject'} Attendance Exception`,
+      message: 'Provide an optional review remark recorded on the audit trail.',
+      placeholder: `Enter ${action.toLowerCase()} remark...`,
+      confirmText: action === 'APPROVE' ? 'Approve' : 'Reject',
+    });
+    if (remark === null) return;
     try {
       const res = await fetch(`/api/attendance/exception/${id}`, {
         method: 'PUT',
@@ -119,13 +127,14 @@ export default function AdminLiveAttendancePage() {
       });
 
       if (res.ok) {
+        toast.success(`Attendance exception ${action.toLowerCase()}ed.`);
         fetchLiveMonitor();
       } else {
         const d = await res.json();
-        alert(d.error || 'Decision failed');
+        toast.error(d.error || 'Decision failed');
       }
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 

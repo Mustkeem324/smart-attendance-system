@@ -35,10 +35,12 @@ import {
   Eye,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { useUi } from '@/components/providers/UiProvider';
 import AndroidBottomNav from '@/components/mobile/AndroidBottomNav';
 
 export default function AdvancedFieldSalesAdminDashboard() {
   const { user } = useAuth();
+  const { toast, prompt } = useUi();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -82,7 +84,13 @@ export default function AdvancedFieldSalesAdminDashboard() {
   };
 
   const handleRejectPriceOverride = async (overrideId: string) => {
-    const reason = prompt('Specify rejection reason:');
+    const reason = await prompt({
+      title: 'Reject Price Override',
+      message: 'Specify the manager reason for rejecting this requested price adjustment.',
+      placeholder: 'Enter rejection reason...',
+      required: true,
+      confirmText: 'Reject Request',
+    });
     if (!reason) return;
     setActionLoading(overrideId);
     try {
@@ -92,10 +100,14 @@ export default function AdvancedFieldSalesAdminDashboard() {
         body: JSON.stringify({ remarks: reason }),
       });
       if (res.ok) {
+        toast.success('Price override rejected.');
         fetchAnalytics();
+      } else {
+        toast.error('Failed to reject price override');
       }
     } catch (e) {
       console.error(e);
+      toast.error('Network error rejecting price override');
     } finally {
       setActionLoading(null);
     }
@@ -119,7 +131,13 @@ export default function AdvancedFieldSalesAdminDashboard() {
   };
 
   const handleRejectShopApplication = async (appId: string) => {
-    const reason = prompt('Specify rejection reason:');
+    const reason = await prompt({
+      title: 'Reject Shop Onboarding Application',
+      message: 'Specify why this retail partner application cannot be approved.',
+      placeholder: 'Enter rejection reason...',
+      required: true,
+      confirmText: 'Reject Application',
+    });
     if (!reason) return;
     setActionLoading(appId);
     try {
@@ -129,10 +147,14 @@ export default function AdvancedFieldSalesAdminDashboard() {
         body: JSON.stringify({ remarks: reason }),
       });
       if (res.ok) {
+        toast.success('Shop application rejected.');
         fetchAnalytics();
+      } else {
+        toast.error('Failed to reject application');
       }
     } catch (e) {
       console.error(e);
+      toast.error('Network error rejecting application');
     } finally {
       setActionLoading(null);
     }

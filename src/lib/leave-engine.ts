@@ -141,96 +141,96 @@ export async function submitLeaveRequest(data: {
   reason: string;
   documentUrl?: string;
 }) {
-  return await prisma.$transaction(async (tx) => {
-    // 1. Check for overlapping requests
-    const start = new Date(`${data.startDateStr}T00:00:00Z`);
-    const end = new Date(`${data.endDateStr}T23:59:59Z`);
+  // Compute deductions & check balance before opening interactive transaction to minimize lock duration
+  const calc = await calculateLeaveDeduction(
+    data.organizationId,
+    data.employeeId,
+    data.leaveTypeId,
+    data.startDateStr,
+    data.endDateStr,
+    data.isHalfDay
+  );
 
-    const overlap = await tx.leaveRequest.findFirst({
-      where: {
-        employeeId: data.employeeId,
-        status: { in: [RequestStatus.PENDING, RequestStatus.APPROVED] },
-        OR: [
-          { startDate: { lte: end }, endDate: { gte: start } },
-        ],
-      },
-    });
+  if (!calc.hasSufficientBalance) {
+    throw new Error(`Insufficient leave balance. Available: ${calc.availableBalance} days, Required: ${calc.deductibleDays} days`);
+  }
 
-    if (overlap) {
-      throw new Error('An overlapping leave request already exists for this date range');
-    }
+  return await prisma.$transaction(
+    async (tx) => {
+      // 1. Check for overlapping requests
+      const start = new Date(`${data.startDateStr}T00:00:00Z`);
+      const end = new Date(`${data.endDateStr}T23:59:59Z`);
 
-    // 2. Calculate deductions and verify balance
-    const calc = await calculateLeaveDeduction(
-      data.organizationId,
-      data.employeeId,
-      data.leaveTypeId,
-      data.startDateStr,
-      data.endDateStr,
-      data.isHalfDay
-    );
+      const overlap = await tx.leaveRequest.findFirst({
+        where: {
+          employeeId: data.employeeId,
+          status: { in: [RequestStatus.PENDING, RequestStatus.APPROVED] },
+          OR: [{ startDate: { lte: end }, endDate: { gte: start } }],
+        },
+      });
 
-    if (!calc.hasSufficientBalance) {
-      throw new Error(`Insufficient leave balance. Available: ${calc.availableBalance} days, Required: ${calc.deductibleDays} days`);
-    }
+      if (overlap) {
+        throw new Error('An overlapping leave request already exists for this date range');
+      }
 
-    // 3. Create Leave Request
-    const leaveRequest = await tx.leaveRequest.create({
-      data: {
-        organizationId: data.organizationId,
-        employeeId: data.employeeId,
-        leaveTypeId: data.leaveTypeId,
-        startDate: start,
-        endDate: end,
-        totalDays: calc.deductibleDays,
-        isHalfDay: Boolean(data.isHalfDay),
-        halfDayPeriod: data.halfDayPeriod || null,
-        reason: data.reason,
-        documentUrl: data.documentUrl || null,
-        status: RequestStatus.PENDING,
-      },
-    });
-
-    // 4. Reserve pending days on balance
-    const currentYear = new Date().getFullYear();
-    const balance = await tx.leaveBalance.findUnique({
-      where: {
-        employeeId_leaveTypeId_year: {
+      // 2. Create Leave Request
+      const leaveRequest = await tx.leaveRequest.create({
+        data: {
+          organizationId: data.organizationId,
           employeeId: data.employeeId,
           leaveTypeId: data.leaveTypeId,
-          year: currentYear,
-        },
-      },
-    });
-
-    if (balance) {
-      await tx.leaveBalance.update({
-        where: { id: balance.id },
-        data: { pendingDays: balance.pendingDays + calc.deductibleDays },
-      });
-    }
-
-    // 5. Create Multi-level approval steps (Manager & HR)
-    const emp = await tx.employee.findUnique({
-      where: { id: data.employeeId },
-      include: { manager: { include: { user: true } } },
-    });
-
-    // Level 1: Reporting Manager (if assigned and has user account)
-    if (emp?.manager?.user?.id) {
-      await tx.leaveApproval.create({
-        data: {
-          leaveRequestId: leaveRequest.id,
-          approverUserId: emp.manager.user.id,
-          approverEmployeeId: emp.manager.id,
-          level: 1,
+          startDate: start,
+          endDate: end,
+          totalDays: calc.deductibleDays,
+          isHalfDay: Boolean(data.isHalfDay),
+          halfDayPeriod: data.halfDayPeriod || null,
+          reason: data.reason,
+          documentUrl: data.documentUrl || null,
           status: RequestStatus.PENDING,
         },
       });
-    }
 
-    return { leaveRequest, calculation: calc };
-  });
+      // 3. Reserve pending days on balance
+      const currentYear = new Date().getFullYear();
+      const balance = await tx.leaveBalance.findUnique({
+        where: {
+          employeeId_leaveTypeId_year: {
+            employeeId: data.employeeId,
+            leaveTypeId: data.leaveTypeId,
+            year: currentYear,
+          },
+        },
+      });
+
+      if (balance) {
+        await tx.leaveBalance.update({
+          where: { id: balance.id },
+          data: { pendingDays: balance.pendingDays + calc.deductibleDays },
+        });
+      }
+
+      // 4. Create Multi-level approval steps (Manager & HR)
+      const emp = await tx.employee.findUnique({
+        where: { id: data.employeeId },
+        include: { manager: { include: { user: true } } },
+      });
+
+      if (emp?.manager?.user?.id) {
+        await tx.leaveApproval.create({
+          data: {
+            leaveRequestId: leaveRequest.id,
+            approverUserId: emp.manager.user.id,
+            approverEmployeeId: emp.manager.id,
+            level: 1,
+            status: RequestStatus.PENDING,
+          },
+        });
+      }
+
+      return { leaveRequest, calculation: calc };
+    },
+    { timeout: 20000, maxWait: 10000 }
+  );
 }
 
 /**

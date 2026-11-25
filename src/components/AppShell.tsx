@@ -13,16 +13,26 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const isAuthPage = pathname === '/login' || pathname === '/forgot-password';
-  const isPublicPage = pathname === '/' || pathname.startsWith('/catalog') || pathname.startsWith('/products');
+  const isAuthPage =
+    pathname === '/login' ||
+    pathname === '/register' ||
+    pathname === '/forgot-password' ||
+    pathname === '/reset-password' ||
+    pathname === '/verify-account';
+  const isPublicPage =
+    pathname === '/' ||
+    pathname === '/contact' ||
+    pathname === '/access-denied' ||
+    pathname.startsWith('/catalog') ||
+    pathname.startsWith('/products');
   const isStandaloneModule = pathname?.startsWith('/distribution') || pathname?.startsWith('/field-sales');
 
-  if (isAuthPage || isPublicPage || isStandaloneModule) {
+  if (isAuthPage || isPublicPage || isStandaloneModule || (!isLoading && !user)) {
     return <main className="min-h-screen">{children}</main>;
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F8F9FD] dark:bg-[#0B0D1E] text-slate-900 dark:text-slate-100 antialiased selection:bg-purple-500 selection:text-white">
+    <div className="flex min-h-screen bg-[#F6F5FF] dark:bg-[#0F1123] text-slate-900 dark:text-slate-100 antialiased selection:bg-[#6538ED] selection:text-white">
       {/* Dark Navy Sidebar */}
       <Sidebar
         isOpen={sidebarOpen}

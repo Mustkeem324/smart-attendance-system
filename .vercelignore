@@ -3,6 +3,16 @@ android/
 test/
 tests/
 docs/
+scripts/audit_screenshots/
+.agents/
+.claude/
+.cursor/
+.devin/
+.freebuff/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
 *.log
 .git
 .github

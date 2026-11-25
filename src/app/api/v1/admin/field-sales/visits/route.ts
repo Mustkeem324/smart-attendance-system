@@ -6,7 +6,13 @@ import { authenticateApi, apiSuccess, apiError } from '@/lib/distribution-helper
 import { ShopVisit } from '@/models/electronics-sales';
 
 export async function GET(req: NextRequest) {
-  const { user, errorResponse } = await authenticateApi(req);
+  const { user, errorResponse } = await authenticateApi(req, [
+    'SUPER_ADMIN',
+    'COMPANY_ADMIN',
+    'HR_MANAGER',
+    'TEAM_MANAGER',
+    'SALES_MANAGER',
+  ]);
   if (errorResponse) return errorResponse;
 
   try {

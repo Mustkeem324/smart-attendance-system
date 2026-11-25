@@ -100,3 +100,44 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const session = await getAuthSession(req);
+    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const hasAccess = requireRole(session.user.role, [
+      Role.SUPER_ADMIN,
+      Role.COMPANY_ADMIN,
+      Role.HR_MANAGER,
+    ]);
+    if (!hasAccess) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
+    const { id } = params;
+    const existing = await prisma.officeLocation.findUnique({ where: { id } });
+    if (!existing || existing.organizationId !== session.user.organizationId) {
+      return NextResponse.json({ error: 'Office location not found' }, { status: 404 });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.employee.updateMany({
+        where: { organizationId: session.user.organizationId, officeLocationId: id },
+        data: { officeLocationId: null },
+      });
+      await tx.officeLocation.delete({ where: { id } });
+    });
+
+    await createAuditLog({
+      organizationId: session.user.organizationId,
+      userId: session.user.id,
+      action: 'DELETE_OFFICE_LOCATION',
+      entity: 'OfficeLocation',
+      entityId: id,
+      oldValues: existing,
+    }).catch(() => {});
+
+    return NextResponse.json({ success: true, message: 'Geofence location deleted.' });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

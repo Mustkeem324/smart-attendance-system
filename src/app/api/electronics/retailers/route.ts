@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthSession } from '@/lib/auth';
+import { hasAnyRole, ROLE_GROUPS } from '@/lib/rbac';
 import { connectToDatabase } from '@/lib/mongodb';
 import { Retailer } from '@/models/electronics-sales';
 import { createRetailer } from '@/lib/electronics-sales-engine';
@@ -10,6 +11,9 @@ export async function GET(req: NextRequest) {
   try {
     const session = await getAuthSession(req);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!hasAnyRole(session.user.role, ROLE_GROUPS.DISTRIBUTION_PORTAL)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
     await connectToDatabase();
 
@@ -42,6 +46,9 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getAuthSession(req);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!hasAnyRole(session.user.role, ROLE_GROUPS.DISTRIBUTION_ORDER_CREATE)) {
+      return NextResponse.json({ error: 'Forbidden: Sales or administration role required.' }, { status: 403 });
+    }
 
     const body = await req.json();
     const retailer = await createRetailer(body);

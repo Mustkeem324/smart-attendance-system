@@ -232,7 +232,7 @@ export default function ProductsPage() {
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-slate-400">
                     <RefreshCw className="w-6 h-6 animate-spin text-purple-400 mx-auto mb-2" />
-                    Loading hardware products from MongoDB...
+                    Loading product catalog...
                   </td>
                 </tr>
               ) : products.length === 0 ? (
@@ -312,7 +312,7 @@ export default function ProductsPage() {
             <div className="flex items-center justify-between pb-4 border-b border-[#23294E]">
               <div>
                 <h2 className="text-base font-bold text-white">Add New Hardware Product</h2>
-                <p className="text-xs text-slate-400">Register product into MongoDB catalog and initialize central warehouse stock.</p>
+                <p className="text-xs text-slate-400">Register product into the distribution catalog and initialize central warehouse stock.</p>
               </div>
               <button onClick={() => setShowAddModal(false)} className="p-1 rounded-lg text-slate-400 hover:text-white">
                 <X className="w-5 h-5" />

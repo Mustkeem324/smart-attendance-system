@@ -142,8 +142,8 @@ export async function POST(
       submittedAt: now,
     }, {
       message: pendingOverrides.length > 0
-        ? `Shop visit submitted successfully! Note: ${pendingOverrides.length} product(s) with manual price adjustments have been routed for manager review.`
-        : 'Shop visit and product sales report successfully submitted and recorded permanently in MongoDB.',
+        ? `Shop visit submitted successfully. Note: ${pendingOverrides.length} product(s) with manual price adjustments have been routed for manager review.`
+        : 'Shop visit and product sales report submitted and recorded successfully.',
     });
   } catch (err: any) {
     console.error('Visit Submit POST Error:', err);

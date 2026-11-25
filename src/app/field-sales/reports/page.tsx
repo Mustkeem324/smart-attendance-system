@@ -73,8 +73,8 @@ export default function FieldSalesReportsPage() {
             <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
               Field Sales &amp; Delivery Reports
             </h1>
-            <span className="rounded-full bg-[#5428E8]/10 px-2.5 py-0.5 text-xs font-bold text-[#5428E8]">
-              Phase 5/9 Export Engine
+            <span className="rounded-full bg-[#6538ED]/10 px-2.5 py-0.5 text-xs font-bold text-[#6538ED]">
+              Distribution Export Engine
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">

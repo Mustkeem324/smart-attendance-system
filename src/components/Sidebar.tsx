@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useLiveNotifications } from '@/components/notifications/LiveNotificationContext';
 import {
   LayoutDashboard,
   Radio,
@@ -34,7 +35,20 @@ import {
   LogOut,
   Shield,
   Layers,
+  User,
+  FolderOpen,
+  UsersRound,
+  CheckSquare,
+  HelpCircle,
+  MessageSquarePlus,
 } from 'lucide-react';
+
+interface NavItem {
+  name: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge?: string;
+}
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -51,19 +65,49 @@ export default function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { unreadCount } = useLiveNotifications();
   const [salesExpanded, setSalesExpanded] = useState(false);
 
   const isElevated = user?.role && ['SUPER_ADMIN', 'COMPANY_ADMIN', 'HR_MANAGER', 'TEAM_MANAGER'].includes(user.role);
   const isSalesElevated = user?.role && ['SUPER_ADMIN', 'COMPANY_ADMIN', 'HR_MANAGER', 'TEAM_MANAGER', 'SALES_MANAGER', 'FIELD_SALES_REP', 'INVENTORY_MANAGER'].includes(user.role);
+  const canAccessFieldMobile =
+    user?.role &&
+    ['SUPER_ADMIN', 'COMPANY_ADMIN', 'HR_MANAGER', 'TEAM_MANAGER', 'SALES_MANAGER', 'FIELD_SALES_REP', 'DELIVERY_AGENT', 'INVENTORY_MANAGER'].includes(user.role);
 
-  // Self Service Portal
-  const selfServiceNavigation = [
-    { name: 'My Attendance & Punch', href: '/employee/dashboard', icon: CheckCircle2 },
+  const employeeDashboardNav: NavItem[] = [
+    { name: 'Employee Dashboard', href: '/employee/dashboard', icon: LayoutDashboard },
+  ];
+
+  // Self Service Portal (separate from Employee Dashboard)
+  const selfServiceNavigation: NavItem[] = [
+    { name: 'My Attendance & Punch', href: '/employee/attendance', icon: CheckCircle2 },
     { name: 'Attendance History', href: '/attendance/my-history', icon: History },
     { name: 'Attendance Exceptions', href: '/attendance/exceptions', icon: AlertCircle },
     { name: 'Leaves & Holidays', href: '/leaves', icon: CalendarDays },
     { name: 'Shifts & Swaps', href: '/shifts', icon: Clock },
-    { name: 'Field Sales & Visits', href: '/field-sales/mobile', icon: Store, badge: 'MOBILE' },
+    ...(canAccessFieldMobile
+      ? [{ name: 'Field Sales & Visits', href: '/field-sales/mobile', icon: Store, badge: 'MOBILE' }]
+      : []),
+  ];
+
+  // Personal Information Portal
+  const myInfoNavigation: NavItem[] = [
+    { name: 'My Profile', href: '/employee/profile', icon: User },
+    { name: 'My Documents', href: '/employee/documents', icon: FolderOpen },
+    { name: 'My Team', href: '/employee/team', icon: UsersRound },
+    { name: 'My Goals & Tasks', href: '/employee/tasks', icon: CheckSquare },
+  ];
+
+  // Support Portal
+  const supportNavigation: NavItem[] = [
+    {
+      name: 'Live Notifications',
+      href: '/notifications',
+      icon: Radio,
+      badge: unreadCount > 0 ? String(unreadCount) : 'LIVE',
+    },
+    { name: 'Help & Support', href: '/employee/support', icon: HelpCircle },
+    { name: 'Raise a Request', href: '/employee/support?tab=request', icon: MessageSquarePlus },
   ];
 
   // HR Administration
@@ -77,7 +121,7 @@ export default function Sidebar({
     { name: 'Attendance Analytics', href: '/admin/analytics', icon: BarChart3, badge: 'PRO' },
     { name: 'Leave Management', href: '/leaves', icon: CalendarDays },
     { name: 'Shift Management', href: '/shifts', icon: Clock },
-    { name: 'Payroll (Phase 2)', href: '/payroll', icon: CreditCard },
+    { name: 'Payroll & Compensation', href: '/payroll', icon: CreditCard },
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
@@ -113,20 +157,20 @@ export default function Sidebar({
         <div className="flex h-16 items-center justify-between border-b border-white/10 px-4">
           {!isCollapsed ? (
             <div className="flex items-center gap-3 overflow-hidden">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#7138F5] text-white shadow-lg shadow-[#7138F5]/40 ring-1 ring-white/20">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#6538ED] text-white shadow-lg shadow-[#6538ED]/40 ring-1 ring-white/20">
                 <Sparkles className="h-4 w-4" />
               </div>
               <div className="truncate">
                 <span className="block text-sm font-extrabold tracking-wide text-white">
                   Salman Enterprises
                 </span>
-                <span className="block text-[10px] font-medium text-purple-300">
-                  SmartHRMS &bull; Cloud Suite
+                <span className="block text-[10px] font-medium text-[#8255FF]">
+                  Enterprise Workforce Suite
                 </span>
               </div>
             </div>
           ) : (
-            <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-[#7138F5] text-white shadow-lg shadow-[#7138F5]/40 ring-1 ring-white/20">
+            <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-[#6538ED] text-white shadow-lg shadow-[#6538ED]/40 ring-1 ring-white/20">
               <Sparkles className="h-4 w-4" />
             </div>
           )}
@@ -154,44 +198,56 @@ export default function Sidebar({
         </div>
 
         {/* Scrollable Navigation Items */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
-          {/* Section 1: Self Service Portal */}
-          <div>
-            {!isCollapsed && (
-              <h3 className="mb-2 px-3 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
-                Self Service Portal
-              </h3>
-            )}
-            <div className="space-y-1">
-              {selfServiceNavigation.map((item) => {
-                const isActive = pathname === item.href;
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={onClose}
-                    title={isCollapsed ? item.name : undefined}
-                    className={`group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-150 ${
-                      isActive
-                        ? 'bg-[#7138F5] text-white shadow-md shadow-[#7138F5]/30 font-bold'
-                        : 'text-slate-300 hover:bg-white/8 hover:text-white'
-                    } ${isCollapsed ? 'justify-center px-2' : ''}`}
-                  >
-                    <div className="flex items-center gap-3 truncate">
-                      <Icon className={`h-4 w-4 shrink-0 transition-colors ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-purple-300'}`} />
-                      {!isCollapsed && <span className="truncate">{item.name}</span>}
-                    </div>
-                    {!isCollapsed && item.badge && (
-                      <span className="rounded-full bg-purple-500/20 px-2 py-0.5 text-[9px] font-black text-purple-300 border border-purple-500/30">
-                        {item.badge}
-                      </span>
-                    )}
-                  </Link>
-                );
-              })}
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
+          {[
+            { title: 'Employee Dashboard', items: employeeDashboardNav },
+            { title: 'Self Service', items: selfServiceNavigation },
+            { title: 'My Information', items: myInfoNavigation },
+            { title: 'Support', items: supportNavigation },
+          ].map((group) => (
+            <div key={group.title}>
+              {!isCollapsed && (
+                <h3 className="mb-2 px-3 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+                  {group.title}
+                </h3>
+              )}
+              <div className="space-y-1">
+                {group.items.map((item) => {
+                  const baseHref = item.href.split('?')[0];
+                  const isActive =
+                    item.href.includes('?') ? false : pathname === baseHref;
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={onClose}
+                      title={isCollapsed ? item.name : undefined}
+                      className={`group flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-150 ${
+                        isActive
+                          ? 'bg-[#6538ED] text-white shadow-md shadow-[#6538ED]/30 font-bold'
+                          : 'text-slate-300 hover:bg-white/8 hover:text-white'
+                      } ${isCollapsed ? 'justify-center px-2' : ''}`}
+                    >
+                      <div className="flex items-center gap-3 truncate">
+                        <Icon
+                          className={`h-4 w-4 shrink-0 transition-colors ${
+                            isActive ? 'text-white' : 'text-slate-400 group-hover:text-purple-300'
+                          }`}
+                        />
+                        {!isCollapsed && <span className="truncate">{item.name}</span>}
+                      </div>
+                      {!isCollapsed && item.badge && (
+                        <span className="rounded-full bg-purple-500/20 px-2 py-0.5 text-[9px] font-black text-purple-300 border border-purple-500/30">
+                          {item.badge}
+                        </span>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ))}
 
           {/* Section 2: HR Administration */}
           {isElevated && (
@@ -317,16 +373,28 @@ export default function Sidebar({
           {user && (
             <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
               <div className="flex items-center gap-2.5 overflow-hidden">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-purple-600 text-xs font-black text-white shadow">
-                  SE
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#6538ED] text-xs font-black text-white shadow uppercase overflow-hidden">
+                  {user.employee?.profilePhoto || user.profilePhoto ? (
+                    <img
+                      src={user.employee?.profilePhoto || user.profilePhoto || ''}
+                      alt={user.employee ? `${user.employee.firstName} ${user.employee.lastName}` : user.email}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : user.employee ? (
+                    `${user.employee.firstName?.[0] || ''}${user.employee.lastName?.[0] || ''}`
+                  ) : (
+                    user.email.slice(0, 2)
+                  )}
                 </div>
                 {!isCollapsed && (
                   <div className="truncate">
                     <p className="text-xs font-bold text-white truncate">
-                      Salman Enterprises
+                      {user.employee
+                        ? `${user.employee.firstName} ${user.employee.lastName}`
+                        : user.email.split('@')[0]}
                     </p>
                     <p className="text-[10px] text-purple-300 truncate">
-                      {user.role?.replace('_', ' ') || 'SUPER ADMIN'}
+                      {user.role?.replace(/_/g, ' ') || 'USER'}
                     </p>
                   </div>
                 )}

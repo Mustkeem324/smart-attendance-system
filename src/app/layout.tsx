@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
+import { UiProvider } from '@/components/providers/UiProvider';
+import { LiveNotificationProvider } from '@/components/notifications/LiveNotificationContext';
 import AppShell from '@/components/AppShell';
 import PWARegister from '@/components/mobile/PWARegister';
 
@@ -63,8 +65,12 @@ export default function RootLayout({
       </head>
       <body className="h-full bg-[var(--background)] font-sans text-[var(--foreground)] antialiased overflow-x-hidden">
         <AuthProvider>
-          <PWARegister />
-          <AppShell>{children}</AppShell>
+          <UiProvider>
+            <LiveNotificationProvider>
+              <PWARegister />
+              <AppShell>{children}</AppShell>
+            </LiveNotificationProvider>
+          </UiProvider>
         </AuthProvider>
       </body>
     </html>

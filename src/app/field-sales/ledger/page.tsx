@@ -225,7 +225,7 @@ export default function DealerLedgerPage() {
         {loading ? (
           <div className="p-12 text-center text-slate-400">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent mb-3" />
-            <p className="text-sm font-semibold">Loading financial ledger entries from MongoDB...</p>
+            <p className="text-sm font-semibold">Loading financial ledger entries...</p>
           </div>
         ) : entries.length === 0 ? (
           <div className="p-16 text-center">

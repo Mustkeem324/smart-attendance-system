@@ -3,6 +3,7 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import { useUi } from '@/components/providers/UiProvider';
 import {
   Users,
   Search,
@@ -24,6 +25,7 @@ import EmployeePhotoUploadModal, { CORPORATE_PORTRAITS } from '@/components/empl
 
 export default function EmployeesPage() {
   const { user } = useAuth();
+  const { toast } = useUi();
   const [employees, setEmployees] = useState<any[]>([]);
   const [departments, setDepartments] = useState<any[]>([]);
   const [branches, setBranches] = useState<any[]>([]);
@@ -121,13 +123,14 @@ export default function EmployeesPage() {
       const data = await res.json();
       if (res.ok) {
         setFeedback(`Employee ${data.employee.firstName} ${data.employee.lastName} registered!`);
+        toast.success(`Employee ${data.employee.firstName} ${data.employee.lastName} registered.`);
         setIsAddModalOpen(false);
         fetchData();
       } else {
-        alert(data.error || 'Failed to create employee');
+        toast.error(data.error || 'Failed to create employee');
       }
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -350,9 +353,12 @@ export default function EmployeesPage() {
             <form onSubmit={handleAddSubmit} className="mt-4 space-y-4">
               {/* Employee Photo Section */}
               <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-3.5 dark:border-slate-800 dark:bg-slate-800/40">
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Employee Profile Photograph
                 </label>
+                <p className="text-[11px] text-[#6538ED] dark:text-purple-300 font-medium mb-2.5">
+                  Please upload a clear, professional headshot photo (front-facing, good lighting, plain background). Saved automatically under the employee&apos;s ID folder.
+                </p>
                 <div className="flex flex-col sm:flex-row items-center gap-3.5">
                   <div className="relative h-16 w-16 shrink-0 rounded-2xl overflow-hidden border-2 border-brand-500 shadow bg-brand-50 dark:bg-brand-950 flex items-center justify-center">
                     {formData.profilePhoto ? (
@@ -394,10 +400,10 @@ export default function EmployeesPage() {
                             if (res.ok && data.url) {
                               setFormData((prev) => ({ ...prev, profilePhoto: data.url }));
                             } else {
-                              alert(data.error || 'Failed to upload photo');
+                              toast.error(data.error || 'Failed to upload photo');
                             }
                           } catch (err: any) {
-                            alert(err.message);
+                            toast.error(err.message);
                           }
                         }}
                       />
@@ -579,6 +585,7 @@ export default function EmployeesPage() {
         <EmployeePhotoUploadModal
           isOpen={Boolean(photoModalEmployee)}
           onClose={() => setPhotoModalEmployee(null)}
+          targetEmployeeId={photoModalEmployee.id}
           currentPhoto={photoModalEmployee.profilePhoto}
           employeeName={`${photoModalEmployee.firstName} ${photoModalEmployee.lastName}`}
           onSave={async (photoUrl) => {
@@ -590,9 +597,10 @@ export default function EmployeesPage() {
             const data = await res.json();
             if (res.ok) {
               setFeedback(`Profile photo updated for ${photoModalEmployee.firstName} ${photoModalEmployee.lastName}!`);
+              toast.success('Employee profile photo updated.');
               fetchData();
             } else {
-              alert(data.error || 'Failed to update photo');
+              toast.error(data.error || 'Failed to update photo');
             }
           }}
         />

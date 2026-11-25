@@ -10,6 +10,11 @@ export async function GET(req: NextRequest) {
     return new Response('Unauthorized', { status: 401 });
   }
 
+  const allowedRoles = ['SUPER_ADMIN', 'COMPANY_ADMIN', 'HR_MANAGER', 'TEAM_MANAGER', 'SALES_MANAGER'];
+  if (!allowedRoles.includes(session.user.role)) {
+    return new Response('Forbidden', { status: 403 });
+  }
+
   const { organizationId } = session.user;
   const encoder = new TextEncoder();
 

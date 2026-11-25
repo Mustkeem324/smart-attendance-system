@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useUi } from '@/components/providers/UiProvider';
 import {
   CalendarDays,
   PlusCircle,
@@ -20,6 +21,7 @@ import {
 
 export default function LeavesPage() {
   const { user } = useAuth();
+  const { toast, confirm, prompt } = useUi();
   const [activeTab, setActiveTab] = useState<'requests' | 'approvals' | 'calendar' | 'policies'>('requests');
 
   const [requests, setRequests] = useState<any[]>([]);
@@ -114,7 +116,13 @@ export default function LeavesPage() {
   };
 
   const handleCancelLeave = async (requestId: string) => {
-    if (!confirm('Are you sure you want to cancel this leave request? Days will be refunded.')) return;
+    const ok = await confirm({
+      title: 'Cancel Leave Request',
+      message: 'Are you sure you want to cancel this leave request? Any deducted leave days will be refunded to your balance.',
+      confirmText: 'Yes, Cancel Leave',
+      variant: 'danger',
+    });
+    if (!ok) return;
     try {
       const res = await fetch(`/api/leaves/${requestId}/cancel`, {
         method: 'POST',
@@ -122,17 +130,26 @@ export default function LeavesPage() {
       const data = await res.json();
       if (res.ok) {
         setFeedback('Leave cancelled and balance restored to ledger.');
+        toast.success('Leave cancelled and balance restored.');
         fetchData();
       } else {
         setFeedback(`Error: ${data.error}`);
+        toast.error(data.error || 'Failed to cancel leave');
       }
     } catch (err: any) {
       setFeedback(`Error: ${err.message}`);
+      toast.error(err.message);
     }
   };
 
   const handleReview = async (id: string, action: 'APPROVE' | 'REJECT') => {
-    const remark = prompt(`Enter ${action.toLowerCase()} remark:`) || '';
+    const remark = await prompt({
+      title: `${action === 'APPROVE' ? 'Approve' : 'Reject'} Leave Application`,
+      message: 'Provide an optional approval or rejection note.',
+      placeholder: `Enter ${action.toLowerCase()} remark...`,
+      confirmText: action === 'APPROVE' ? 'Approve Leave' : 'Reject Leave',
+    });
+    if (remark === null) return;
     try {
       const res = await fetch(`/api/leaves/${id}`, {
         method: 'PUT',
@@ -143,12 +160,15 @@ export default function LeavesPage() {
       const data = await res.json();
       if (res.ok) {
         setFeedback(`Leave request ${action.toLowerCase()}ed.`);
+        toast.success(`Leave request ${action.toLowerCase()}ed.`);
         fetchData();
       } else {
         setFeedback(`Error: ${data.error}`);
+        toast.error(data.error || 'Leave decision failed');
       }
     } catch (err: any) {
       setFeedback(`Error: ${err.message}`);
+      toast.error(err.message);
     }
   };
 

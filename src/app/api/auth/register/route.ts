@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { hashPassword, generateTokens } from '@/lib/auth';
 import { createAuditLog } from '@/lib/audit';
+import { buildAuthCookieOptions } from '@/lib/cookies';
 import { connectToDatabase } from '@/lib/mongodb';
 import { Retailer, DistributionNotification, RetailerInquiry } from '@/models/electronics-sales';
 import { Role } from '@prisma/client';
@@ -82,14 +83,22 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 7. Role Mapping
+    // 7. Strict Public Role Mapping (Never allow admin or staff privilege escalation on public signup)
     let mappedRole: Role = Role.RETAILER;
-    const rUpper = (role || '').toUpperCase();
-    if (rUpper === 'DISTRIBUTOR') mappedRole = Role.DISTRIBUTOR;
-    else if (rUpper === 'SALES_MANAGER' || rUpper === 'SALES_EXECUTIVE') mappedRole = Role.SALES_MANAGER;
-    else if (rUpper === 'FIELD_SALES_REP') mappedRole = Role.FIELD_SALES_REP;
-    else if (rUpper === 'COMPANY_ADMIN' || rUpper === 'ADMIN') mappedRole = Role.COMPANY_ADMIN;
-    else mappedRole = Role.RETAILER;
+    const rUpper = (role || '').toUpperCase().trim();
+    if (!rUpper || rUpper === 'RETAILER') {
+      mappedRole = Role.RETAILER;
+    } else if (rUpper === 'DISTRIBUTOR') {
+      mappedRole = Role.DISTRIBUTOR;
+    } else {
+      return NextResponse.json(
+        {
+          error:
+            'Public registration is restricted to Retailer and Distributor partner accounts. Staff accounts must be provisioned by an organization administrator.',
+        },
+        { status: 403 }
+      );
+    }
 
     // 8. Hash Password
     const passwordHash = await hashPassword(password);
@@ -199,8 +208,6 @@ export async function POST(req: NextRequest) {
     let redirectUrl = '/distribution';
     if (mappedRole === Role.RETAILER) {
       redirectUrl = '/catalog';
-    } else if (mappedRole === Role.FIELD_SALES_REP) {
-      redirectUrl = '/field-sales/mobile';
     }
 
     const response = NextResponse.json({
@@ -222,13 +229,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Set 30-Day HTTP-Only Cookie
-    response.cookies.set('auth_token', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 30 * 24 * 60 * 60,
-    });
+    response.cookies.set('auth_token', accessToken, buildAuthCookieOptions(req, 30 * 24 * 60 * 60));
 
     return response;
   } catch (error: any) {

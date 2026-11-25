@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useUi } from '@/components/providers/UiProvider';
 import {
   ShoppingBag,
   Plus,
@@ -59,6 +60,7 @@ interface SalesOrder {
 }
 
 export default function SalesOrdersPage() {
+  const { toast, confirm } = useUi();
   const [orders, setOrders] = useState<SalesOrder[]>([]);
   const [retailers, setRetailers] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
@@ -150,7 +152,13 @@ export default function SalesOrdersPage() {
   }, [fetchAuxData]);
 
   const handleApproveOrder = async (orderId: string) => {
-    if (!confirm('Approve this sales order? This will automatically generate a GST Tax Invoice and charge the dealer ledger.')) {
+    const ok = await confirm({
+      title: 'Approve Wholesale Sales Order',
+      message:
+        'Approving this sales order will generate the GST Tax Invoice and charge the dealer ledger.',
+      confirmText: 'Approve & Generate Invoice',
+    });
+    if (!ok) {
       return;
     }
 
@@ -411,7 +419,7 @@ export default function SalesOrdersPage() {
         {loading ? (
           <div className="p-12 text-center text-slate-400">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent mb-3" />
-            <p className="text-sm font-semibold">Loading sales orders from MongoDB...</p>
+            <p className="text-sm font-semibold">Loading wholesale sales orders...</p>
           </div>
         ) : orders.length === 0 ? (
           <div className="p-16 text-center">

@@ -139,7 +139,7 @@ export default function RetailerDirectoryPage() {
               RETAILER DISTRIBUTION NETWORK
             </span>
             <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
-              MongoDB 7.0 Verified
+              Verified Directory
             </span>
           </div>
           <h1 className="text-3xl font-extrabold text-[#11152F] tracking-tight">
@@ -272,7 +272,7 @@ export default function RetailerDirectoryPage() {
         {loading ? (
           <div className="p-12 text-center text-slate-400">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent mb-3" />
-            <p className="text-sm font-semibold">Loading retailers from MongoDB...</p>
+            <p className="text-sm font-semibold">Loading retailer directory...</p>
           </div>
         ) : retailers.length === 0 ? (
           <div className="p-16 text-center">

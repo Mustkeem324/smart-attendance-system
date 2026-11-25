@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAuthSession, requireRole } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { createAuditLog } from '@/lib/audit';
+import { notifyOrgManagers } from '@/lib/notifications';
 import { Role, RequestStatus } from '@prisma/client';
 
 export async function GET(req: NextRequest) {
@@ -112,6 +113,26 @@ export async function POST(req: NextRequest) {
       ipAddress: req.headers.get('x-forwarded-for') || '127.0.0.1',
       userAgent: req.headers.get('user-agent') || 'Browser',
     });
+
+    // Notify HR/Managers with rich exception details
+    await notifyOrgManagers({
+      organizationId: session.user.organizationId,
+      title: `Attendance Exception: ${newException.employee.firstName} ${newException.employee.lastName}`,
+      message: `${newException.employee.firstName} ${newException.employee.lastName} submitted a ${reason.replace(/_/g, ' ')} exception for ${exceptionDate}: "${explanation}"`,
+      type: 'WARNING',
+      category: 'ATTENDANCE',
+      priority: 'HIGH',
+      link: '/attendance/exceptions',
+      actionLabel: 'Inspect Exception',
+      actorName: `${newException.employee.firstName} ${newException.employee.lastName}`,
+      actorRole: session.user.role,
+      details: {
+        Date: exceptionDate,
+        Reason: reason,
+        EmployeeCode: newException.employee.employeeCode,
+      },
+      excludeUserId: session.user.id,
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,

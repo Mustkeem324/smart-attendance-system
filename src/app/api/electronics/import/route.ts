@@ -2,12 +2,16 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthSession } from '@/lib/auth';
+import { hasAnyRole, ROLE_GROUPS } from '@/lib/rbac';
 import { importActualElectronicsData } from '@/lib/electronics-sales-engine';
 
 export async function POST(req: NextRequest) {
   try {
     const session = await getAuthSession(req);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!hasAnyRole(session.user.role, ROLE_GROUPS.INVENTORY_WRITE)) {
+      return NextResponse.json({ error: 'Forbidden: Inventory or Admin privileges required.' }, { status: 403 });
+    }
 
     const body = await req.json();
     let type = body.type;

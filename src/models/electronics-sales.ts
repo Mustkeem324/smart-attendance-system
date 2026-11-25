@@ -1691,3 +1691,61 @@ const ShopApplicationSchema = new Schema<IShopApplication>(
 export const ShopApplication: Model<IShopApplication> =
   mongoose.models.ShopApplication ||
   mongoose.model<IShopApplication>('ShopApplication', ShopApplicationSchema);
+
+// -----------------------------------------------------------------------------
+// PROFILE PHOTO ASSETS & NON-EMPLOYEE USER AVATAR STORAGE
+// -----------------------------------------------------------------------------
+
+export interface IUploadedProfilePhoto extends Document {
+  folder: string;
+  ownerType: 'employee' | 'user';
+  filename: string;
+  storagePath: string;
+  mimeType: string;
+  size: number;
+  data: Buffer;
+  organizationId?: string;
+  uploadedByUserId?: string;
+  createdAt: Date;
+}
+
+const UploadedProfilePhotoSchema = new Schema<IUploadedProfilePhoto>(
+  {
+    folder: { type: String, required: true, index: true },
+    ownerType: { type: String, enum: ['employee', 'user'], default: 'user' },
+    filename: { type: String, required: true },
+    storagePath: { type: String, required: true },
+    mimeType: { type: String, required: true },
+    size: { type: Number, required: true },
+    data: { type: Buffer, required: true },
+    organizationId: { type: String, index: true },
+    uploadedByUserId: { type: String },
+  },
+  { timestamps: true }
+);
+
+UploadedProfilePhotoSchema.index({ folder: 1, filename: 1 }, { unique: true });
+
+export const UploadedProfilePhoto: Model<IUploadedProfilePhoto> =
+  mongoose.models.UploadedProfilePhoto ||
+  mongoose.model<IUploadedProfilePhoto>('UploadedProfilePhoto', UploadedProfilePhotoSchema);
+
+export interface IUserAvatar extends Document {
+  userId: string;
+  organizationId?: string;
+  profilePhoto: string;
+  updatedAt: Date;
+}
+
+const UserAvatarSchema = new Schema<IUserAvatar>(
+  {
+    userId: { type: String, required: true, unique: true, index: true },
+    organizationId: { type: String, index: true },
+    profilePhoto: { type: String, default: '' },
+  },
+  { timestamps: true }
+);
+
+export const UserAvatar: Model<IUserAvatar> =
+  mongoose.models.UserAvatar ||
+  mongoose.model<IUserAvatar>('UserAvatar', UserAvatarSchema);

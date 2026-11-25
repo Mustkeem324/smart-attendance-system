@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { comparePassword, generateTokens } from '@/lib/auth';
 import { createAuditLog } from '@/lib/audit';
+import { buildAuthCookieOptions } from '@/lib/cookies';
+import { resolveUserAvatar } from '@/lib/profile-photo-storage';
 
 export async function POST(req: NextRequest) {
   try {
@@ -80,6 +82,8 @@ export async function POST(req: NextRequest) {
       userAgent: req.headers.get('user-agent') || 'Browser',
     });
 
+    const profilePhoto = await resolveUserAvatar(user.id, user.employee?.profilePhoto);
+
     const response = NextResponse.json({
       success: true,
       token: accessToken,
@@ -87,6 +91,7 @@ export async function POST(req: NextRequest) {
         id: user.id,
         email: user.email,
         role: user.role,
+        profilePhoto,
         organization: {
           id: user.organization.id,
           name: user.organization.name,
@@ -99,6 +104,7 @@ export async function POST(req: NextRequest) {
               firstName: user.employee.firstName,
               lastName: user.employee.lastName,
               designation: user.employee.designation,
+              profilePhoto: user.employee.profilePhoto,
               department: user.employee.department.name,
               branch: {
                 id: user.employee.branch.id,
@@ -120,13 +126,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Set HTTP-Only Cookie (Active for 30 Days)
-    response.cookies.set('auth_token', accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 30 * 24 * 60 * 60, // 30 days active session
-    });
+    response.cookies.set('auth_token', accessToken, buildAuthCookieOptions(req, 30 * 24 * 60 * 60));
 
     return response;
   } catch (error: any) {

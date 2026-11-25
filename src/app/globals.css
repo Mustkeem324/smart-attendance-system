@@ -5,13 +5,25 @@
 :root {
   color-scheme: light;
   --background: #F6F5FF;
-  --foreground: #172033;
+  --foreground: #15172B;
+  --surface: #FFFFFF;
+  --surface-muted: #F6F5FF;
+  --border-subtle: #E6E8F2;
+  --brand-primary: #6538ED;
+  --brand-accent: #8255FF;
+  --brand-navy: #15172B;
+  --status-success: #12B886;
+  --status-warning: #F59E0B;
+  --status-danger: #EF476F;
 }
 
 .dark {
   color-scheme: dark;
-  --background: #0f172a;
-  --foreground: #f8fafc;
+  --background: #0D0F1E;
+  --foreground: #F6F5FF;
+  --surface: #15172B;
+  --surface-muted: #1C203B;
+  --border-subtle: #282D4F;
 }
 
 body {
@@ -20,10 +32,15 @@ body {
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
-/* Keyboard focus for custom interactive cards (e.g. KPI tiles) */
-[role='button']:focus-visible {
-  outline: 2px solid #5428E8;
-  outline-offset: 3px;
+/* Keyboard focus accessibility */
+[role='button']:focus-visible,
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #6538ED;
+  outline-offset: 2px;
 }
 
 /* Custom scrollbars */
@@ -39,17 +56,17 @@ body {
   border-radius: 9999px;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #2E345C;
 }
 
-/* Radar pulse animation for GPS scanner */
+/* Radar pulse animation for GPS geofence */
 @keyframes pulse-ring {
   0% {
     transform: scale(0.95);
     opacity: 0.8;
   }
   50% {
-    transform: scale(1.3);
+    transform: scale(1.25);
     opacity: 0.3;
   }
   100% {
@@ -60,4 +77,19 @@ body {
 
 .animate-pulse-ring {
   animation: pulse-ring 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@layer components {
+  .enterprise-card {
+    @apply rounded-2xl border border-[#E6E8F2] bg-white shadow-enterprise-sm transition-all duration-200 dark:border-[#282D4F] dark:bg-[#15172B];
+  }
+  .enterprise-input {
+    @apply w-full rounded-xl border border-[#E6E8F2] bg-[#F6F5FF]/60 px-3.5 py-2.5 text-xs font-medium text-[#15172B] placeholder-slate-400 outline-none transition focus:border-[#6538ED] focus:bg-white focus:ring-2 focus:ring-[#6538ED]/15 dark:border-[#292E52] dark:bg-[#101225] dark:text-white dark:focus:bg-[#15172B];
+  }
+  .enterprise-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#6538ED] to-[#8255FF] px-4 py-2.5 text-xs font-bold text-white shadow-enterprise-glow transition hover:brightness-105 active:scale-[0.99] disabled:opacity-50;
+  }
+  .enterprise-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-[#E6E8F2] bg-white px-4 py-2.5 text-xs font-semibold text-[#15172B] shadow-enterprise-sm transition hover:bg-[#F6F5FF] dark:border-[#292E52] dark:bg-[#1C203B] dark:text-slate-200 dark:hover:bg-[#252A4D];
+  }
 }

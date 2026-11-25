@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useUi } from '@/components/providers/UiProvider';
 import {
   History,
   Filter,
@@ -19,6 +20,7 @@ import {
 
 export default function AttendancePage() {
   const { user } = useAuth();
+  const { toast } = useUi();
   const [records, setRecords] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [dateFilter, setDateFilter] = useState('');
@@ -79,13 +81,14 @@ export default function AttendancePage() {
       const data = await res.json();
       if (res.ok) {
         setActionMessage(data.message || 'Correction applied successfully');
+        toast.success(data.message || 'Attendance correction applied.');
         setCorrectingRecord(null);
         fetchRecords();
       } else {
-        alert(data.error || 'Failed to submit correction');
+        toast.error(data.error || 'Failed to submit correction');
       }
     } catch (err: any) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 

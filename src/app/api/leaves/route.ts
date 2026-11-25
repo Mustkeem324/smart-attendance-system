@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
       organizationId: session.user.organizationId,
     };
 
-    if (!isElevated || (!queryEmployeeId && session.user.role === Role.EMPLOYEE)) {
+    if (!isElevated) {
       if (!session.employee) {
         return NextResponse.json({ requests: [], balances: [] });
       }

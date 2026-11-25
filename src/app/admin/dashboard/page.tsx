@@ -27,8 +27,13 @@ import {
   LogOut,
   Coffee,
   Laptop,
+  Package,
+  ShoppingCart,
+  Store,
+  IndianRupee,
 } from 'lucide-react';
 import KPIDrilldownModal from '@/components/KPIDrilldownModal';
+import { SkeletonCards } from '@/components/ui/EnterpriseUI';
 import {
   DailyAttendanceLineChart,
   PresentVsAbsentPieChart,
@@ -40,12 +45,30 @@ import { EmployeeDailyStatus } from '@/lib/analytics';
 export default function AdminDashboardPage() {
   const { user } = useAuth();
   const [data, setData] = useState<any>(null);
+  const [distData, setDistData] = useState<any>(null);
   const [weeklyData, setWeeklyData] = useState<any>(null);
   const [deptData, setDeptData] = useState<any[]>([]);
   const [branchData, setBranchData] = useState<any[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [selectedBranch, setSelectedBranch] = useState<string>('');
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    try {
+      const savedBranch = sessionStorage.getItem('se_selected_branch');
+      if (savedBranch && savedBranch !== 'ALL') {
+        setSelectedBranch(savedBranch);
+      }
+      const handleBranchEvent = (e: any) => {
+        const nextVal = e?.detail === 'ALL' ? '' : String(e?.detail || '');
+        setSelectedBranch(nextVal);
+      };
+      window.addEventListener('se:branch-changed', handleBranchEvent);
+      return () => window.removeEventListener('se:branch-changed', handleBranchEvent);
+    } catch {
+      return undefined;
+    }
+  }, []);
 
   // Drilldown modal state
   const [drilldownModal, setDrilldownModal] = useState<{
@@ -66,6 +89,13 @@ export default function AdminDashboardPage() {
         date: selectedDate,
         ...(selectedBranch && { branchId: selectedBranch }),
       });
+
+      fetch('/api/v1/dashboard')
+        .then((r) => (r.ok ? r.json() : null))
+        .then((json) => {
+          if (json?.data) setDistData(json.data);
+        })
+        .catch(() => {});
 
       const [resOverview, resWeekly, resDept, resBranch] = await Promise.all([
         fetch(`/api/admin/dashboard/overview?${queryParams}`),
@@ -173,11 +203,9 @@ export default function AdminDashboardPage() {
 
   if (loading && !data) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="flex flex-col items-center gap-2">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-600 border-t-transparent" />
-          <p className="text-xs text-slate-500">Compiling executive dashboard telemetry...</p>
-        </div>
+      <div className="space-y-6">
+        <SkeletonCards count={4} />
+        <SkeletonCards count={4} />
       </div>
     );
   }
@@ -192,15 +220,15 @@ export default function AdminDashboardPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-2xl">
-              Executive HRMS Dashboard
+              Executive Operations Dashboard
             </h1>
             <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              Live DB Telemetry
+              Live Operations
             </span>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Real-time workforce presence, biometric verification, geofences, and BI analytics
+            Unified workforce attendance, geofence monitoring, sales distribution, and stock overview
           </p>
         </div>
 
@@ -342,7 +370,7 @@ export default function AdminDashboardPage() {
           </Link>
           <Link
             href="/branches"
-            className="group flex flex-col items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50/60 p-3.5 text-center transition hover:border-[#7138F5] hover:bg-purple-50/50 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:hover:border-purple-500"
+            className="group flex flex-col items-center justify-center rounded-2xl border border-slate-200/80 bg-slate-50/60 p-3.5 text-center transition hover:border-[#6538ED] hover:bg-purple-50/50 hover:shadow-sm dark:border-white/10 dark:bg-white/5 dark:hover:border-purple-500"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-950/60 dark:text-blue-300 group-hover:scale-110 transition">
               <Building2 className="h-5 w-5" />
@@ -352,6 +380,100 @@ export default function AdminDashboardPage() {
           </Link>
         </div>
       </div>
+
+      {/* Distribution, Sales & Inventory Cross-Platform Summary */}
+      {distData?.kpis && (
+        <div className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-xs dark:border-white/10 dark:bg-[#0F122B]">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="text-xs font-bold tracking-wider text-slate-500 uppercase dark:text-slate-400">
+                B2B Distribution, Sales &amp; Stock Overview
+              </h2>
+              <p className="text-[11px] text-slate-400">Commercial performance alongside workforce presence</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Link
+                href="/distribution"
+                className="rounded-xl bg-[#6538ED] px-3 py-1.5 text-[11px] font-bold text-white hover:bg-[#562BD4] transition"
+              >
+                Open Distribution Hub →
+              </Link>
+              <Link
+                href="/field-sales"
+                className="rounded-xl border border-slate-200 dark:border-white/15 px-3 py-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-200 hover:border-[#6538ED] transition"
+              >
+                Field Sales
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <Link
+              href="/distribution/orders"
+              className="rounded-2xl border border-slate-200/70 bg-slate-50/70 p-3.5 hover:border-[#6538ED] transition dark:border-white/10 dark:bg-white/5"
+            >
+              <div className="flex items-center justify-between text-[#6538ED]">
+                <span className="text-[11px] font-bold uppercase">Monthly Revenue</span>
+                <IndianRupee className="h-4 w-4" />
+              </div>
+              <p className="mt-1.5 text-xl font-black text-slate-900 dark:text-white">
+                ₹{Number(distData.kpis.monthRevenue || 0).toLocaleString('en-IN')}
+              </p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                Today: ₹{Number(distData.kpis.todayRevenue || 0).toLocaleString('en-IN')}
+              </p>
+            </Link>
+
+            <Link
+              href="/distribution/orders"
+              className="rounded-2xl border border-slate-200/70 bg-slate-50/70 p-3.5 hover:border-[#6538ED] transition dark:border-white/10 dark:bg-white/5"
+            >
+              <div className="flex items-center justify-between text-emerald-600">
+                <span className="text-[11px] font-bold uppercase">Wholesale Orders</span>
+                <ShoppingCart className="h-4 w-4" />
+              </div>
+              <p className="mt-1.5 text-xl font-black text-slate-900 dark:text-white">
+                {distData.kpis.monthOrdersCount ?? 0}
+              </p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                {distData.kpis.pendingOrdersCount ?? 0} awaiting processing
+              </p>
+            </Link>
+
+            <Link
+              href="/distribution/inventory"
+              className="rounded-2xl border border-slate-200/70 bg-slate-50/70 p-3.5 hover:border-[#6538ED] transition dark:border-white/10 dark:bg-white/5"
+            >
+              <div className="flex items-center justify-between text-amber-600">
+                <span className="text-[11px] font-bold uppercase">Warehouse Stock</span>
+                <Package className="h-4 w-4" />
+              </div>
+              <p className="mt-1.5 text-xl font-black text-slate-900 dark:text-white">
+                {Number(distData.kpis.totalWarehouseStock || 0).toLocaleString('en-IN')} units
+              </p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                {distData.kpis.lowStockAlertsCount ?? 0} low-stock SKU alert(s)
+              </p>
+            </Link>
+
+            <Link
+              href="/distribution/retailers"
+              className="rounded-2xl border border-slate-200/70 bg-slate-50/70 p-3.5 hover:border-[#6538ED] transition dark:border-white/10 dark:bg-white/5"
+            >
+              <div className="flex items-center justify-between text-indigo-600">
+                <span className="text-[11px] font-bold uppercase">Active Retailers</span>
+                <Store className="h-4 w-4" />
+              </div>
+              <p className="mt-1.5 text-xl font-black text-slate-900 dark:text-white">
+                {distData.kpis.activeRetailersCount ?? 0}
+              </p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                {distData.kpis.todayVisitsCount ?? 0} field visit(s) logged today
+              </p>
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* 12 DYNAMIC KPI CARDS (All Clickable for Drill-down Employee List) */}
       <div>

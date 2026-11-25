@@ -118,8 +118,8 @@ export default function ReportsPage() {
             <h1 className="text-2xl font-black tracking-tight text-slate-900">
               Enterprise Reporting & Bulk Data Operations
             </h1>
-            <span className="rounded-full bg-[#5428E8]/10 px-2.5 py-0.5 text-xs font-bold text-[#5428E8]">
-              Phase 5 Advanced Engine
+            <span className="rounded-full bg-[#6538ED]/10 px-2.5 py-0.5 text-xs font-bold text-[#6538ED]">
+              Enterprise Reporting Engine
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">

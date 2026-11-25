@@ -252,7 +252,7 @@ export default function InventoryPage() {
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-slate-400">
                     <RefreshCw className="w-6 h-6 animate-spin text-purple-400 mx-auto mb-2" />
-                    Loading inventory records from MongoDB...
+                    Loading warehouse inventory records...
                   </td>
                 </tr>
               ) : inventories.length === 0 ? (

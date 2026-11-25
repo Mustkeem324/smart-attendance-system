@@ -237,9 +237,19 @@ export function DistributionSidebar({
       </div>
 
       {/* Quick Portal Switcher Footer */}
-      <div className="p-3 border-t border-[#23294E] bg-[#0c0e22] shrink-0">
+      <div className="p-3 border-t border-[#23294E] bg-[#15172B] shrink-0">
         {!collapsed ? (
           <div className="space-y-2">
+            <Link
+              href="/admin/dashboard"
+              className="flex items-center justify-between px-3 py-2 rounded-lg bg-[#6538ED]/20 hover:bg-[#6538ED]/35 text-purple-200 hover:text-white text-xs transition-colors border border-[#6538ED]/30"
+            >
+              <span className="flex items-center gap-2">
+                <Users2 className="w-3.5 h-3.5 text-[#8255FF]" />
+                <span>Workforce &amp; HRMS Hub</span>
+              </span>
+              <ExternalLink className="w-3.5 h-3.5 text-purple-300" />
+            </Link>
             <Link
               href="/"
               className="flex items-center justify-between px-3 py-2 rounded-lg bg-[#151A38] hover:bg-[#1C234E] text-slate-300 hover:text-white text-xs transition-colors border border-white/5"

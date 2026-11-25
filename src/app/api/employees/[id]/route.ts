@@ -15,8 +15,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
     const { id } = params;
 
-    // Permissions check: regular employee can only view themselves
-    if (session.user.role === Role.EMPLOYEE && session.employee?.id !== id) {
+    // Permissions check: non-management staff can only view their own employee record
+    const canViewAnyEmployee = requireRole(session.user.role, [
+      Role.SUPER_ADMIN,
+      Role.COMPANY_ADMIN,
+      Role.HR_MANAGER,
+      Role.TEAM_MANAGER,
+    ]);
+    if (!canViewAnyEmployee && session.employee?.id !== id) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -43,7 +49,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       },
     });
 
-    if (!employee) {
+    if (!employee || employee.organizationId !== session.user.organizationId) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
 
@@ -75,7 +81,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     const existing = await prisma.employee.findUnique({ where: { id } });
-    if (!existing) {
+    if (!existing || existing.organizationId !== session.user.organizationId) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
 
@@ -130,6 +136,59 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     });
 
     return NextResponse.json({ success: true, employee: updated });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const session = await getAuthSession(req);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const hasElevatedAccess = requireRole(session.user.role, [
+      Role.SUPER_ADMIN,
+      Role.COMPANY_ADMIN,
+      Role.HR_MANAGER,
+    ]);
+    if (!hasElevatedAccess) {
+      return NextResponse.json({ error: 'Forbidden: Insufficient privileges' }, { status: 403 });
+    }
+
+    const { id } = params;
+    const existing = await prisma.employee.findUnique({ where: { id } });
+    if (!existing || existing.organizationId !== session.user.organizationId) {
+      return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    }
+
+    if (session.employee?.id === id) {
+      return NextResponse.json({ error: 'You cannot deactivate your own employee profile.' }, { status: 400 });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.employee.update({
+        where: { id },
+        data: { employmentStatus: 'TERMINATED' },
+      });
+      await tx.user.update({
+        where: { id: existing.userId },
+        data: { isActive: false, refreshToken: null },
+      });
+    });
+
+    await createAuditLog({
+      organizationId: session.user.organizationId,
+      userId: session.user.id,
+      action: 'DEACTIVATE_EMPLOYEE',
+      entity: 'Employee',
+      entityId: id,
+      oldValues: { employmentStatus: existing.employmentStatus },
+      newValues: { employmentStatus: 'TERMINATED' },
+    }).catch(() => {});
+
+    return NextResponse.json({ success: true, message: 'Employee deactivated successfully.' });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

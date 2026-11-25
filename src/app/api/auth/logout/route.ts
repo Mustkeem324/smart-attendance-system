@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyToken } from '@/lib/auth';
+import { buildAuthCookieOptions } from '@/lib/cookies';
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,14 +33,7 @@ export async function POST(req: NextRequest) {
       message: 'Logged out successfully. 30-day session terminated.',
     });
 
-    response.cookies.set('auth_token', '', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 0,
-      expires: new Date(0),
-    });
+    response.cookies.set('auth_token', '', buildAuthCookieOptions(req, 0));
 
     return response;
   } catch (error: any) {

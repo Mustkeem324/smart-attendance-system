@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthSession } from '@/lib/auth';
 import { submitLeaveRequest } from '@/lib/leave-engine';
+import { notifyOrgManagers } from '@/lib/notifications';
 
 export async function POST(req: NextRequest) {
   try {
@@ -33,6 +34,26 @@ export async function POST(req: NextRequest) {
       reason,
       documentUrl: documentUrl || undefined,
     });
+
+    await notifyOrgManagers({
+      organizationId: session.user.organizationId,
+      title: `New Leave Request from ${session.employee.firstName} ${session.employee.lastName}`,
+      message: `${session.employee.firstName} ${session.employee.lastName} (${session.employee.employeeCode}) applied for ${result.calculation.deductibleDays} day(s) of leave from ${startDateStr} to ${endDateStr}. Reason: "${reason}"`,
+      type: 'INFO',
+      category: 'LEAVE',
+      priority: 'HIGH',
+      link: '/leaves',
+      actionLabel: 'Review Leave Request',
+      actorName: `${session.employee.firstName} ${session.employee.lastName}`,
+      actorRole: session.user.role,
+      details: {
+        EmployeeCode: session.employee.employeeCode,
+        Dates: `${startDateStr} to ${endDateStr}`,
+        Days: result.calculation.deductibleDays,
+        HalfDay: Boolean(isHalfDay),
+      },
+      excludeUserId: session.user.id,
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,

@@ -298,7 +298,7 @@ export default function PublicNavbar({
                   </div>
 
                   <div className="mt-2 pt-2 border-t border-[#252A54] px-2 flex items-center justify-between text-[10px] text-slate-400">
-                    <span>Database: PostgreSQL + MongoDB</span>
+                    <span>Enterprise Workspace Suite</span>
                     <Link
                       href="/distribution"
                       onClick={() => setFeaturesDropdownOpen(false)}
@@ -310,16 +310,6 @@ export default function PublicNavbar({
                 </div>
               )}
             </div>
-
-            {/* ROI Calculator */}
-            <a
-              href={getAnchorHref('#calculator')}
-              onClick={(e) => handleAnchorClick(e, '#calculator')}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg hover:text-white hover:bg-[#1B1D35] text-slate-300 transition-colors"
-            >
-              <Calculator className="h-3.5 w-3.5 text-purple-400" />
-              <span>ROI Calculator</span>
-            </a>
 
             {/* Brands */}
             <a
@@ -540,17 +530,17 @@ export default function PublicNavbar({
                 <ChevronRight className="h-4 w-4 text-slate-500" />
               </Link>
 
-              <a
-                onClick={(e) => handleAnchorClick(e, '#calculator')}
-                href={getAnchorHref('#calculator')}
+              <Link
+                onClick={() => setMobileMenuOpen(false)}
+                href="/contact"
                 className="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-[#1B1D35] hover:text-white transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <Calculator className="h-4 w-4 text-purple-400" />
-                  <span>ROI Profit Margin Calculator</span>
+                  <ArrowRight className="h-4 w-4 text-purple-400" />
+                  <span>Contact Sales &amp; Support</span>
                 </div>
                 <ChevronRight className="h-4 w-4 text-slate-500" />
-              </a>
+              </Link>
 
               <a
                 onClick={(e) => handleAnchorClick(e, '#brands')}

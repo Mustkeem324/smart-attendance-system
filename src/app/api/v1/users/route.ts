@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '20')));
     const skip = (page - 1) * limit;
 
-    const where: any = {};
+    const where: any = { organizationId: user!.organizationId };
     if (role) where.role = role;
     if (search) {
       where.OR = [
@@ -81,23 +81,43 @@ export async function POST(req: NextRequest) {
       return apiError('Email, password and role are required', 400);
     }
 
-    const existing = await prisma.user.findFirst({ where: { email: email.toLowerCase().trim() } });
-    if (existing) {
-      return apiError('User with this email already exists', 409);
+    const ALLOWED_ROLES = [
+      'SUPER_ADMIN',
+      'COMPANY_ADMIN',
+      'HR_MANAGER',
+      'TEAM_MANAGER',
+      'EMPLOYEE',
+      'SALES_MANAGER',
+      'FIELD_SALES_REP',
+      'DELIVERY_AGENT',
+      'INVENTORY_MANAGER',
+      'RETAILER',
+      'DISTRIBUTOR',
+    ];
+    const normalizedRole = String(role).toUpperCase().trim();
+    if (!ALLOWED_ROLES.includes(normalizedRole)) {
+      return apiError(`Invalid role specified: ${role}`, 400);
+    }
+    if (normalizedRole === 'SUPER_ADMIN' && user!.role !== 'SUPER_ADMIN') {
+      return apiError('Only a Super Admin can provision another Super Admin account.', 403);
+    }
+    if (String(password).length < 6) {
+      return apiError('Password must be at least 6 characters long.', 400);
     }
 
-    const org = await prisma.organization.findFirst();
-    if (!org) {
-      return apiError('No organization configured in system', 500);
+    const normalizedEmail = String(email).toLowerCase().trim();
+    const existing = await prisma.user.findFirst({ where: { email: normalizedEmail } });
+    if (existing) {
+      return apiError('User with this email already exists', 409);
     }
 
     const passwordHash = await hashPassword(password);
     const newUser = await prisma.user.create({
       data: {
-        email: email.toLowerCase().trim(),
+        email: normalizedEmail,
         passwordHash,
-        role,
-        organizationId: org.id,
+        role: normalizedRole as any,
+        organizationId: user!.organizationId,
         isActive: true,
       },
       select: {

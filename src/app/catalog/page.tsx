@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import PublicNavbar from '@/components/public/PublicNavbar';
 import { useAuth } from '@/context/AuthContext';
+import { useUi } from '@/components/providers/UiProvider';
 import {
   Search,
   Filter,
@@ -118,6 +119,7 @@ const CATEGORY_ICONS: Record<string, any> = {
 export default function ProductCatalogPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const { toast } = useUi();
 
   // Catalog State
   const [products, setProducts] = useState<ProductItem[]>([]);
@@ -307,7 +309,7 @@ export default function ProductCatalogPage() {
         return prev.filter((p) => p._id !== product._id);
       }
       if (prev.length >= 4) {
-        alert('You can compare a maximum of 4 products simultaneously.');
+        toast.warning('You can compare a maximum of 4 products simultaneously.');
         return prev;
       }
       return [...prev, product];

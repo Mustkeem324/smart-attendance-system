@@ -5,6 +5,7 @@ import { getAuthSession } from '@/lib/auth';
 import { connectToDatabase } from '@/lib/mongodb';
 import { Retailer } from '@/models/electronics-sales';
 import { apiSuccess, apiError } from '@/lib/distribution-helper';
+import { resolveUserAvatar } from '@/lib/profile-photo-storage';
 
 export async function GET(req: NextRequest) {
   try {
@@ -17,10 +18,15 @@ export async function GET(req: NextRequest) {
 
     // Check if user is also linked to a Retailer
     const retailer = await Retailer.findOne({ email: session.user.email }).lean();
+    const profilePhoto = await resolveUserAvatar(
+      session.user.id,
+      session.employee?.profilePhoto
+    );
 
     return apiSuccess({
       user: {
         ...session.user,
+        profilePhoto,
         name: session.employee ? `${session.employee.firstName} ${session.employee.lastName}` : session.user.email,
         employee: session.employee,
         retailer: retailer ? {

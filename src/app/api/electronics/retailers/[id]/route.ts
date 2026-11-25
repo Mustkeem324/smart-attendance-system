@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthSession } from '@/lib/auth';
+import { hasAnyRole, ROLE_GROUPS } from '@/lib/rbac';
 import { connectToDatabase } from '@/lib/mongodb';
 import { Retailer, ShopVisit, SalesOrder, Delivery, Invoice, PaymentCollection, RetailerLedger } from '@/models/electronics-sales';
 import mongoose from 'mongoose';
@@ -10,6 +11,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   try {
     const session = await getAuthSession(req);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!hasAnyRole(session.user.role, ROLE_GROUPS.DISTRIBUTION_PORTAL)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
     await connectToDatabase();
 
@@ -46,6 +50,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   try {
     const session = await getAuthSession(req);
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!hasAnyRole(session.user.role, [...ROLE_GROUPS.MANAGEMENT, 'FIELD_SALES_REP'])) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
     await connectToDatabase();
 
